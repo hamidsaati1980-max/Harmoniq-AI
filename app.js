@@ -1,2827 +1,1706 @@
 /* =========================================================
-   HARMONIQ AI
-   APP.JS
-   Complete application engine
+   Harmoniq AI
+   Main Application
+   - 6 Languages
+   - RTL Arabic
+   - Web Audio demo music
+   - Player controls
+   - Favorites
+   - Recently played
+   - Playlists
+   - Search
+   - Local AI music intent
+   - LocalStorage
    ========================================================= */
 
-"use strict";
+(() => {
+  "use strict";
 
-/* =========================================================
-   1. MUSIC LIBRARY
-   ========================================================= */
+  const BASE = "/Harmoniq-AI/";
+  const LOCALES = ["en", "ar", "tr", "fr", "es", "de"];
 
-const tracks = [
-  {
-    id: 1,
-    title: "Afterglow",
-    artist: "Luna Vale",
-    album: "Night Signals",
-    cover: "c1",
-    emoji: "🌌",
-    moods: ["relax", "sleep", "calm"],
-    genres: ["ambient", "chill"],
-    duration: 180
-  },
-  {
-    id: 2,
-    title: "Velvet Sky",
-    artist: "Noah Kade",
-    album: "Midnight Roads",
-    cover: "c2",
-    emoji: "🌃",
-    moods: ["night", "relax", "chill"],
-    genres: ["lofi", "chill"],
-    duration: 195
-  },
-  {
-    id: 3,
-    title: "Open Water",
-    artist: "Kairo Field",
-    album: "Blue Horizon",
-    cover: "c3",
-    emoji: "🌊",
-    moods: ["focus", "calm", "nature"],
-    genres: ["ambient", "focus"],
-    duration: 210
-  },
-  {
-    id: 4,
-    title: "Lucid Dream",
-    artist: "Harmoniq",
-    album: "Dream State",
-    cover: "c4",
-    emoji: "✨",
-    moods: ["sleep", "dream", "relax"],
-    genres: ["ambient", "meditation"],
-    duration: 200
-  }
-];
-
-
-/* =========================================================
-   2. TRANSLATIONS
-   ========================================================= */
-
-const translations = {
-
-  en: {
-    menu: "Menu",
-    home: "Home",
-    search: "Search",
-    library: "Library",
-    yourMusic: "Your Music",
-    favorites: "Favorites",
-    playlists: "My Playlists",
-    recent: "Recently Played",
-    goodEvening: "Good evening 👋",
-    discover: "Discover your next favorite sound.",
-    quickAccess: "Quick Access",
-    recommended: "Recommended for you",
-    searchResults: "Search Results",
-    createPlaylist: "Create Playlist",
-    searchPlaceholder: "Search music, artists or albums...",
-    aiPlaceholder: "Ask Harmoniq AI: play relaxing music for sleep..."
-  },
-
-  ar: {
-    menu: "القائمة",
-    home: "الرئيسية",
-    search: "بحث",
-    library: "المكتبة",
-    yourMusic: "موسيقاك",
-    favorites: "المفضلة",
-    playlists: "قوائم التشغيل",
-    recent: "تم تشغيلها مؤخراً",
-    goodEvening: "مساء الخير 👋",
-    discover: "اكتشف الصوت المفضل الجديد لديك.",
-    quickAccess: "وصول سريع",
-    recommended: "مقترحات لك",
-    searchResults: "نتائج البحث",
-    createPlaylist: "إنشاء قائمة تشغيل",
-    searchPlaceholder: "ابحث عن موسيقى أو فنان أو ألبوم...",
-    aiPlaceholder: "اطلب من Harmoniq AI: شغّل موسيقى هادئة للنوم..."
-  },
-
-  tr: {
-    menu: "Menü",
-    home: "Ana Sayfa",
-    search: "Ara",
-    library: "Kitaplık",
-    yourMusic: "Müziğin",
-    favorites: "Favoriler",
-    playlists: "Çalma Listelerim",
-    recent: "Son Çalınanlar",
-    goodEvening: "İyi akşamlar 👋",
-    discover: "Yeni favori sesini keşfet.",
-    quickAccess: "Hızlı Erişim",
-    recommended: "Senin için önerilenler",
-    searchResults: "Arama Sonuçları",
-    createPlaylist: "Çalma Listesi Oluştur",
-    searchPlaceholder: "Müzik, sanatçı veya albüm ara...",
-    aiPlaceholder: "Harmoniq AI'ya sor: uyku için rahatlatıcı müzik çal..."
-  },
-
-  fr: {
-    menu: "Menu",
-    home: "Accueil",
-    search: "Recherche",
-    library: "Bibliothèque",
-    yourMusic: "Votre musique",
-    favorites: "Favoris",
-    playlists: "Mes playlists",
-    recent: "Écoutés récemment",
-    goodEvening: "Bonsoir 👋",
-    discover: "Découvrez votre prochain son préféré.",
-    quickAccess: "Accès rapide",
-    recommended: "Recommandé pour vous",
-    searchResults: "Résultats",
-    createPlaylist: "Créer une playlist",
-    searchPlaceholder: "Rechercher musique, artiste ou album...",
-    aiPlaceholder: "Demandez à Harmoniq AI..."
-  },
-
-  es: {
-    menu: "Menú",
-    home: "Inicio",
-    search: "Buscar",
-    library: "Biblioteca",
-    yourMusic: "Tu música",
-    favorites: "Favoritos",
-    playlists: "Mis playlists",
-    recent: "Reproducidos recientemente",
-    goodEvening: "Buenas tardes 👋",
-    discover: "Descubre tu próximo sonido favorito.",
-    quickAccess: "Acceso rápido",
-    recommended: "Recomendado para ti",
-    searchResults: "Resultados",
-    createPlaylist: "Crear playlist",
-    searchPlaceholder: "Buscar música, artistas o álbumes...",
-    aiPlaceholder: "Pregunta a Harmoniq AI..."
-  },
-
-  de: {
-    menu: "Menü",
-    home: "Start",
-    search: "Suche",
-    library: "Bibliothek",
-    yourMusic: "Deine Musik",
-    favorites: "Favoriten",
-    playlists: "Meine Playlists",
-    recent: "Zuletzt gespielt",
-    goodEvening: "Guten Abend 👋",
-    discover: "Entdecke deinen nächsten Lieblingssound.",
-    quickAccess: "Schnellzugriff",
-    recommended: "Für dich empfohlen",
-    searchResults: "Suchergebnisse",
-    createPlaylist: "Playlist erstellen",
-    searchPlaceholder: "Musik, Künstler oder Album suchen...",
-    aiPlaceholder: "Harmoniq AI fragen..."
-  }
-
-};
-
-
-/* =========================================================
-   3. APPLICATION STATE
-   ========================================================= */
-
-const defaultState = {
-  language: "en",
-  favorites: [],
-  recent: [],
-  playlists: [],
-  currentTrackId: null,
-  currentIndex: 0,
-  playing: false,
-  shuffle: false,
-  repeat: false,
-  volume: 0.8,
-  currentTime: 0,
-  searchQuery: ""
-};
-
-let state = loadState();
-
-
-/* =========================================================
-   4. LOCAL STORAGE
-   ========================================================= */
-
-function loadState() {
-
-  try {
-
-    const saved = localStorage.getItem("harmoniq-state");
-
-    if (!saved) {
-      return { ...defaultState };
+  const TRACKS = [
+    {
+      id: "afterglow",
+      title: "Afterglow",
+      artist: "Luna Vale",
+      album: "Night Signals",
+      cover: "🌌",
+      moods: ["relax", "sleep", "calm", "chill"],
+      frequencies: [174, 220, 261.63]
+    },
+    {
+      id: "velvetSky",
+      title: "Velvet Sky",
+      artist: "Noah Kade",
+      album: "Midnight Roads",
+      cover: "🌃",
+      moods: ["night", "relax", "chill"],
+      frequencies: [196, 246.94, 293.66]
+    },
+    {
+      id: "openWater",
+      title: "Open Water",
+      artist: "Kairo Field",
+      album: "Blue Horizon",
+      cover: "🌊",
+      moods: ["focus", "nature", "calm"],
+      frequencies: [220, 277.18, 329.63]
+    },
+    {
+      id: "lucidDream",
+      title: "Lucid Dream",
+      artist: "Harmoniq",
+      album: "Dream State",
+      cover: "✨",
+      moods: ["sleep", "dream", "relax", "meditation"],
+      frequencies: [164.81, 207.65, 246.94]
     }
+  ];
 
-    const parsed = JSON.parse(saved);
+  const DEFAULT_STATE = {
+    language: "en",
+    favorites: [],
+    recent: [],
+    playlists: [],
+    volume: 0.65,
+    shuffle: false,
+    repeat: false
+  };
 
-    return {
-      ...defaultState,
-      ...parsed
-    };
+  let state = loadState();
+  let translations = {};
+  let currentTrackIndex = 0;
+  let currentTime = 0;
+  let isPlaying = false;
+  let progressTimer = null;
+  let audioContext = null;
+  let masterGain = null;
+  let activeNodes = [];
+  let searchTimer = null;
 
-  } catch (error) {
+  const TRACK_DURATION = 180;
 
-    console.warn("Harmoniq state could not be loaded.", error);
+  /* =========================================================
+     STORAGE
+     ========================================================= */
 
-    return { ...defaultState };
+  function loadState() {
+    try {
+      const saved = JSON.parse(
+        localStorage.getItem("harmoniq_ai_state") || "null"
+      );
+
+      return {
+        ...DEFAULT_STATE,
+        ...(saved || {}),
+        favorites: Array.isArray(saved?.favorites) ? saved.favorites : [],
+        recent: Array.isArray(saved?.recent) ? saved.recent : [],
+        playlists: Array.isArray(saved?.playlists) ? saved.playlists : []
+      };
+    } catch {
+      return { ...DEFAULT_STATE };
+    }
   }
-}
 
-
-function saveState() {
-
-  try {
-
+  function saveState() {
     localStorage.setItem(
-      "harmoniq-state",
+      "harmoniq_ai_state",
       JSON.stringify(state)
     );
+  }
 
-    localStorage.setItem(
-      "harmoniq-language",
-      state.language
+  /* =========================================================
+     TRANSLATION
+     ========================================================= */
+
+  async function loadLanguage(language) {
+    if (!LOCALES.includes(language)) {
+      language = "en";
+    }
+
+    try {
+      const response = await fetch(
+        `${BASE}locales/${language}.json`,
+        { cache: "no-cache" }
+      );
+
+      if (!response.ok) {
+        throw new Error("Language file unavailable");
+      }
+
+      translations = await response.json();
+      state.language = language;
+      saveState();
+
+      document.documentElement.lang = language;
+      document.documentElement.dir =
+        language === "ar" ? "rtl" : "ltr";
+
+      updateLanguageSelector();
+      applyTranslations();
+      renderAll();
+
+    } catch (error) {
+      console.warn("Language loading failed:", error);
+
+      if (language !== "en") {
+        await loadLanguage("en");
+      }
+    }
+  }
+
+  function t(path, fallback = "") {
+    const parts = path.split(".");
+    let value = translations;
+
+    for (const part of parts) {
+      if (
+        value &&
+        Object.prototype.hasOwnProperty.call(value, part)
+      ) {
+        value = value[part];
+      } else {
+        return fallback || path;
+      }
+    }
+
+    return typeof value === "string"
+      ? value
+      : fallback || path;
+  }
+
+  function applyTranslations() {
+    document.querySelectorAll("[data-i18n]").forEach((element) => {
+      const key = element.dataset.i18n;
+      const value = t(key);
+
+      if (value && value !== key) {
+        element.textContent = value;
+      }
+    });
+
+    document
+      .querySelectorAll("[data-i18n-placeholder]")
+      .forEach((element) => {
+        const key = element.dataset.i18nPlaceholder;
+        const value = t(key);
+
+        if (value && value !== key) {
+          element.placeholder = value;
+        }
+      });
+
+    const greeting = document.querySelector(
+      "[data-role='greeting']"
     );
 
-    localStorage.setItem(
-      "harmoniq-favorites",
-      JSON.stringify(state.favorites)
+    if (greeting) {
+      greeting.textContent = t(
+        "home.greeting",
+        "Good evening"
+      );
+    }
+
+    const subtitle = document.querySelector(
+      "[data-role='home-subtitle']"
     );
 
-    localStorage.setItem(
-      "harmoniq-recent",
-      JSON.stringify(state.recent)
+    if (subtitle) {
+      subtitle.textContent = t(
+        "home.subtitle",
+        "Discover music that fits your mood."
+      );
+    }
+  }
+
+  function updateLanguageSelector() {
+    const selectors = document.querySelectorAll(
+      "#languageSelect, [data-language-select]"
     );
 
-    localStorage.setItem(
-      "harmoniq-playlists",
-      JSON.stringify(state.playlists)
+    selectors.forEach((select) => {
+      select.value = state.language;
+    });
+  }
+
+  /* =========================================================
+     DOM HELPERS
+     ========================================================= */
+
+  function qs(selector, parent = document) {
+    return parent.querySelector(selector);
+  }
+
+  function qsa(selector, parent = document) {
+    return [...parent.querySelectorAll(selector)];
+  }
+
+  function setText(selector, text) {
+    const element = qs(selector);
+    if (element) element.textContent = text;
+  }
+
+  function escapeHTML(value) {
+    return String(value)
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#039;");
+  }
+
+  /* =========================================================
+     TRACK HELPERS
+     ========================================================= */
+
+  function getCurrentTrack() {
+    return TRACKS[currentTrackIndex];
+  }
+
+  function getTrackById(id) {
+    return TRACKS.find((track) => track.id === id);
+  }
+
+  function trackTitle(track) {
+    return t(
+      `tracks.${track.id}.title`,
+      track.title
     );
-
-  } catch (error) {
-
-    console.warn("Harmoniq state could not be saved.", error);
-  }
-}
-
-
-/* =========================================================
-   5. AUDIO ENGINE
-   ========================================================= */
-
-let audioContext = null;
-let masterGain = null;
-let activeOscillators = [];
-let audioTimer = null;
-let demoStartedAt = 0;
-let demoDuration = 0;
-
-
-function initAudio() {
-
-  if (audioContext) {
-    return;
   }
 
-  const AudioContextClass =
-    window.AudioContext ||
-    window.webkitAudioContext;
-
-  if (!AudioContextClass) {
-    return;
+  function trackArtist(track) {
+    return t(
+      `tracks.${track.id}.artist`,
+      track.artist
+    );
   }
 
-  audioContext = new AudioContextClass();
-
-  masterGain = audioContext.createGain();
-
-  masterGain.gain.value =
-    Number(state.volume) * 0.12;
-
-  masterGain.connect(
-    audioContext.destination
-  );
-}
-
-
-function resumeAudio() {
-
-  initAudio();
-
-  if (
-    audioContext &&
-    audioContext.state === "suspended"
-  ) {
-    audioContext.resume();
-  }
-}
-
-
-function stopAudio() {
-
-  if (audioTimer) {
-    clearTimeout(audioTimer);
-    audioTimer = null;
+  function trackAlbum(track) {
+    return t(
+      `tracks.${track.id}.album`,
+      track.album
+    );
   }
 
-  activeOscillators.forEach(
-    oscillator => {
+  function formatTime(seconds) {
+    seconds = Math.max(0, Math.floor(seconds));
 
+    const minutes = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+
+    return `${minutes}:${String(secs).padStart(2, "0")}`;
+  }
+
+  /* =========================================================
+     AUDIO ENGINE
+     ========================================================= */
+
+  function createAudioContext() {
+    if (!audioContext) {
+      const AudioCtx =
+        window.AudioContext ||
+        window.webkitAudioContext;
+
+      if (!AudioCtx) {
+        showToast("Web Audio is not supported.");
+        return false;
+      }
+
+      audioContext = new AudioCtx();
+
+      masterGain = audioContext.createGain();
+      masterGain.gain.value = state.volume;
+
+      masterGain.connect(audioContext.destination);
+    }
+
+    return true;
+  }
+
+  async function resumeAudio() {
+    if (!createAudioContext()) return false;
+
+    if (audioContext.state === "suspended") {
+      await audioContext.resume();
+    }
+
+    return true;
+  }
+
+  function stopAudioNodes() {
+    activeNodes.forEach((node) => {
       try {
-        oscillator.stop();
+        node.stop();
       } catch (_) {}
 
-    }
-  );
+      try {
+        node.disconnect();
+      } catch (_) {}
+    });
 
-  activeOscillators = [];
-}
-
-
-function playDemoAudio(track) {
-
-  resumeAudio();
-
-  if (!audioContext || !masterGain) {
-    return;
+    activeNodes = [];
   }
 
-  stopAudio();
+  function startGeneratedTrack(track) {
+    if (!audioContext || !masterGain) return;
 
-  const now = audioContext.currentTime;
+    stopAudioNodes();
 
-  demoStartedAt = Date.now();
-  demoDuration = track.duration;
+    const now = audioContext.currentTime;
 
-  const frequencies = [
-    220,
-    261.63,
-    293.66,
-    329.63
-  ];
+    const frequencies = track.frequencies;
 
-  const base =
-    frequencies[
-      (track.id - 1) % frequencies.length
-    ];
-
-  const frequenciesToPlay = [
-    base,
-    base * 1.25,
-    base * 1.5
-  ];
-
-  frequenciesToPlay.forEach(
-    (frequency, index) => {
-
+    frequencies.forEach((frequency, index) => {
       const oscillator =
         audioContext.createOscillator();
 
       const gain =
         audioContext.createGain();
 
+      const filter =
+        audioContext.createBiquadFilter();
+
       oscillator.type =
-        index === 0
-          ? "sine"
-          : "triangle";
+        index === 0 ? "sine" :
+        index === 1 ? "triangle" :
+        "sine";
 
-      oscillator.frequency.value =
-        frequency;
-
-      gain.gain.setValueAtTime(
-        0,
+      oscillator.frequency.setValueAtTime(
+        frequency,
         now
       );
 
-      gain.gain.linearRampToValueAtTime(
-        0.035,
-        now + 1
+      filter.type = "lowpass";
+      filter.frequency.value =
+        900 + index * 300;
+
+      const baseVolume =
+        index === 0 ? 0.08 :
+        index === 1 ? 0.045 :
+        0.025;
+
+      gain.gain.setValueAtTime(
+        0.0001,
+        now
       );
 
-      gain.gain.linearRampToValueAtTime(
-        0.02,
-        now + 7
+      gain.gain.exponentialRampToValueAtTime(
+        baseVolume,
+        now + 2
       );
 
-      gain.gain.linearRampToValueAtTime(
-        0,
-        now + 10
-      );
-
-      oscillator.connect(gain);
-
+      oscillator.connect(filter);
+      filter.connect(gain);
       gain.connect(masterGain);
 
       oscillator.start(now);
 
-      oscillator.stop(now + 10);
+      activeNodes.push(oscillator);
+    });
 
-      activeOscillators.push(
-        oscillator
-      );
-    }
-  );
+    /* Soft ambient pulse */
+    const lfo = audioContext.createOscillator();
+    const lfoGain = audioContext.createGain();
 
-  audioTimer = setTimeout(
-    () => {
+    lfo.type = "sine";
+    lfo.frequency.value = 0.08;
+    lfoGain.gain.value = 0.018;
 
-      if (!state.playing) {
-        return;
-      }
+    lfo.connect(lfoGain);
+    lfoGain.connect(masterGain.gain);
 
-      if (state.repeat) {
+    lfo.start(now);
 
-        playDemoAudio(track);
-
-      } else {
-
-        nextTrack();
-      }
-
-    },
-    9500
-  );
-}
-
-
-/* =========================================================
-   6. PLAYER
-   ========================================================= */
-
-function getCurrentTrack() {
-
-  if (!state.currentTrackId) {
-    return null;
+    activeNodes.push(lfo);
   }
 
-  return tracks.find(
-    track =>
-      track.id === state.currentTrackId
-  ) || null;
-}
+  async function playCurrentTrack() {
+    const ready = await resumeAudio();
 
+    if (!ready) return;
 
-function playTrack(trackId) {
+    const track = getCurrentTrack();
 
-  const index =
-    tracks.findIndex(
-      track => track.id === trackId
-    );
+    startGeneratedTrack(track);
 
-  if (index === -1) {
-    return;
+    isPlaying = true;
+
+    addToRecent(track.id);
+    updatePlayer();
+    startProgressTimer();
   }
 
-  const track = tracks[index];
+  function pauseCurrentTrack() {
+    stopAudioNodes();
 
-  state.currentTrackId = track.id;
-  state.currentIndex = index;
-  state.playing = true;
-  state.currentTime = 0;
+    isPlaying = false;
 
-  addToRecent(track.id);
+    stopProgressTimer();
 
-  saveState();
-
-  playDemoAudio(track);
-
-  updatePlayer();
-
-  renderAllTracks();
-
-  showToast(
-    `${track.title} — ${track.artist}`
-  );
-}
-
-
-function togglePlay() {
-
-  const current = getCurrentTrack();
-
-  if (!current) {
-
-    playTrack(tracks[0].id);
-
-    return;
+    updatePlayer();
   }
 
-  if (state.playing) {
-
-    state.playing = false;
-
-    stopAudio();
-
-  } else {
-
-    state.playing = true;
-
-    playDemoAudio(current);
-  }
-
-  saveState();
-
-  updatePlayer();
-}
-
-
-function nextTrack() {
-
-  if (!tracks.length) {
-    return;
-  }
-
-  let nextIndex;
-
-  if (state.shuffle) {
-
-    nextIndex =
-      Math.floor(
-        Math.random() * tracks.length
-      );
-
-  } else {
-
-    nextIndex =
-      state.currentIndex + 1;
-
-    if (nextIndex >= tracks.length) {
-
-      if (state.repeat) {
-
-        nextIndex = 0;
-
-      } else {
-
-        nextIndex =
-          tracks.length - 1;
-
-        state.playing = false;
-
-        stopAudio();
-
-        updatePlayer();
-
-        return;
-      }
+  async function togglePlay() {
+    if (isPlaying) {
+      pauseCurrentTrack();
+    } else {
+      await playCurrentTrack();
     }
   }
 
-  playTrack(
-    tracks[nextIndex].id
-  );
-}
+  /* =========================================================
+     PROGRESS
+     ========================================================= */
 
+  function startProgressTimer() {
+    stopProgressTimer();
 
-function previousTrack() {
+    progressTimer = setInterval(() => {
+      if (!isPlaying) return;
 
-  if (!tracks.length) {
-    return;
+      currentTime += 1;
+
+      if (currentTime >= TRACK_DURATION) {
+        currentTime = TRACK_DURATION;
+        handleTrackEnded();
+        return;
+      }
+
+      updateProgress();
+    }, 1000);
   }
 
-  let previousIndex =
-    state.currentIndex - 1;
-
-  if (previousIndex < 0) {
-    previousIndex =
-      tracks.length - 1;
+  function stopProgressTimer() {
+    if (progressTimer) {
+      clearInterval(progressTimer);
+      progressTimer = null;
+    }
   }
 
-  playTrack(
-    tracks[previousIndex].id
-  );
-}
-
-
-function toggleShuffle() {
-
-  state.shuffle =
-    !state.shuffle;
-
-  saveState();
-
-  const button =
-    document.getElementById(
-      "shuffleBtn"
-    );
-
-  if (button) {
-    button.classList.toggle(
-      "active",
-      state.shuffle
-    );
-  }
-
-  showToast(
-    state.shuffle
-      ? "Shuffle ON"
-      : "Shuffle OFF"
-  );
-}
-
-
-function toggleRepeat() {
-
-  state.repeat =
-    !state.repeat;
-
-  saveState();
-
-  const button =
-    document.getElementById(
-      "repeatBtn"
-    );
-
-  if (button) {
-    button.classList.toggle(
-      "active",
-      state.repeat
-    );
-  }
-
-  showToast(
-    state.repeat
-      ? "Repeat ON"
-      : "Repeat OFF"
-  );
-}
-
-
-/* =========================================================
-   7. VOLUME
-   ========================================================= */
-
-function changeVolume(value) {
-
-  const volume =
-    Math.max(
-      0,
-      Math.min(
-        1,
-        Number(value)
-      )
-    );
-
-  state.volume = volume;
-
-  if (masterGain) {
-
-    masterGain.gain.value =
-      volume * 0.12;
-  }
-
-  saveState();
-
-  updateMuteButton();
-}
-
-
-function toggleMute() {
-
-  if (!masterGain) {
-    initAudio();
-  }
-
-  if (!masterGain) {
-    return;
-  }
-
-  if (masterGain.gain.value > 0) {
-
-    masterGain.gain.value = 0;
-
-  } else {
-
-    masterGain.gain.value =
-      state.volume * 0.12;
-  }
-
-  updateMuteButton();
-}
-
-
-function updateMuteButton() {
-
-  const button =
-    document.getElementById(
-      "muteBtn"
-    );
-
-  if (!button) {
-    return;
-  }
-
-  const muted =
-    masterGain &&
-    masterGain.gain.value === 0;
-
-  button.textContent =
-    muted
-      ? "🔇"
-      : "🔊";
-}
-
-
-/* =========================================================
-   8. PROGRESS
-   ========================================================= */
-
-function seek(value) {
-
-  const track =
-    getCurrentTrack();
-
-  if (!track) {
-    return;
-  }
-
-  const percentage =
-    Number(value) / 100;
-
-  state.currentTime =
-    track.duration * percentage;
-
-  demoStartedAt =
-    Date.now() -
-    state.currentTime * 1000;
-
-  updateProgressUI();
-}
-
-
-function updateProgress() {
-
-  const track =
-    getCurrentTrack();
-
-  if (
-    !track ||
-    !state.playing
-  ) {
-    return;
-  }
-
-  const elapsed =
-    (Date.now() - demoStartedAt) / 1000;
-
-  state.currentTime =
-    Math.min(
-      elapsed,
-      track.duration
-    );
-
-  if (
-    state.currentTime >=
-    track.duration
-  ) {
+  function handleTrackEnded() {
+    stopProgressTimer();
 
     if (state.repeat) {
+      currentTime = 0;
+      playCurrentTrack();
+      return;
+    }
 
-      playDemoAudio(track);
+    nextTrack();
+  }
 
+  function seekTo(value) {
+    const numeric = Number(value);
+
+    if (!Number.isFinite(numeric)) return;
+
+    currentTime = Math.max(
+      0,
+      Math.min(TRACK_DURATION, numeric)
+    );
+
+    updateProgress();
+  }
+
+  function updateProgress() {
+    const percent =
+      (currentTime / TRACK_DURATION) * 100;
+
+    qsa(
+      "#progressBar, [data-role='progress']"
+    ).forEach((element) => {
+      if (
+        element instanceof HTMLInputElement &&
+        element.type === "range"
+      ) {
+        element.value = String(currentTime);
+        element.max = String(TRACK_DURATION);
+      } else {
+        element.style.width = `${percent}%`;
+      }
+    });
+
+    setText(
+      "[data-role='current-time']",
+      formatTime(currentTime)
+    );
+
+    setText(
+      "[data-role='duration']",
+      formatTime(TRACK_DURATION)
+    );
+  }
+
+  /* =========================================================
+     NEXT / PREVIOUS
+     ========================================================= */
+
+  async function nextTrack() {
+    if (state.shuffle) {
+      let nextIndex = currentTrackIndex;
+
+      if (TRACKS.length > 1) {
+        while (nextIndex === currentTrackIndex) {
+          nextIndex =
+            Math.floor(Math.random() * TRACKS.length);
+        }
+      }
+
+      currentTrackIndex = nextIndex;
     } else {
-
-      nextTrack();
+      currentTrackIndex =
+        (currentTrackIndex + 1) % TRACKS.length;
     }
 
-    return;
+    currentTime = 0;
+
+    if (isPlaying) {
+      await playCurrentTrack();
+    } else {
+      updatePlayer();
+    }
   }
 
-  updateProgressUI();
-}
-
-
-function updateProgressUI() {
-
-  const progress =
-    document.getElementById(
-      "progress"
-    );
-
-  const currentTime =
-    document.getElementById(
-      "currentTime"
-    );
-
-  const duration =
-    document.getElementById(
-      "duration"
-    );
-
-  const track =
-    getCurrentTrack();
-
-  if (!track) {
-
-    if (progress) {
-      progress.value = 0;
+  async function previousTrack() {
+    if (currentTime > 5) {
+      currentTime = 0;
+      updateProgress();
+      return;
     }
 
-    if (currentTime) {
-      currentTime.textContent =
-        "0:00";
-    }
+    currentTrackIndex =
+      (currentTrackIndex - 1 + TRACKS.length) %
+      TRACKS.length;
 
-    if (duration) {
-      duration.textContent =
-        "0:00";
-    }
+    currentTime = 0;
 
-    return;
+    if (isPlaying) {
+      await playCurrentTrack();
+    } else {
+      updatePlayer();
+    }
   }
 
-  const percentage =
-    (state.currentTime /
-      track.duration) *
-    100;
+  /* =========================================================
+     VOLUME
+     ========================================================= */
 
-  if (progress) {
-    progress.value =
-      Math.min(
-        100,
-        Math.max(
-          0,
-          percentage
+  function setVolume(value) {
+    const volume = Math.max(
+      0,
+      Math.min(1, Number(value))
+    );
+
+    state.volume = volume;
+    saveState();
+
+    if (masterGain) {
+      masterGain.gain.value = volume;
+    }
+
+    qsa(
+      "#volumeControl, [data-role='volume']"
+    ).forEach((element) => {
+      if (element instanceof HTMLInputElement) {
+        element.value = String(volume);
+      }
+    });
+  }
+
+  function toggleMute() {
+    if (state.volume > 0) {
+      localStorage.setItem(
+        "harmoniq_previous_volume",
+        String(state.volume)
+      );
+
+      setVolume(0);
+    } else {
+      const previous = Number(
+        localStorage.getItem(
+          "harmoniq_previous_volume"
+        ) || 0.65
+      );
+
+      setVolume(previous);
+    }
+  }
+
+  /* =========================================================
+     FAVORITES
+     ========================================================= */
+
+  function isFavorite(trackId) {
+    return state.favorites.includes(trackId);
+  }
+
+  function toggleFavorite(trackId) {
+    if (isFavorite(trackId)) {
+      state.favorites =
+        state.favorites.filter(
+          (id) => id !== trackId
+        );
+
+      showToast(
+        t(
+          "messages.removedFavorite",
+          "Removed from Favorites"
         )
       );
-  }
+    } else {
+      state.favorites.push(trackId);
 
-  if (currentTime) {
-    currentTime.textContent =
-      formatTime(
-        state.currentTime
+      showToast(
+        t(
+          "messages.addedFavorite",
+          "Added to Favorites"
+        )
       );
+    }
+
+    saveState();
+    renderAll();
+    updatePlayer();
   }
 
-  if (duration) {
-    duration.textContent =
-      formatTime(
-        track.duration
+  /* =========================================================
+     RECENT
+     ========================================================= */
+
+  function addToRecent(trackId) {
+    state.recent =
+      state.recent.filter(
+        (id) => id !== trackId
       );
+
+    state.recent.unshift(trackId);
+
+    state.recent =
+      state.recent.slice(0, 20);
+
+    saveState();
   }
-}
 
+  /* =========================================================
+     PLAYLISTS
+     ========================================================= */
 
-function formatTime(seconds) {
+  function createPlaylist(name, description = "") {
+    const cleanName = String(name || "").trim();
 
-  const value =
-    Math.max(
-      0,
-      Math.floor(
-        Number(seconds) || 0
-      )
-    );
-
-  const minutes =
-    Math.floor(value / 60);
-
-  const remaining =
-    value % 60;
-
-  return (
-    minutes +
-    ":" +
-    String(
-      remaining
-    ).padStart(2, "0")
-  );
-}
-
-
-/* =========================================================
-   9. PLAYER UI
-   ========================================================= */
-
-function updatePlayer() {
-
-  const title =
-    document.getElementById(
-      "nowTitle"
-    );
-
-  const artist =
-    document.getElementById(
-      "nowArtist"
-    );
-
-  const cover =
-    document.getElementById(
-      "miniCover"
-    );
-
-  const playButton =
-    document.getElementById(
-      "playButton"
-    );
-
-  const favoriteButton =
-    document.getElementById(
-      "playerFavorite"
-    );
-
-  const track =
-    getCurrentTrack();
-
-  if (!track) {
-
-    if (title) {
-      title.textContent =
-        "Nothing playing";
+    if (!cleanName) {
+      showToast("Please enter a playlist name.");
+      return;
     }
 
-    if (artist) {
-      artist.textContent =
-        "Choose a track";
-    }
+    state.playlists.push({
+      id:
+        "playlist_" +
+        Date.now() +
+        "_" +
+        Math.random()
+          .toString(36)
+          .slice(2, 8),
+      name: cleanName,
+      description: String(description || "").trim(),
+      tracks: []
+    });
 
-    if (cover) {
-      cover.textContent =
-        "♫";
-    }
-
-    if (playButton) {
-      playButton.textContent =
-        "▶";
-    }
-
-    if (favoriteButton) {
-      favoriteButton.textContent =
-        "♡";
-    }
-
-    updateProgressUI();
-
-    return;
-  }
-
-  if (title) {
-    title.textContent =
-      track.title;
-  }
-
-  if (artist) {
-    artist.textContent =
-      track.artist;
-  }
-
-  if (cover) {
-    cover.textContent =
-      track.emoji;
-  }
-
-  if (playButton) {
-
-    playButton.textContent =
-      state.playing
-        ? "Ⅱ"
-        : "▶";
-  }
-
-  if (favoriteButton) {
-
-    favoriteButton.textContent =
-      state.favorites.includes(
-        track.id
-      )
-        ? "♥"
-        : "♡";
-  }
-
-  updateProgressUI();
-
-  const shuffleButton =
-    document.getElementById(
-      "shuffleBtn"
-    );
-
-  const repeatButton =
-    document.getElementById(
-      "repeatBtn"
-    );
-
-  if (shuffleButton) {
-
-    shuffleButton.classList.toggle(
-      "active",
-      state.shuffle
-    );
-  }
-
-  if (repeatButton) {
-
-    repeatButton.classList.toggle(
-      "active",
-      state.repeat
-    );
-  }
-}
-
-
-/* =========================================================
-   10. FAVORITES
-   ========================================================= */
-
-function toggleFavorite(trackId) {
-
-  const index =
-    state.favorites.indexOf(
-      trackId
-    );
-
-  if (index >= 0) {
-
-    state.favorites.splice(
-      index,
-      1
-    );
+    saveState();
+    closeModal();
+    renderAll();
 
     showToast(
-      "Removed from Favorites"
-    );
-
-  } else {
-
-    state.favorites.push(
-      trackId
-    );
-
-    showToast(
-      "Added to Favorites"
+      t(
+        "messages.playlistCreated",
+        "Playlist created successfully."
+      )
     );
   }
 
-  saveState();
-
-  renderAllTracks();
-
-  updateCounters();
-
-  updatePlayer();
-}
-
-
-function isFavorite(trackId) {
-
-  return state.favorites.includes(
-    trackId
-  );
-}
-
-
-/* =========================================================
-   11. RECENTLY PLAYED
-   ========================================================= */
-
-function addToRecent(trackId) {
-
-  state.recent =
-    state.recent.filter(
-      id => id !== trackId
+  function addTrackToPlaylist(trackId, playlistId) {
+    const playlist = state.playlists.find(
+      (item) => item.id === playlistId
     );
 
-  state.recent.unshift(
-    trackId
-  );
+    if (!playlist) return;
 
-  state.recent =
-    state.recent.slice(
-      0,
-      20
-    );
+    if (!playlist.tracks.includes(trackId)) {
+      playlist.tracks.push(trackId);
+      saveState();
 
-  saveState();
+      showToast(
+        t(
+          "messages.addedPlaylist",
+          "Added to playlist"
+        )
+      );
 
-  updateCounters();
-}
-
-
-/* =========================================================
-   12. TRACK RENDERING
-   ========================================================= */
-
-function renderTracks(
-  list,
-  targetId
-) {
-
-  const container =
-    document.getElementById(
-      targetId
-    );
-
-  if (!container) {
-    return;
+      renderAll();
+    }
   }
 
-  if (!list.length) {
+  /* =========================================================
+     SEARCH
+     ========================================================= */
 
-    container.innerHTML = `
-      <div class="emptyState">
-        <div class="emptyIcon">♫</div>
-        <h3>No music found</h3>
-        <p>Try another search or explore Harmoniq recommendations.</p>
-      </div>
-    `;
-
-    return;
-  }
-
-  container.innerHTML =
-    list.map(
-      track => createTrackHTML(track)
-    ).join("");
-}
-
-
-function createTrackHTML(track) {
-
-  const favorite =
-    isFavorite(track.id);
-
-  const current =
-    state.currentTrackId ===
-    track.id;
-
-  return `
-    <article
-      class="track"
-      data-track-id="${track.id}"
-    >
-
-      <button
-        class="cover ${track.cover}"
-        data-action="play"
-        data-id="${track.id}"
-        aria-label="Play ${escapeHtml(track.title)}"
-      >
-        <span>${track.emoji}</span>
-
-        ${
-          current && state.playing
-            ? `<span class="playingBadge">♫</span>`
-            : ""
-        }
-
-      </button>
-
-      <div class="trackInfo">
-
-        <h3>
-          ${escapeHtml(track.title)}
-        </h3>
-
-        <p>
-          ${escapeHtml(track.artist)}
-        </p>
-
-        <small>
-          ${escapeHtml(track.album)}
-        </small>
-
-      </div>
-
-      <div class="trackActions">
-
-        <button
-          class="likeButton ${favorite ? "on" : ""}"
-          data-action="favorite"
-          data-id="${track.id}"
-          aria-label="Favorite"
-        >
-          ${favorite ? "♥" : "♡"}
-        </button>
-
-        <button
-          class="playButtonSmall"
-          data-action="play"
-          data-id="${track.id}"
-          aria-label="Play"
-        >
-          ▶
-        </button>
-
-      </div>
-
-    </article>
-  `;
-}
-
-
-function renderAllTracks() {
-
-  renderTracks(
-    tracks,
-    "trackGrid"
-  );
-
-  const search =
-    state.searchQuery.trim();
-
-  if (search) {
-
-    const results =
-      filterTracks(search);
-
-    renderTracks(
-      results,
-      "searchResults"
-    );
-  }
-
-  renderLibrary();
-}
-
-
-/* =========================================================
-   13. SEARCH
-   ========================================================= */
-
-function filterTracks(query) {
-
-  const q =
-    query
+  function searchTracks(query) {
+    const text = String(query || "")
       .trim()
       .toLowerCase();
 
-  if (!q) {
-    return tracks;
-  }
+    if (!text) {
+      return TRACKS;
+    }
 
-  return tracks.filter(
-    track => {
-
-      const searchable = [
+    return TRACKS.filter((track) => {
+      const haystack = [
         track.title,
         track.artist,
         track.album,
-        ...track.moods,
-        ...track.genres
+        ...track.moods
       ]
         .join(" ")
         .toLowerCase();
 
-      return searchable.includes(q);
-    }
-  );
-}
-
-
-function performSearch(query) {
-
-  state.searchQuery =
-    query.trim();
-
-  if (!state.searchQuery) {
-
-    showPage("home");
-
-    return;
+      return haystack.includes(text);
+    });
   }
 
-  const results =
-    filterTracks(
-      state.searchQuery
-    );
+  function renderSearchResults(query = "") {
+    const container =
+      qs("[data-role='search-results']") ||
+      qs("#searchResults");
 
-  showPage("search");
+    if (!container) return;
 
-  renderTracks(
-    results,
-    "searchResults"
-  );
-}
+    const results = searchTracks(query);
 
+    if (!results.length) {
+      container.innerHTML = `
+        <div class="emptyState">
+          ${escapeHTML(
+            t(
+              "search.noResults",
+              "No results found."
+            )
+          )}
+        </div>
+      `;
+      return;
+    }
 
-/* =========================================================
-   14. HARMONIQ AI
-   ========================================================= */
+    container.innerHTML =
+      results.map(trackCardHTML).join("");
 
-function askHarmoniqAI(command) {
+    bindDynamicButtons(container);
+  }
 
-  const text =
-    String(command || "")
+  /* =========================================================
+     AI
+     ========================================================= */
+
+  function processAICommand(command) {
+    const text = String(command || "")
       .trim()
       .toLowerCase();
 
-  if (!text) {
+    if (!text) return;
 
-    showToast(
-      "Tell Harmoniq AI what you want to hear."
-    );
-
-    return;
-  }
-
-  let results = [];
-
-
-  /* Sleep */
-
-  if (
-    containsAny(
-      text,
-      [
+    const words = {
+      sleep: [
         "sleep",
-        "bed",
-        "dream",
+        "sleeping",
         "نوم",
-        "نومي",
         "للنوم",
         "uyku",
         "dormir",
         "schlafen"
-      ]
-    )
-  ) {
-
-    results =
-      tracks.filter(
-        track =>
-          track.moods.includes(
-            "sleep"
-          ) ||
-          track.moods.includes(
-            "dream"
-          )
-      );
-  }
-
-
-  /* Relax */
-
-  else if (
-    containsAny(
-      text,
-      [
+      ],
+      relax: [
         "relax",
         "relaxing",
-        "calm",
-        "استرخ",
+        "هادئة",
         "استرخاء",
-        "هادئ",
-        "راحة",
-        "sakin",
         "rahat",
-        "relaxant",
-        "entspann"
-      ]
-    )
-  ) {
-
-    results =
-      tracks.filter(
-        track =>
-          track.moods.includes(
-            "relax"
-          ) ||
-          track.moods.includes(
-            "calm"
-          )
-      );
-  }
-
-
-  /* Focus */
-
-  else if (
-    containsAny(
-      text,
-      [
+        "détente",
+        "relajante",
+        "entspannung"
+      ],
+      focus: [
         "focus",
         "study",
         "work",
         "تركيز",
         "دراسة",
-        "عمل",
         "çalış",
-        "odak",
-        "concentr",
-        "fokus"
-      ]
-    )
-  ) {
-
-    results =
-      tracks.filter(
-        track =>
-          track.moods.includes(
-            "focus"
-          )
-      );
-  }
-
-
-  /* Nature */
-
-  else if (
-    containsAny(
-      text,
-      [
+        "concentration",
+        "estudiar"
+      ],
+      nature: [
         "nature",
-        "forest",
         "ocean",
         "water",
         "طبيعة",
         "بحر",
         "ماء",
         "doğa",
-        "deniz",
-        "nature",
-        "natur"
+        "nature"
+      ],
+      meditation: [
+        "meditation",
+        "تأمل",
+        "meditasyon",
+        "méditation",
+        "meditación",
+        "meditation"
       ]
-    )
-  ) {
+    };
 
-    results =
-      tracks.filter(
-        track =>
-          track.moods.includes(
-            "nature"
-          )
-      );
-  }
+    let mood = null;
 
-
-  /* Direct track search */
-
-  else {
-
-    results =
-      tracks.filter(
-        track => {
-
-          const title =
-            track.title.toLowerCase();
-
-          const artist =
-            track.artist.toLowerCase();
-
-          const album =
-            track.album.toLowerCase();
-
-          return (
-            text.includes(title) ||
-            text.includes(artist) ||
-            text.includes(album) ||
-            title.includes(text) ||
-            artist.includes(text)
-          );
-        }
-      );
-  }
-
-
-  if (!results.length) {
-
-    results =
-      tracks.slice();
-  }
-
-
-  const selected =
-    results[0];
-
-  playTrack(
-    selected.id
-  );
-
-  showToast(
-    `Harmoniq AI: ${selected.title}`
-  );
-}
-
-
-function containsAny(
-  text,
-  words
-) {
-
-  return words.some(
-    word =>
-      text.includes(
-        word.toLowerCase()
-      )
-  );
-}
-
-
-/* =========================================================
-   15. LIBRARY
-   ========================================================= */
-
-let currentLibraryTab =
-  "favorites";
-
-
-function renderLibrary() {
-
-  const container =
-    document.getElementById(
-      "libraryContent"
-    );
-
-  if (!container) {
-    return;
-  }
-
-  let list = [];
-
-  if (
-    currentLibraryTab ===
-    "favorites"
-  ) {
-
-    list =
-      tracks.filter(
-        track =>
-          state.favorites.includes(
-            track.id
-          )
-      );
-
-  } else if (
-    currentLibraryTab ===
-    "recent"
-  ) {
-
-    list =
-      state.recent
-        .map(
-          id =>
-            tracks.find(
-              track =>
-                track.id === id
-            )
-        )
-        .filter(Boolean);
-
-  } else if (
-    currentLibraryTab ===
-    "playlists"
-  ) {
-
-    renderPlaylists(
-      container
-    );
-
-    return;
-  }
-
-
-  if (!list.length) {
-
-    container.innerHTML = `
-      <div class="emptyState">
-        <div class="emptyIcon">♫</div>
-        <h3>Your library is empty</h3>
-        <p>Add music to your ${currentLibraryTab} collection.</p>
-      </div>
-    `;
-
-    return;
-  }
-
-
-  container.innerHTML =
-    `<div class="trackGrid" id="libraryTracks"></div>`;
-
-  renderTracks(
-    list,
-    "libraryTracks"
-  );
-}
-
-
-function setLibraryTab(tab) {
-
-  currentLibraryTab =
-    tab;
-
-  document
-    .querySelectorAll(
-      ".libraryTab"
-    )
-    .forEach(
-      button => {
-
-        button.classList.toggle(
-          "active",
-          button.dataset.library ===
-          tab
-        );
+    for (const [key, list] of Object.entries(words)) {
+      if (list.some((word) => text.includes(word))) {
+        mood = key;
+        break;
       }
-    );
+    }
 
-  renderLibrary();
-}
+    let matches = [];
 
+    if (mood) {
+      matches = TRACKS.filter((track) =>
+        track.moods.includes(mood)
+      );
+    }
 
-function renderPlaylists(container) {
+    if (!matches.length) {
+      matches = searchTracks(text);
+    }
 
-  if (!state.playlists.length) {
+    if (!matches.length) {
+      matches = TRACKS;
+    }
 
-    container.innerHTML = `
-      <div class="emptyState">
-        <div class="emptyIcon">+</div>
-        <h3>No playlists yet</h3>
-        <p>Create your first Harmoniq playlist.</p>
-        <button
-          class="primaryBtn"
-          data-action="openPlaylist"
-        >
-          Create Playlist
-        </button>
-      </div>
-    `;
+    const selected = matches[0];
 
-    return;
-  }
+    currentTrackIndex =
+      TRACKS.findIndex(
+        (track) => track.id === selected.id
+      );
 
-
-  container.innerHTML = `
-    <div class="playlistGrid">
-      ${state.playlists.map(
-        playlist => `
-          <div class="playlistCard">
-
-            <div class="playlistIconLarge">
-              ♫
-            </div>
-
-            <div>
-              <h3>
-                ${escapeHtml(
-                  playlist.name
-                )}
-              </h3>
-
-              <p>
-                ${playlist.tracks.length} tracks
-              </p>
-            </div>
-
-          </div>
-        `
-      ).join("")}
-    </div>
-  `;
-}
-
-
-/* =========================================================
-   16. PLAYLISTS
-   ========================================================= */
-
-function openPlaylistModal() {
-
-  const modal =
-    document.getElementById(
-      "playlistModal"
-    );
-
-  if (!modal) {
-    return;
-  }
-
-  modal.classList.add(
-    "show"
-  );
-
-  const input =
-    document.getElementById(
-      "playlistName"
-    );
-
-  if (input) {
-
-    input.value = "";
-
-    setTimeout(
-      () => input.focus(),
-      50
-    );
-  }
-}
-
-
-function closePlaylistModal() {
-
-  const modal =
-    document.getElementById(
-      "playlistModal"
-    );
-
-  if (modal) {
-
-    modal.classList.remove(
-      "show"
-    );
-  }
-}
-
-
-function createPlaylist() {
-
-  const input =
-    document.getElementById(
-      "playlistName"
-    );
-
-  if (!input) {
-    return;
-  }
-
-  const name =
-    input.value.trim();
-
-  if (!name) {
+    currentTime = 0;
 
     showToast(
-      "Enter a playlist name."
+      `${trackTitle(selected)} — ${trackArtist(selected)}`
     );
 
-    return;
+    playCurrentTrack();
   }
 
+  /* =========================================================
+     NAVIGATION
+     ========================================================= */
 
-  state.playlists.push({
-
-    id:
-      Date.now(),
-
-    name,
-
-    tracks: []
-
-  });
-
-
-  saveState();
-
-  updateCounters();
-
-  closePlaylistModal();
-
-  renderLibrary();
-
-  showToast(
-    "Playlist created"
-  );
-}
-
-
-/* =========================================================
-   17. NAVIGATION
-   ========================================================= */
-
-function showPage(pageId) {
-
-  document
-    .querySelectorAll(
-      ".page"
-    )
-    .forEach(
-      page => {
-
-        page.classList.toggle(
-          "activePage",
-          page.id === pageId
-        );
-
-        page.style.display =
-          page.id === pageId
-            ? "block"
-            : "none";
-      }
+  function showPage(pageName) {
+    const pages = qsa(
+      ".page, [data-page]"
     );
 
+    pages.forEach((page) => {
+      const pageId =
+        page.dataset.page ||
+        page.id ||
+        "";
 
-  document
-    .querySelectorAll(
-      ".navBtn"
-    )
-    .forEach(
-      button => {
+      const active =
+        pageId === pageName ||
+        pageId === `${pageName}Page`;
 
+      page.classList.toggle(
+        "activePage",
+        active
+      );
+
+      page.classList.toggle(
+        "active",
+        active
+      );
+    });
+
+    qsa(
+      ".navBtn, .mobileNavBtn, [data-nav]"
+    ).forEach((button) => {
+      const target =
+        button.dataset.nav ||
+        button.dataset.page ||
+        button.getAttribute("href")?.replace("#", "");
+
+      button.classList.toggle(
+        "active",
+        target === pageName
+      );
+    });
+  }
+
+  /* =========================================================
+     RENDER TRACK CARD
+     ========================================================= */
+
+  function trackCardHTML(track) {
+    const favorite = isFavorite(track.id);
+
+    return `
+      <article
+        class="trackCard"
+        data-track-id="${escapeHTML(track.id)}"
+      >
+        <div class="trackCover">
+          <span class="coverEmoji">
+            ${track.cover}
+          </span>
+
+          <button
+            class="playButtonSmall"
+            data-action="play"
+            data-track-id="${escapeHTML(track.id)}"
+            aria-label="${escapeHTML(
+              t("actions.playNow", "Play Now")
+            )}"
+          >
+            ▶
+          </button>
+        </div>
+
+        <div class="trackInfo">
+          <h3>${escapeHTML(trackTitle(track))}</h3>
+          <p>${escapeHTML(trackArtist(track))}</p>
+          <small>${escapeHTML(trackAlbum(track))}</small>
+        </div>
+
+        <button
+          class="likeButton ${favorite ? "active" : ""}"
+          data-action="favorite"
+          data-track-id="${escapeHTML(track.id)}"
+          aria-label="${
+            favorite
+              ? escapeHTML(
+                  t(
+                    "actions.removeFavorite",
+                    "Remove from Favorites"
+                  )
+                )
+              : escapeHTML(
+                  t(
+                    "actions.addFavorite",
+                    "Add to Favorites"
+                  )
+                )
+          }"
+        >
+          ${favorite ? "♥" : "♡"}
+        </button>
+      </article>
+    `;
+  }
+
+  /* =========================================================
+     RENDER HOME
+     ========================================================= */
+
+  function renderRecommended() {
+    const containers = [
+      qs("[data-role='recommended']"),
+      qs("#recommendedTracks"),
+      qs(".recommendedGrid")
+    ].filter(Boolean);
+
+    containers.forEach((container) => {
+      container.innerHTML =
+        TRACKS.map(trackCardHTML).join("");
+
+      bindDynamicButtons(container);
+    });
+  }
+
+  /* =========================================================
+     RENDER LIBRARY
+     ========================================================= */
+
+  function renderLibrary() {
+    const favoritesContainer =
+      qs("[data-role='favorites-list']") ||
+      qs("#favoritesList");
+
+    if (favoritesContainer) {
+      const tracks = state.favorites
+        .map(getTrackById)
+        .filter(Boolean);
+
+      favoritesContainer.innerHTML =
+        tracks.length
+          ? tracks.map(trackCardHTML).join("")
+          : `<div class="emptyState">
+              ${escapeHTML(
+                t(
+                  "library.emptyFavorites",
+                  "You haven't added any favorites yet."
+                )
+              )}
+             </div>`;
+
+      bindDynamicButtons(favoritesContainer);
+    }
+
+    const recentContainer =
+      qs("[data-role='recent-list']") ||
+      qs("#recentList");
+
+    if (recentContainer) {
+      const tracks = state.recent
+        .map(getTrackById)
+        .filter(Boolean);
+
+      recentContainer.innerHTML =
+        tracks.length
+          ? tracks.map(trackCardHTML).join("")
+          : `<div class="emptyState">
+              ${escapeHTML(
+                t(
+                  "library.emptyRecent",
+                  "Your recently played tracks will appear here."
+                )
+              )}
+             </div>`;
+
+      bindDynamicButtons(recentContainer);
+    }
+
+    renderPlaylists();
+  }
+
+  function renderPlaylists() {
+    const container =
+      qs("[data-role='playlists-list']") ||
+      qs("#playlistsList");
+
+    if (!container) return;
+
+    if (!state.playlists.length) {
+      container.innerHTML = `
+        <div class="emptyState">
+          ${escapeHTML(
+            t(
+              "library.emptyPlaylists",
+              "Create a playlist to start organizing your music."
+            )
+          )}
+        </div>
+      `;
+      return;
+    }
+
+    container.innerHTML = state.playlists
+      .map((playlist) => {
+        const count = playlist.tracks.length;
+
+        return `
+          <div class="playlistCard">
+            <div class="playlistIcon">♫</div>
+
+            <div>
+              <h3>${escapeHTML(playlist.name)}</h3>
+              <p>${escapeHTML(
+                playlist.description || ""
+              )}</p>
+              <small>${count} tracks</small>
+            </div>
+
+            <button
+              class="primaryBtn"
+              data-action="open-playlist"
+              data-playlist-id="${escapeHTML(
+                playlist.id
+              )}"
+            >
+              ▶
+            </button>
+          </div>
+        `;
+      })
+      .join("");
+  }
+
+  /* =========================================================
+     PLAYER
+     ========================================================= */
+
+  function updatePlayer() {
+    const track = getCurrentTrack();
+
+    if (!track) return;
+
+    const title = trackTitle(track);
+    const artist = trackArtist(track);
+
+    qsa(
+      "[data-role='player-title'], #playerTitle"
+    ).forEach((element) => {
+      element.textContent = title;
+    });
+
+    qsa(
+      "[data-role='player-artist'], #playerArtist"
+    ).forEach((element) => {
+      element.textContent = artist;
+    });
+
+    qsa(
+      "[data-role='player-cover'], #playerCover"
+    ).forEach((element) => {
+      element.textContent = track.cover;
+    });
+
+    qsa(
+      "[data-action='play-toggle'], #playButton"
+    ).forEach((button) => {
+      button.textContent = isPlaying ? "Ⅱ" : "▶";
+
+      button.setAttribute(
+        "aria-label",
+        isPlaying
+          ? t("player.pause", "Pause")
+          : t("player.play", "Play")
+      );
+    });
+
+    qsa("[data-action='shuffle']").forEach(
+      (button) => {
         button.classList.toggle(
           "active",
-          button.dataset.section ===
-          pageId
+          state.shuffle
         );
       }
     );
 
-
-  document
-    .querySelectorAll(
-      ".mobileNavBtn"
-    )
-    .forEach(
-      button => {
-
+    qsa("[data-action='repeat']").forEach(
+      (button) => {
         button.classList.toggle(
           "active",
-          button.dataset.section ===
-          pageId
+          state.repeat
         );
       }
     );
 
-
-  if (pageId === "library") {
-
-    renderLibrary();
-  }
-}
-
-
-function showFavorites() {
-
-  currentLibraryTab =
-    "favorites";
-
-  showPage(
-    "library"
-  );
-
-  updateLibraryTabs();
-
-  renderLibrary();
-}
-
-
-function showRecent() {
-
-  currentLibraryTab =
-    "recent";
-
-  showPage(
-    "library"
-  );
-
-  updateLibraryTabs();
-
-  renderLibrary();
-}
-
-
-function showPlaylists() {
-
-  currentLibraryTab =
-    "playlists";
-
-  showPage(
-    "library"
-  );
-
-  updateLibraryTabs();
-
-  renderLibrary();
-}
-
-
-function updateLibraryTabs() {
-
-  document
-    .querySelectorAll(
-      ".libraryTab"
-    )
-    .forEach(
-      button => {
-
-        button.classList.toggle(
-          "active",
-          button.dataset.library ===
-          currentLibraryTab
-        );
-      }
-    );
-}
-
-
-/* =========================================================
-   18. COUNTERS
-   ========================================================= */
-
-function updateCounters() {
-
-  const favorites =
-    document.getElementById(
-      "favoriteCount"
-    );
-
-  const playlists =
-    document.getElementById(
-      "playlistCount"
-    );
-
-  const recent =
-    document.getElementById(
-      "recentCount"
-    );
-
-
-  if (favorites) {
-
-    favorites.textContent =
-      `${state.favorites.length} tracks`;
+    updateProgress();
+    setVolume(state.volume);
   }
 
+  /* =========================================================
+     MODAL
+     ========================================================= */
 
-  if (playlists) {
+  function openPlaylistModal() {
+    const modal =
+      qs("#playlistModal") ||
+      qs("[data-role='playlist-modal']");
 
-    playlists.textContent =
-      `${state.playlists.length} playlists`;
+    if (!modal) return;
+
+    modal.classList.add("open");
+    modal.classList.add("active");
   }
 
-
-  if (recent) {
-
-    recent.textContent =
-      `${state.recent.length} tracks`;
-  }
-}
-
-
-/* =========================================================
-   19. LANGUAGES
-   ========================================================= */
-
-function changeLanguage(language) {
-
-  if (
-    !translations[
-      language
-    ]
-  ) {
-
-    language = "en";
+  function closeModal() {
+    qsa(
+      ".modal.open, .modal.active, [data-role='playlist-modal'].open"
+    ).forEach((modal) => {
+      modal.classList.remove("open");
+      modal.classList.remove("active");
+    });
   }
 
+  /* =========================================================
+     TOAST
+     ========================================================= */
 
-  state.language =
-    language;
+  function showToast(message) {
+    let toast =
+      qs("#toast") ||
+      qs("[data-role='toast']");
 
-  saveState();
+    if (!toast) {
+      toast = document.createElement("div");
+      toast.id = "toast";
+      toast.className = "toast";
+      document.body.appendChild(toast);
+    }
 
+    toast.textContent = message;
+    toast.classList.add("show");
 
-  document.documentElement.lang =
-    language;
+    clearTimeout(toast._timer);
 
-  document.documentElement.dir =
-    language === "ar"
-      ? "rtl"
-      : "ltr";
-
-
-  const dictionary =
-    translations[
-      language
-    ];
-
-
-  document
-    .querySelectorAll(
-      "[data-i18n]"
-    )
-    .forEach(
-      element => {
-
-        const key =
-          element.dataset.i18n;
-
-        if (
-          dictionary[key]
-        ) {
-
-          element.textContent =
-            dictionary[key];
-        }
-      }
-    );
-
-
-  document
-    .querySelectorAll(
-      "[data-placeholder]"
-    )
-    .forEach(
-      element => {
-
-        const key =
-          element.dataset.placeholder;
-
-        if (
-          dictionary[key]
-        ) {
-
-          element.placeholder =
-            dictionary[key];
-        }
-      }
-    );
-
-
-  const select =
-    document.getElementById(
-      "language"
-    );
-
-  if (select) {
-
-    select.value =
-      language;
-  }
-}
-
-
-/* =========================================================
-   20. TOAST
-   ========================================================= */
-
-let toastTimer = null;
-
-
-function showToast(message) {
-
-  const toast =
-    document.getElementById(
-      "toast"
-    );
-
-  if (!toast) {
-    return;
+    toast._timer = setTimeout(() => {
+      toast.classList.remove("show");
+    }, 2200);
   }
 
-  toast.textContent =
-    message;
+  /* =========================================================
+     EVENT BINDING
+     ========================================================= */
 
-  toast.classList.add(
-    "show"
-  );
+  function bindDynamicButtons(root = document) {
+    qsa(
+      "[data-action]",
+      root
+    ).forEach((element) => {
+      if (element.dataset.bound === "true") return;
 
+      element.dataset.bound = "true";
 
-  if (toastTimer) {
+      element.addEventListener("click", async (event) => {
+        event.preventDefault();
 
-    clearTimeout(
-      toastTimer
-    );
-  }
+        const action =
+          element.dataset.action;
 
+        const trackId =
+          element.dataset.trackId;
 
-  toastTimer =
-    setTimeout(
-      () => {
-
-        toast.classList.remove(
-          "show"
-        );
-
-      },
-      2200
-    );
-}
-
-
-/* =========================================================
-   21. HTML SAFETY
-   ========================================================= */
-
-function escapeHtml(value) {
-
-  return String(value)
-    .replace(
-      /[&<>"']/g,
-      character => {
-
-        const map = {
-
-          "&": "&amp;",
-          "<": "&lt;",
-          ">": "&gt;",
-          '"': "&quot;",
-          "'": "&#039;"
-
-        };
-
-        return map[
-          character
-        ];
-      }
-    );
-}
-
-
-/* =========================================================
-   22. EVENT SYSTEM
-   ========================================================= */
-
-function setupEvents() {
-
-
-  /* Navigation */
-
-  document
-    .querySelectorAll(
-      "[data-section]"
-    )
-    .forEach(
-      button => {
-
-        button.addEventListener(
-          "click",
-          () => {
-
-            showPage(
-              button.dataset.section
+        if (action === "play" && trackId) {
+          const index =
+            TRACKS.findIndex(
+              (track) => track.id === trackId
             );
+
+          if (index >= 0) {
+            currentTrackIndex = index;
+            currentTime = 0;
+            await playCurrentTrack();
           }
-        );
-      }
-    );
 
-
-  /* Search */
-
-  const searchInput =
-    document.getElementById(
-      "searchInput"
-    );
-
-  if (searchInput) {
-
-    searchInput.addEventListener(
-      "input",
-      event => {
-
-        performSearch(
-          event.target.value
-        );
-      }
-    );
-  }
-
-
-  /* Language */
-
-  const language =
-    document.getElementById(
-      "language"
-    );
-
-  if (language) {
-
-    language.addEventListener(
-      "change",
-      event => {
-
-        changeLanguage(
-          event.target.value
-        );
-      }
-    );
-  }
-
-
-  /* AI */
-
-  const aiButton =
-    document.getElementById(
-      "aiButton"
-    );
-
-  const aiInput =
-    document.getElementById(
-      "aiInput"
-    );
-
-
-  if (aiButton) {
-
-    aiButton.addEventListener(
-      "click",
-      () => {
-
-        askHarmoniqAI(
-          aiInput
-            ? aiInput.value
-            : ""
-        );
-
-        if (aiInput) {
-          aiInput.value = "";
+          return;
         }
-      }
-    );
+
+        if (action === "favorite" && trackId) {
+          toggleFavorite(trackId);
+          return;
+        }
+
+        if (action === "play-toggle") {
+          await togglePlay();
+          return;
+        }
+
+        if (action === "next") {
+          await nextTrack();
+          return;
+        }
+
+        if (action === "previous") {
+          await previousTrack();
+          return;
+        }
+
+        if (action === "shuffle") {
+          state.shuffle = !state.shuffle;
+          saveState();
+          updatePlayer();
+          return;
+        }
+
+        if (action === "repeat") {
+          state.repeat = !state.repeat;
+          saveState();
+          updatePlayer();
+          return;
+        }
+
+        if (action === "mute") {
+          toggleMute();
+          return;
+        }
+
+        if (action === "open-playlist") {
+          const playlist =
+            state.playlists.find(
+              (item) =>
+                item.id ===
+                element.dataset.playlistId
+            );
+
+          if (!playlist) return;
+
+          if (!playlist.tracks.length) {
+            showToast(
+              t(
+                "playlist.empty",
+                "This playlist is empty."
+              )
+            );
+            return;
+          }
+
+          const firstTrack =
+            getTrackById(
+              playlist.tracks[0]
+            );
+
+          if (!firstTrack) return;
+
+          currentTrackIndex =
+            TRACKS.findIndex(
+              (track) =>
+                track.id === firstTrack.id
+            );
+
+          currentTime = 0;
+          await playCurrentTrack();
+        }
+      });
+    });
   }
 
+  function bindNavigation() {
+    qsa(
+      ".navBtn, .mobileNavBtn, [data-nav]"
+    ).forEach((button) => {
+      if (button.dataset.navBound === "true") {
+        return;
+      }
 
-  if (aiInput) {
+      button.dataset.navBound = "true";
 
-    aiInput.addEventListener(
-      "keydown",
-      event => {
+      button.addEventListener("click", (event) => {
+        const target =
+          button.dataset.nav ||
+          button.dataset.page ||
+          button
+            .getAttribute("href")
+            ?.replace("#", "");
 
-        if (
-          event.key ===
-          "Enter"
-        ) {
+        if (!target) return;
 
+        event.preventDefault();
+
+        showPage(target);
+      });
+    });
+  }
+
+  function bindLanguage() {
+    qsa(
+      "#languageSelect, [data-language-select]"
+    ).forEach((select) => {
+      if (select.dataset.langBound === "true") {
+        return;
+      }
+
+      select.dataset.langBound = "true";
+
+      select.addEventListener(
+        "change",
+        async (event) => {
+          await loadLanguage(
+            event.target.value
+          );
+        }
+      );
+    });
+  }
+
+  function bindSearch() {
+    qsa(
+      "#searchInput, [data-role='search-input']"
+    ).forEach((input) => {
+      if (input.dataset.searchBound === "true") {
+        return;
+      }
+
+      input.dataset.searchBound = "true";
+
+      input.addEventListener("input", (event) => {
+        clearTimeout(searchTimer);
+
+        searchTimer = setTimeout(() => {
+          renderSearchResults(
+            event.target.value
+          );
+        }, 120);
+      });
+    });
+  }
+
+  function bindAI() {
+    const inputs = qsa(
+      "#aiInput, [data-role='ai-input']"
+    );
+
+    inputs.forEach((input) => {
+      if (input.dataset.aiBound === "true") {
+        return;
+      }
+
+      input.dataset.aiBound = "true";
+
+      input.addEventListener("keydown", (event) => {
+        if (event.key === "Enter") {
+          event.preventDefault();
+          processAICommand(
+            input.value
+          );
+        }
+      });
+    });
+
+    qsa(
+      "#aiButton, [data-action='ask-ai']"
+    ).forEach((button) => {
+      if (button.dataset.aiButtonBound === "true") {
+        return;
+      }
+
+      button.dataset.aiButtonBound = "true";
+
+      button.addEventListener("click", () => {
+        const input =
+          qs("#aiInput") ||
+          qs("[data-role='ai-input']");
+
+        if (input) {
+          processAICommand(input.value);
+        }
+      });
+    });
+  }
+
+  function bindPlayer() {
+    qsa(
+      "#progressBar, [data-role='progress-input']"
+    ).forEach((element) => {
+      if (element.dataset.progressBound === "true") {
+        return;
+      }
+
+      element.dataset.progressBound = "true";
+
+      element.min = "0";
+      element.max = String(TRACK_DURATION);
+      element.step = "1";
+
+      element.addEventListener(
+        "input",
+        (event) => {
+          seekTo(event.target.value);
+        }
+      );
+    });
+
+    qsa(
+      "#volumeControl, [data-role='volume']"
+    ).forEach((element) => {
+      if (element.dataset.volumeBound === "true") {
+        return;
+      }
+
+      element.dataset.volumeBound = "true";
+
+      element.min = "0";
+      element.max = "1";
+      element.step = "0.01";
+
+      element.addEventListener(
+        "input",
+        (event) => {
+          setVolume(event.target.value);
+        }
+      );
+    });
+  }
+
+  function bindPlaylistCreation() {
+    qsa(
+      "#createPlaylistButton, [data-action='create-playlist']"
+    ).forEach((button) => {
+      if (button.dataset.playlistBound === "true") {
+        return;
+      }
+
+      button.dataset.playlistBound = "true";
+
+      button.addEventListener("click", () => {
+        openPlaylistModal();
+      });
+    });
+
+    qsa(
+      "#closeModal, [data-action='close-modal']"
+    ).forEach((button) => {
+      button.addEventListener(
+        "click",
+        closeModal
+      );
+    });
+
+    qsa(
+      "#cancelPlaylist, [data-action='cancel-playlist']"
+    ).forEach((button) => {
+      button.addEventListener(
+        "click",
+        closeModal
+      );
+    });
+
+    const form =
+      qs("#playlistForm") ||
+      qs("[data-role='playlist-form']");
+
+    if (form && form.dataset.bound !== "true") {
+      form.dataset.bound = "true";
+
+      form.addEventListener(
+        "submit",
+        (event) => {
           event.preventDefault();
 
-          askHarmoniqAI(
-            aiInput.value
-          );
+          const name =
+            qs("#playlistName", form)?.value ||
+            qs("[name='playlistName']", form)
+              ?.value;
 
-          aiInput.value = "";
+          const description =
+            qs("#playlistDescription", form)
+              ?.value ||
+            qs(
+              "[name='playlistDescription']",
+              form
+            )?.value ||
+            "";
+
+          createPlaylist(
+            name,
+            description
+          );
         }
-      }
-    );
+      );
+    }
   }
 
+  /* =========================================================
+     GLOBAL CLICK FALLBACK
+     ========================================================= */
 
-  /* AI suggestion buttons */
+  function bindGlobalActions() {
+    document.addEventListener("click", async (event) => {
+      const element =
+        event.target.closest("[data-action]");
 
-  document
-    .querySelectorAll(
-      "[data-ai]"
-    )
-    .forEach(
-      button => {
+      if (!element) return;
 
-        button.addEventListener(
-          "click",
-          () => {
-
-            askHarmoniqAI(
-              button.dataset.ai
-            );
-          }
-        );
-      }
-    );
-
-
-  /* Track actions */
-
-  document.addEventListener(
-    "click",
-    event => {
-
-      const actionElement =
-        event.target.closest(
-          "[data-action]"
-        );
-
-      if (!actionElement) {
+      if (element.dataset.bound === "true") {
         return;
       }
 
       const action =
-        actionElement.dataset.action;
+        element.dataset.action;
 
-      const id =
-        Number(
-          actionElement.dataset.id
-        );
-
-
-      if (action === "play") {
-
-        playTrack(id);
-
-      } else if (
-        action === "favorite"
-      ) {
-
-        toggleFavorite(id);
-
-      } else if (
-        action === "openPlaylist"
-      ) {
-
-        openPlaylistModal();
+      if (action === "play-toggle") {
+        await togglePlay();
       }
+    });
+  }
+
+  /* =========================================================
+     SERVICE WORKER
+     ========================================================= */
+
+  function registerServiceWorker() {
+    if (!("serviceWorker" in navigator)) {
+      return;
     }
-  );
 
-
-  /* Player controls */
-
-  const playButton =
-    document.getElementById(
-      "playButton"
-    );
-
-  const previousButton =
-    document.getElementById(
-      "previousBtn"
-    );
-
-  const nextButton =
-    document.getElementById(
-      "nextBtn"
-    );
-
-  const shuffleButton =
-    document.getElementById(
-      "shuffleBtn"
-    );
-
-  const repeatButton =
-    document.getElementById(
-      "repeatBtn"
-    );
-
-
-  if (playButton) {
-
-    playButton.addEventListener(
-      "click",
-      togglePlay
-    );
-  }
-
-
-  if (previousButton) {
-
-    previousButton.addEventListener(
-      "click",
-      previousTrack
-    );
-  }
-
-
-  if (nextButton) {
-
-    nextButton.addEventListener(
-      "click",
-      nextTrack
-    );
-  }
-
-
-  if (shuffleButton) {
-
-    shuffleButton.addEventListener(
-      "click",
-      toggleShuffle
-    );
-  }
-
-
-  if (repeatButton) {
-
-    repeatButton.addEventListener(
-      "click",
-      toggleRepeat
-    );
-  }
-
-
-  /* Favorite current song */
-
-  const playerFavorite =
-    document.getElementById(
-      "playerFavorite"
-    );
-
-  if (playerFavorite) {
-
-    playerFavorite.addEventListener(
-      "click",
-      () => {
-
-        const track =
-          getCurrentTrack();
-
-        if (track) {
-
-          toggleFavorite(
-            track.id
+    window.addEventListener("load", () => {
+      navigator.serviceWorker
+        .register(`${BASE}service-worker.js`)
+        .catch((error) => {
+          console.warn(
+            "Service Worker registration failed:",
+            error
           );
-        }
-      }
+        });
+    });
+  }
+
+  /* =========================================================
+     RENDER ALL
+     ========================================================= */
+
+  function renderAll() {
+    applyTranslations();
+    renderRecommended();
+    renderLibrary();
+    renderSearchResults("");
+    updatePlayer();
+    bindDynamicButtons();
+  }
+
+  /* =========================================================
+     INIT
+     ========================================================= */
+
+  async function init() {
+    bindNavigation();
+    bindLanguage();
+    bindSearch();
+    bindAI();
+    bindPlayer();
+    bindPlaylistCreation();
+    bindDynamicButtons();
+    bindGlobalActions();
+
+    await loadLanguage(
+      state.language || "en"
+    );
+
+    renderAll();
+
+    registerServiceWorker();
+
+    console.log(
+      "Harmoniq AI initialized successfully."
     );
   }
 
-
-  /* Volume */
-
-  const volume =
-    document.getElementById(
-      "volume"
-    );
-
-  if (volume) {
-
-    volume.addEventListener(
-      "input",
-      event => {
-
-        changeVolume(
-          event.target.value
-        );
-      }
-    );
-  }
-
-
-  /* Mute */
-
-  const mute =
-    document.getElementById(
-      "muteBtn"
-    );
-
-  if (mute) {
-
-    mute.addEventListener(
-      "click",
-      toggleMute
-    );
-  }
-
-
-  /* Progress */
-
-  const progress =
-    document.getElementById(
-      "progress"
-    );
-
-  if (progress) {
-
-    progress.addEventListener(
-      "input",
-      event => {
-
-        seek(
-          event.target.value
-        );
-      }
-    );
-  }
-
-
-  /* Quick cards */
-
-  const favoritesCard =
-    document.getElementById(
-      "favoritesCard"
-    );
-
-  const playlistCard =
-    document.getElementById(
-      "playlistCard"
-    );
-
-  const recentCard =
-    document.getElementById(
-      "recentCard"
-    );
-
-
-  if (favoritesCard) {
-
-    favoritesCard.addEventListener(
-      "click",
-      showFavorites
-    );
-  }
-
-
-  if (playlistCard) {
-
-    playlistCard.addEventListener(
-      "click",
-      openPlaylistModal
-    );
-  }
-
-
-  if (recentCard) {
-
-    recentCard.addEventListener(
-      "click",
-      showRecent
-    );
-  }
-
-
-  /* Sidebar buttons */
-
-  const favoritesNav =
-    document.getElementById(
-      "favoritesNav"
-    );
-
-  const playlistsNav =
-    document.getElementById(
-      "playlistsNav"
-    );
-
-  const recentNav =
-    document.getElementById(
-      "recentNav"
-    );
-
-
-  if (favoritesNav) {
-
-    favoritesNav.addEventListener(
-      "click",
-      showFavorites
-    );
-  }
-
-
-  if (playlistsNav) {
-
-    playlistsNav.addEventListener(
-      "click",
-      openPlaylistModal
-    );
-  }
-
-
-  if (recentNav) {
-
-    recentNav.addEventListener(
-      "click",
-      showRecent
-    );
-  }
-
-
-  /* Mobile favorite */
-
-  const mobileFavorites =
-    document.getElementById(
-      "mobileFavorites"
-    );
-
-  if (mobileFavorites) {
-
-    mobileFavorites.addEventListener(
-      "click",
-      showFavorites
-    );
-  }
-
-
-  /* Library tabs */
-
-  document
-    .querySelectorAll(
-      ".libraryTab"
-    )
-    .forEach(
-      button => {
-
-        button.addEventListener(
-          "click",
-          () => {
-
-            setLibraryTab(
-              button.dataset.library
-            );
-          }
-        );
-      }
-    );
-
-
-  /* Playlist modal */
-
-  const closeModal =
-    document.getElementById(
-      "closeModal"
-    );
-
-  const cancelPlaylist =
-    document.getElementById(
-      "cancelPlaylist"
-    );
-
-  const createPlaylistButton =
-    document.getElementById(
-      "createPlaylistBtn"
-    );
-
-
-  if (closeModal) {
-
-    closeModal.addEventListener(
-      "click",
-      closePlaylistModal
-    );
-  }
-
-
-  if (cancelPlaylist) {
-
-    cancelPlaylist.addEventListener(
-      "click",
-      closePlaylistModal
-    );
-  }
-
-
-  if (createPlaylistButton) {
-
-    createPlaylistButton.addEventListener(
-      "click",
-      createPlaylist
-    );
-  }
-
-
-  const playlistName =
-    document.getElementById(
-      "playlistName"
-    );
-
-  if (playlistName) {
-
-    playlistName.addEventListener(
-      "keydown",
-      event => {
-
-        if (
-          event.key ===
-          "Enter"
-        ) {
-
-          event.preventDefault();
-
-          createPlaylist();
-        }
-      }
-    );
-  }
-
-
-  const modal =
-    document.getElementById(
-      "playlistModal"
-    );
-
-  if (modal) {
-
-    modal.addEventListener(
-      "click",
-      event => {
-
-        if (
-          event.target ===
-          modal
-        ) {
-
-          closePlaylistModal();
-        }
-      }
-    );
-  }
-
-
-  /* Keyboard */
-
-  document.addEventListener(
-    "keydown",
-    event => {
-
-      if (
-        event.code === "Space" &&
-        event.target.tagName !==
-          "INPUT" &&
-        event.target.tagName !==
-          "TEXTAREA"
-      ) {
-
-        event.preventDefault();
-
-        togglePlay();
-      }
-
-
-      if (
-        event.key === "ArrowRight" &&
-        event.target.tagName !==
-          "INPUT"
-      ) {
-
-        nextTrack();
-      }
-
-
-      if (
-        event.key === "ArrowLeft" &&
-        event.target.tagName !==
-          "INPUT"
-      ) {
-
-        previousTrack();
-      }
-    }
-  );
-}
-
-
-/* =========================================================
-   23. INITIALIZATION
-   ========================================================= */
-
-function initializeApp() {
-
-  setupEvents();
-
-  /* Restore language */
-
-  const savedLanguage =
-    localStorage.getItem(
-      "harmoniq-language"
-    );
+  /* =========================================================
+     PUBLIC API
+     ========================================================= */
+
+  window.HarmoniqAI = {
+    tracks: TRACKS,
+    state,
+    play: playCurrentTrack,
+    pause: pauseCurrentTrack,
+    next: nextTrack,
+    previous: previousTrack,
+    search: searchTracks,
+    askAI: processAICommand,
+    setLanguage: loadLanguage,
+    setVolume,
+    toggleFavorite,
+    createPlaylist
+  };
 
   if (
-    savedLanguage &&
-    translations[savedLanguage]
+    document.readyState === "loading"
   ) {
-
-    state.language =
-      savedLanguage;
-  }
-
-  changeLanguage(
-    state.language
-  );
-
-
-  /* Restore volume */
-
-  const volume =
-    document.getElementById(
-      "volume"
+    document.addEventListener(
+      "DOMContentLoaded",
+      init,
+      { once: true }
     );
-
-  if (volume) {
-
-    volume.value =
-      state.volume;
+  } else {
+    init();
   }
-
-
-  /* Initial page */
-
-  showPage(
-    "home"
-  );
-
-
-  /* Initial content */
-
-  renderAllTracks();
-
-  updateCounters();
-
-  updatePlayer();
-
-  updateLibraryTabs();
-
-  updateMuteButton();
-
-
-  /* Progress clock */
-
-  setInterval(
-    updateProgress,
-    500
-  );
-
-
-  saveState();
-}
-
-
-/* =========================================================
-   24. START APPLICATION
-   ========================================================= */
-
-if (
-  document.readyState ===
-  "loading"
-) {
-
-  document.addEventListener(
-    "DOMContentLoaded",
-    initializeApp
-  );
-
-} else {
-
-  initializeApp();
-             }
+})();
