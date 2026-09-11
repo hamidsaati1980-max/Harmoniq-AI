@@ -9,12 +9,12 @@
 
   <title>Harmoniq AI</title>
 
+  <link rel="manifest" href="manifest.json">
   <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
 
-  <!-- APP -->
   <div class="app">
 
     <!-- SIDEBAR -->
@@ -47,22 +47,21 @@
           <span data-i18n="library">Library</span>
         </button>
 
-
         <div class="navTitle" data-i18n="yourMusic">
           Your Music
         </div>
 
-        <button class="navBtn" id="favoritesNav">
+        <button class="navBtn" id="favoritesNav" data-section="library">
           <span>♡</span>
           <span data-i18n="favorites">Favorites</span>
         </button>
 
-        <button class="navBtn" id="playlistsNav">
+        <button class="navBtn" id="playlistsNav" data-section="library">
           <span>＋</span>
           <span data-i18n="playlists">Playlists</span>
         </button>
 
-        <button class="navBtn" id="recentNav">
+        <button class="navBtn" id="recentNav" data-section="library">
           <span>◷</span>
           <span data-i18n="recent">Recently Played</span>
         </button>
@@ -99,18 +98,15 @@
 
         </div>
 
-
         <div class="topActions">
 
           <select id="language" class="languageSelect">
-
             <option value="en">English</option>
             <option value="ar">العربية</option>
             <option value="tr">Türkçe</option>
             <option value="fr">Français</option>
             <option value="es">Español</option>
             <option value="de">Deutsch</option>
-
           </select>
 
         </div>
@@ -121,7 +117,6 @@
       <!-- HOME -->
       <section id="home" class="page activePage">
 
-        <!-- HERO -->
         <section class="hero">
 
           <div class="heroContent">
@@ -138,7 +133,6 @@
               Discover your next favorite sound.
             </p>
 
-
             <!-- AI COMMAND -->
             <div class="aiBox">
 
@@ -152,13 +146,16 @@
                 autocomplete="off"
               >
 
-              <button id="aiButton" class="primaryBtn">
+              <button
+                id="aiButton"
+                class="primaryBtn"
+                data-action="ai"
+              >
                 <span>✦</span>
                 Harmoniq AI
               </button>
 
             </div>
-
 
             <div class="aiSuggestions">
 
@@ -201,7 +198,6 @@
             </div>
 
           </div>
-
 
           <div class="quickGrid">
 
@@ -304,7 +300,7 @@
       </section>
 
 
-      <!-- SEARCH PAGE -->
+      <!-- SEARCH -->
       <section id="search" class="page">
 
         <div class="pageHeader">
@@ -324,7 +320,7 @@
       </section>
 
 
-      <!-- LIBRARY PAGE -->
+      <!-- LIBRARY -->
       <section id="library" class="page">
 
         <div class="pageHeader">
@@ -342,20 +338,28 @@
 
         <div class="libraryTabs">
 
-          <button class="libraryTab active" data-library="favorites">
+          <button
+            class="libraryTab active"
+            data-library="favorites"
+          >
             ♡ Favorites
           </button>
 
-          <button class="libraryTab" data-library="recent">
+          <button
+            class="libraryTab"
+            data-library="recent"
+          >
             ◷ Recently Played
           </button>
 
-          <button class="libraryTab" data-library="playlists">
+          <button
+            class="libraryTab"
+            data-library="playlists"
+          >
             + Playlists
           </button>
 
         </div>
-
 
         <div id="libraryContent"></div>
 
@@ -369,22 +373,35 @@
   <!-- MOBILE NAVIGATION -->
   <nav class="mobileNav">
 
-    <button class="mobileNavBtn active" data-section="home">
+    <button
+      class="mobileNavBtn active"
+      data-section="home"
+    >
       <span>⌂</span>
       <small>Home</small>
     </button>
 
-    <button class="mobileNavBtn" data-section="search">
+    <button
+      class="mobileNavBtn"
+      data-section="search"
+    >
       <span>⌕</span>
       <small>Search</small>
     </button>
 
-    <button class="mobileNavBtn" data-section="library">
+    <button
+      class="mobileNavBtn"
+      data-section="library"
+    >
       <span>▣</span>
       <small>Library</small>
     </button>
 
-    <button class="mobileNavBtn" id="mobileFavorites">
+    <button
+      class="mobileNavBtn"
+      id="mobileFavorites"
+      data-section="library"
+    >
       <span>♡</span>
       <small>Favorites</small>
     </button>
@@ -413,7 +430,11 @@
 
       </div>
 
-      <button id="playerFavorite" class="playerFavorite">
+      <button
+        id="playerFavorite"
+        class="playerFavorite"
+        data-action="favorite"
+      >
         ♡
       </button>
 
@@ -424,23 +445,44 @@
 
       <div class="controlButtons">
 
-        <button id="shuffleBtn" class="controlBtn">
+        <button
+          id="shuffleBtn"
+          class="controlBtn"
+          data-action="shuffle"
+        >
           ⤨
         </button>
 
-        <button id="previousBtn" class="controlBtn">
+        <button
+          id="previousBtn"
+          class="controlBtn"
+          data-action="previous"
+        >
           ↶
         </button>
 
-        <button id="playButton" class="playMain">
+        <button
+          id="playButton"
+          class="playMain"
+          data-action="play-toggle"
+          aria-label="Play"
+        >
           ▶
         </button>
 
-        <button id="nextBtn" class="controlBtn">
+        <button
+          id="nextBtn"
+          class="controlBtn"
+          data-action="next"
+        >
           ↷
         </button>
 
-        <button id="repeatBtn" class="controlBtn">
+        <button
+          id="repeatBtn"
+          class="controlBtn"
+          data-action="repeat"
+        >
           ↻
         </button>
 
@@ -454,15 +496,17 @@
         </span>
 
         <input
-          id="progress"
+          id="progressBar"
+          data-role="progress-input"
           type="range"
           min="0"
-          max="100"
+          max="180"
           value="0"
+          step="1"
         >
 
         <span id="duration">
-          0:00
+          3:00
         </span>
 
       </div>
@@ -472,12 +516,17 @@
 
     <div class="playerRight">
 
-      <button id="muteBtn" class="controlBtn">
+      <button
+        id="muteBtn"
+        class="controlBtn"
+        data-action="mute"
+      >
         🔊
       </button>
 
       <input
-        id="volume"
+        id="volumeControl"
+        data-role="volume"
         class="volume"
         type="range"
         min="0"
@@ -496,7 +545,10 @@
 
     <div class="modalBox">
 
-      <button id="closeModal" class="modalClose">
+      <button
+        id="closeModal"
+        class="modalClose"
+      >
         ×
       </button>
 
@@ -522,11 +574,17 @@
 
       <div class="modalActions">
 
-        <button id="cancelPlaylist" class="secondaryBtn">
+        <button
+          id="cancelPlaylist"
+          class="secondaryBtn"
+        >
           Cancel
         </button>
 
-        <button id="createPlaylistBtn" class="primaryBtn">
+        <button
+          id="createPlaylistBtn"
+          class="primaryBtn"
+        >
           Create
         </button>
 
@@ -545,4 +603,4 @@
   <script src="app.js"></script>
 
 </body>
-     </html>
+        </html>
