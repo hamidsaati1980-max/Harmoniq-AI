@@ -1,0 +1,139 @@
+{
+  "appName": "Harmoniq AI",
+  "tagline": "Seni anlayan müzik",
+
+  "nav": {
+    "home": "Ana Sayfa",
+    "search": "Ara",
+    "library": "Kütüphane",
+    "favorites": "Favoriler",
+    "playlists": "Çalma Listeleri",
+    "recent": "Son Çalınanlar"
+  },
+
+  "home": {
+    "greeting": "İyi akşamlar",
+    "subtitle": "Ruh haline uygun müzikleri keşfet.",
+    "recommended": "Senin için önerilenler",
+    "quickAccess": "Hızlı Erişim",
+    "madeForYou": "Senin için",
+    "recentlyPlayed": "Son Çalınanlar"
+  },
+
+  "ai": {
+    "title": "Harmoniq AI",
+    "description": "Ne dinlemek istediğini söyle.",
+    "placeholder": "Örnek: Uyku için rahatlatıcı müzik çal",
+    "button": "Harmoniq AI'ya Sor",
+    "thinking": "Senin için uygun müzik aranıyor...",
+    "noResults": "Eşleşen bir müzik bulunamadı."
+  },
+
+  "search": {
+    "title": "Ara",
+    "placeholder": "Şarkı, sanatçı veya albüm ara...",
+    "results": "Arama Sonuçları",
+    "noResults": "Sonuç bulunamadı.",
+    "tryAgain": "Başka bir arama dene."
+  },
+
+  "library": {
+    "title": "Kütüphanen",
+    "favorites": "Favoriler",
+    "recent": "Son Çalınanlar",
+    "playlists": "Çalma Listeleri",
+    "albums": "Kaydedilen Albümler",
+    "emptyFavorites": "Henüz favorilerine müzik eklemedin.",
+    "emptyRecent": "Son çaldığın müzikler burada görünecek.",
+    "emptyPlaylists": "Müziklerini düzenlemek için bir çalma listesi oluştur."
+  },
+
+  "playlist": {
+    "title": "Çalma Listeleri",
+    "create": "Çalma Listesi Oluştur",
+    "name": "Çalma listesi adı",
+    "description": "Açıklama",
+    "createButton": "Oluştur",
+    "cancel": "İptal",
+    "empty": "Bu çalma listesi boş."
+  },
+
+  "player": {
+    "play": "Oynat",
+    "pause": "Duraklat",
+    "next": "Sonraki",
+    "previous": "Önceki",
+    "shuffle": "Karışık Çal",
+    "repeat": "Tekrarla",
+    "volume": "Ses",
+    "mute": "Sesi Kapat",
+    "unmute": "Sesi Aç",
+    "queue": "Sıra"
+  },
+
+  "tracks": {
+    "afterglow": {
+      "title": "Afterglow",
+      "artist": "Luna Vale",
+      "album": "Night Signals"
+    },
+    "velvetSky": {
+      "title": "Velvet Sky",
+      "artist": "Noah Kade",
+      "album": "Midnight Roads"
+    },
+    "openWater": {
+      "title": "Open Water",
+      "artist": "Kairo Field",
+      "album": "Blue Horizon"
+    },
+    "lucidDream": {
+      "title": "Lucid Dream",
+      "artist": "Harmoniq",
+      "album": "Dream State"
+    }
+  },
+
+  "moods": {
+    "relax": "Rahatlama",
+    "sleep": "Uyku",
+    "focus": "Odaklanma",
+    "nature": "Doğa",
+    "chill": "Sakinlik",
+    "meditation": "Meditasyon"
+  },
+
+  "actions": {
+    "addFavorite": "Favorilere Ekle",
+    "removeFavorite": "Favorilerden Kaldır",
+    "addToPlaylist": "Çalma Listesine Ekle",
+    "removeFromPlaylist": "Çalma Listesinden Kaldır",
+    "playNow": "Şimdi Oynat"
+  },
+
+  "messages": {
+    "addedFavorite": "Favorilere eklendi",
+    "removedFavorite": "Favorilerden kaldırıldı",
+    "addedPlaylist": "Çalma listesine eklendi",
+    "playlistCreated": "Çalma listesi başarıyla oluşturuldu."
+  },
+
+  "settings": {
+    "language": "Dil",
+    "theme": "Tema",
+    "dark": "Koyu"
+  },
+
+  "common": {
+    "save": "Kaydet",
+    "close": "Kapat",
+    "back": "Geri",
+    "cancel": "İptal",
+    "loading": "Yükleniyor..."
+  },
+
+  "advertisement": {
+    "label": "REKLAM",
+    "ready": "AdMob alanı hazır"
+  }
+  }
