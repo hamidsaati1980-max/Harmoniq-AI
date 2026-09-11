@@ -1,0 +1,139 @@
+{
+  "appName": "Harmoniq AI",
+  "tagline": "موسيقى تفهمك",
+
+  "nav": {
+    "home": "الرئيسية",
+    "search": "بحث",
+    "library": "المكتبة",
+    "favorites": "المفضلة",
+    "playlists": "قوائم التشغيل",
+    "recent": "تم تشغيلها مؤخراً"
+  },
+
+  "home": {
+    "greeting": "مساء الخير",
+    "subtitle": "اكتشف الموسيقى التي تناسب مزاجك.",
+    "recommended": "مقترحة لك",
+    "quickAccess": "الوصول السريع",
+    "madeForYou": "مخصصة لك",
+    "recentlyPlayed": "تم تشغيلها مؤخراً"
+  },
+
+  "ai": {
+    "title": "Harmoniq AI",
+    "description": "أخبرني بما تريد الاستماع إليه.",
+    "placeholder": "مثال: شغّل موسيقى هادئة للنوم",
+    "button": "اسأل Harmoniq AI",
+    "thinking": "أبحث عن الموسيقى المناسبة...",
+    "noResults": "لم أجد موسيقى مطابقة."
+  },
+
+  "search": {
+    "title": "بحث",
+    "placeholder": "ابحث عن الأغاني والفنانين والألبومات...",
+    "results": "نتائج البحث",
+    "noResults": "لم يتم العثور على نتائج.",
+    "tryAgain": "جرّب بحثاً آخر."
+  },
+
+  "library": {
+    "title": "مكتبتك",
+    "favorites": "المفضلة",
+    "recent": "تم تشغيلها مؤخراً",
+    "playlists": "قوائم التشغيل",
+    "albums": "الألبومات المحفوظة",
+    "emptyFavorites": "لم تضف أي أغنية إلى المفضلة بعد.",
+    "emptyRecent": "ستظهر الموسيقى التي شغلتها مؤخراً هنا.",
+    "emptyPlaylists": "أنشئ قائمة تشغيل لتنظيم موسيقاك."
+  },
+
+  "playlist": {
+    "title": "قوائم التشغيل",
+    "create": "إنشاء قائمة تشغيل",
+    "name": "اسم قائمة التشغيل",
+    "description": "الوصف",
+    "createButton": "إنشاء",
+    "cancel": "إلغاء",
+    "empty": "قائمة التشغيل هذه فارغة."
+  },
+
+  "player": {
+    "play": "تشغيل",
+    "pause": "إيقاف مؤقت",
+    "next": "التالي",
+    "previous": "السابق",
+    "shuffle": "تشغيل عشوائي",
+    "repeat": "تكرار",
+    "volume": "مستوى الصوت",
+    "mute": "كتم الصوت",
+    "unmute": "إلغاء كتم الصوت",
+    "queue": "قائمة الانتظار"
+  },
+
+  "tracks": {
+    "afterglow": {
+      "title": "Afterglow",
+      "artist": "Luna Vale",
+      "album": "Night Signals"
+    },
+    "velvetSky": {
+      "title": "Velvet Sky",
+      "artist": "Noah Kade",
+      "album": "Midnight Roads"
+    },
+    "openWater": {
+      "title": "Open Water",
+      "artist": "Kairo Field",
+      "album": "Blue Horizon"
+    },
+    "lucidDream": {
+      "title": "Lucid Dream",
+      "artist": "Harmoniq",
+      "album": "Dream State"
+    }
+  },
+
+  "moods": {
+    "relax": "استرخاء",
+    "sleep": "نوم",
+    "focus": "تركيز",
+    "nature": "طبيعة",
+    "chill": "هدوء",
+    "meditation": "تأمل"
+  },
+
+  "actions": {
+    "addFavorite": "إضافة إلى المفضلة",
+    "removeFavorite": "إزالة من المفضلة",
+    "addToPlaylist": "إضافة إلى قائمة تشغيل",
+    "removeFromPlaylist": "إزالة من قائمة التشغيل",
+    "playNow": "تشغيل الآن"
+  },
+
+  "messages": {
+    "addedFavorite": "تمت الإضافة إلى المفضلة",
+    "removedFavorite": "تمت الإزالة من المفضلة",
+    "addedPlaylist": "تمت الإضافة إلى قائمة التشغيل",
+    "playlistCreated": "تم إنشاء قائمة التشغيل بنجاح."
+  },
+
+  "settings": {
+    "language": "اللغة",
+    "theme": "المظهر",
+    "dark": "داكن"
+  },
+
+  "common": {
+    "save": "حفظ",
+    "close": "إغلاق",
+    "back": "رجوع",
+    "cancel": "إلغاء",
+    "loading": "جارٍ التحميل..."
+  },
+
+  "advertisement": {
+    "label": "إعلان",
+    "ready": "مكان AdMob جاهز"
+  }
+  }
