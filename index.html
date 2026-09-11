@@ -2,1106 +2,432 @@
 <html lang="en" dir="ltr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-
-<meta name="theme-color" content="#080a10">
-<meta name="description" content="Harmoniq AI - Modern AI Music Player">
-
-<link rel="manifest" href="manifest.json">
-
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<meta name="theme-color" content="#080b14">
+<meta name="description" content="Harmoniq AI - Smart Music Player">
 <title>Harmoniq AI</title>
 
 <style>
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+*{box-sizing:border-box}
+:root{
+  --bg:#080b14;
+  --panel:#101522;
+  --panel2:#151b2b;
+  --text:#f5f7ff;
+  --muted:#8d96aa;
+  --accent:#7c5cff;
+  --accent2:#00d4ff;
+  --danger:#ff5577;
+  --border:rgba(255,255,255,.08);
+  --shadow:0 15px 45px rgba(0,0,0,.35);
 }
-
-:root {
-  --bg: #080a10;
-  --bg2: #0d1018;
-  --panel: #11151f;
-  --panel2: #151a25;
-  --border: rgba(255,255,255,.08);
-  --text: #ffffff;
-  --muted: #8e96a8;
-  --accent: #8b5cf6;
-  --accent2: #6366f1;
-  --danger: #ef4444;
-  --success: #22c55e;
-  --player-height: 86px;
-}
-
-html,
-body {
-  width: 100%;
-  min-height: 100%;
-  background: var(--bg);
-  color: var(--text);
-  font-family:
-    Inter,
-    system-ui,
-    -apple-system,
-    BlinkMacSystemFont,
-    "Segoe UI",
-    Roboto,
-    Arial,
-    sans-serif;
-}
-
-body {
-  overflow-x: hidden;
-}
-
-button,
-input {
-  font: inherit;
-}
-
-button {
-  border: 0;
-  cursor: pointer;
-}
-
-button:disabled {
-  opacity: .5;
-  cursor: not-allowed;
-}
-
-.hidden {
-  display: none !important;
-}
-
-/* =========================
-   APP LAYOUT
-========================= */
-
-.app {
-  min-height: 100vh;
-  display: flex;
-}
-
-.sidebar {
-  width: 240px;
-  min-height: 100vh;
-  position: fixed;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  z-index: 30;
-  padding: 22px 14px;
-  background: #0b0e15;
-  border-right: 1px solid var(--border);
-  display: flex;
-  flex-direction: column;
-}
-
-.logo {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 8px 10px 28px;
-}
-
-.logo-icon {
-  width: 40px;
-  height: 40px;
-  border-radius: 13px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: linear-gradient(135deg, var(--accent), var(--accent2));
-  font-size: 20px;
-  box-shadow: 0 10px 30px rgba(99,102,241,.25);
-}
-
-.logo-text {
-  font-size: 20px;
-  font-weight: 800;
-  letter-spacing: -.5px;
-}
-
-.logo-text span {
-  color: #a78bfa;
-}
-
-.nav-title {
-  color: #5f6778;
-  font-size: 11px;
-  text-transform: uppercase;
-  letter-spacing: 1.5px;
-  padding: 0 12px 10px;
-}
-
-.nav {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-}
-
-.nav button {
-  width: 100%;
-  min-height: 44px;
-  padding: 0 12px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  border-radius: 11px;
-  background: transparent;
-  color: var(--muted);
-  text-align: left;
-  transition: .2s;
-}
-
-.nav button:hover,
-.nav button.active {
-  background: rgba(139,92,246,.13);
-  color: white;
-}
-
-.nav-icon {
-  width: 24px;
-  text-align: center;
-  font-size: 17px;
-}
-
-.sidebar-bottom {
-  margin-top: auto;
-}
-
-.main {
-  width: calc(100% - 240px);
-  margin-left: 240px;
-  padding-bottom: calc(var(--player-height) + 24px);
-}
-
-.topbar {
-  height: 72px;
-  padding: 12px 28px;
-  display: flex;
-  align-items: center;
-  gap: 18px;
-  position: sticky;
-  top: 0;
-  z-index: 20;
-  background: rgba(8,10,16,.88);
-  backdrop-filter: blur(18px);
-  border-bottom: 1px solid rgba(255,255,255,.04);
-}
-
-.search-box {
-  flex: 1;
-  max-width: 650px;
-  position: relative;
-}
-
-.search-box input {
-  width: 100%;
-  height: 44px;
-  padding: 0 45px 0 16px;
-  border: 1px solid var(--border);
-  border-radius: 13px;
-  outline: none;
-  color: white;
-  background: #11151d;
-}
-
-.search-box input:focus {
-  border-color: rgba(139,92,246,.6);
-}
-
-.search-icon {
-  position: absolute;
-  right: 15px;
-  top: 12px;
-  color: var(--muted);
-}
-
-.top-actions {
-  margin-left: auto;
-  display: flex;
-  gap: 8px;
-}
-
-.icon-button {
-  width: 42px;
-  height: 42px;
-  border-radius: 12px;
-  background: #11151d;
-  border: 1px solid var(--border);
-  color: white;
-}
-
-.icon-button:hover {
-  background: #191e2a;
-}
-
-/* =========================
-   CONTENT
-========================= */
-
-.content {
-  padding: 30px 30px 20px;
-}
-
-.page {
-  display: none;
-}
-
-.page.active {
-  display: block;
-}
-
-.hero {
-  min-height: 300px;
-  border-radius: 25px;
-  padding: 40px;
+*{scrollbar-width:thin;scrollbar-color:#333b52 transparent}
+body{
+  margin:0;
   background:
-    radial-gradient(circle at 85% 20%, rgba(139,92,246,.35), transparent 35%),
-    radial-gradient(circle at 20% 80%, rgba(59,130,246,.16), transparent 35%),
-    linear-gradient(135deg,#151827,#0f121b);
-  border: 1px solid var(--border);
-  position: relative;
-  overflow: hidden;
+    radial-gradient(circle at 20% 0%,rgba(124,92,255,.15),transparent 35%),
+    radial-gradient(circle at 90% 10%,rgba(0,212,255,.08),transparent 30%),
+    var(--bg);
+  color:var(--text);
+  font-family:Arial,Helvetica,sans-serif;
+  min-height:100vh;
 }
-
-.hero::after {
-  content: "";
-  position: absolute;
-  width: 280px;
-  height: 280px;
-  border-radius: 50%;
-  right: -90px;
-  bottom: -130px;
-  background: rgba(139,92,246,.15);
-  filter: blur(10px);
+button,input,select{font:inherit}
+button{cursor:pointer}
+.app{display:flex;min-height:100vh}
+.sidebar{
+  width:245px;
+  background:rgba(10,13,22,.92);
+  border-right:1px solid var(--border);
+  padding:22px 14px;
+  position:fixed;
+  top:0;bottom:0;left:0;
+  z-index:50;
 }
-
-.eyebrow {
-  color: #a78bfa;
-  font-size: 13px;
-  font-weight: 700;
-  margin-bottom: 12px;
+.logo{
+  font-size:24px;
+  font-weight:900;
+  padding:8px 12px 28px;
+  letter-spacing:-1px;
 }
-
-.hero h1 {
-  max-width: 650px;
-  font-size: clamp(30px,5vw,56px);
-  line-height: 1.05;
-  letter-spacing: -2px;
-  margin-bottom: 15px;
+.logo span{color:var(--accent)}
+.nav-title{
+  color:#606a80;
+  font-size:11px;
+  text-transform:uppercase;
+  padding:12px;
+  letter-spacing:1px;
 }
-
-.hero p {
-  color: var(--muted);
-  max-width: 650px;
-  line-height: 1.7;
+.nav-btn{
+  width:100%;
+  border:0;
+  background:transparent;
+  color:#aab2c4;
+  padding:12px;
+  border-radius:12px;
+  text-align:left;
+  margin:2px 0;
+  transition:.2s;
 }
-
-.ai-box {
-  max-width: 720px;
-  margin-top: 25px;
-  display: flex;
-  gap: 10px;
+.nav-btn:hover,.nav-btn.active{
+  background:rgba(124,92,255,.14);
+  color:white;
 }
-
-.ai-box input {
-  flex: 1;
-  min-width: 0;
-  height: 52px;
-  padding: 0 16px;
-  border-radius: 14px;
-  border: 1px solid var(--border);
-  outline: none;
-  background: rgba(5,7,12,.7);
-  color: white;
+.main{
+  margin-left:245px;
+  width:calc(100% - 245px);
+  padding-bottom:115px;
 }
-
-.primary-button {
-  min-height: 48px;
-  padding: 0 20px;
-  border-radius: 13px;
-  color: white;
-  font-weight: 700;
-  background: linear-gradient(135deg,var(--accent),var(--accent2));
-  box-shadow: 0 10px 25px rgba(99,102,241,.22);
+.topbar{
+  height:72px;
+  display:flex;
+  align-items:center;
+  gap:14px;
+  padding:0 28px;
+  position:sticky;
+  top:0;
+  z-index:30;
+  background:rgba(8,11,20,.78);
+  backdrop-filter:blur(18px);
+  border-bottom:1px solid var(--border);
 }
-
-.primary-button:hover {
-  transform: translateY(-1px);
+.search-box{
+  flex:1;
+  max-width:650px;
+  position:relative;
 }
-
-.secondary-button {
-  min-height: 44px;
-  padding: 0 16px;
-  border-radius: 12px;
-  background: #171c27;
-  color: white;
-  border: 1px solid var(--border);
+.search-box input{
+  width:100%;
+  border:1px solid var(--border);
+  background:#121827;
+  color:white;
+  border-radius:14px;
+  padding:13px 18px 13px 44px;
+  outline:none;
 }
-
-.section {
-  margin-top: 35px;
+.search-box input:focus{border-color:var(--accent)}
+.search-icon{
+  position:absolute;
+  left:15px;
+  top:12px;
+  color:#788197;
 }
-
-.section-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 16px;
-  gap: 10px;
-}
-
-.section-title {
-  font-size: 21px;
-  font-weight: 800;
-}
-
-.section-subtitle {
-  color: var(--muted);
-  font-size: 13px;
-  margin-top: 4px;
-}
-
-.track-grid {
-  display: grid;
-  grid-template-columns: repeat(4,minmax(0,1fr));
-  gap: 17px;
-}
-
-.track-card {
-  min-width: 0;
-  padding: 13px;
-  border-radius: 18px;
-  background: var(--panel);
-  border: 1px solid var(--border);
-  transition: .2s;
-  cursor: pointer;
-}
-
-.track-card:hover {
-  transform: translateY(-3px);
-  border-color: rgba(139,92,246,.35);
-  background: #151a25;
-}
-
-.cover {
-  width: 100%;
-  aspect-ratio: 1;
-  border-radius: 13px;
-  overflow: hidden;
+.content{padding:28px}
+.page{display:none}
+.page.active{display:block}
+.hero{
+  min-height:300px;
+  padding:35px;
+  border:1px solid var(--border);
+  border-radius:26px;
   background:
-    linear-gradient(135deg,#202638,#10131b);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 12px;
-  position: relative;
-}
-
-.cover img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.cover-placeholder {
-  font-size: 40px;
-}
-
-.track-title {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  font-weight: 700;
-}
-
-.track-artist {
-  margin-top: 5px;
-  color: var(--muted);
-  font-size: 13px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.track-card-actions {
-  margin-top: 11px;
-  display: flex;
-  gap: 7px;
-}
-
-.small-button {
-  flex: 1;
-  height: 36px;
-  border-radius: 9px;
-  background: #1a1f2b;
-  color: #dce0e8;
-  border: 1px solid rgba(255,255,255,.05);
-}
-
-.small-button:hover {
-  background: #222938;
-}
-
-.small-button.favorite.active {
-  color: #f472b6;
-}
-
-/* =========================
-   QUICK ACCESS
-========================= */
-
-.quick-grid {
-  display: grid;
-  grid-template-columns: repeat(3,1fr);
-  gap: 14px;
-}
-
-.quick-card {
-  min-height: 110px;
-  border-radius: 18px;
-  padding: 18px;
-  border: 1px solid var(--border);
-  background: var(--panel);
-  cursor: pointer;
-  transition: .2s;
-}
-
-.quick-card:hover {
-  background: var(--panel2);
-  transform: translateY(-2px);
-}
-
-.quick-icon {
-  font-size: 25px;
-  margin-bottom: 12px;
-}
-
-.quick-card strong {
-  display: block;
-  margin-bottom: 5px;
-}
-
-.quick-card span {
-  color: var(--muted);
-  font-size: 12px;
-}
-
-/* =========================
-   DEVICE MUSIC
-========================= */
-
-.device-panel {
-  padding: 22px;
-  border-radius: 20px;
-  background: var(--panel);
-  border: 1px solid var(--border);
-}
-
-.upload-area {
-  border: 1px dashed rgba(139,92,246,.45);
-  border-radius: 17px;
-  min-height: 150px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  text-align: center;
-  padding: 25px;
-  background: rgba(139,92,246,.04);
-}
-
-.upload-area .big-icon {
-  font-size: 38px;
-  margin-bottom: 10px;
-}
-
-.upload-area p {
-  color: var(--muted);
-  margin: 8px 0 16px;
-  font-size: 13px;
-}
-
-.file-input {
-  display: none;
-}
-
-.device-list {
-  margin-top: 18px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.device-row {
-  display: grid;
-  grid-template-columns: 52px 1fr auto;
-  align-items: center;
-  gap: 13px;
-  padding: 10px;
-  border-radius: 13px;
-  background: #0e121a;
-  border: 1px solid rgba(255,255,255,.04);
-}
-
-.device-thumb {
-  width: 52px;
-  height: 52px;
-  border-radius: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #191e29;
-  font-size: 22px;
-}
-
-.device-name {
-  font-weight: 700;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.device-meta {
-  color: var(--muted);
-  font-size: 12px;
-  margin-top: 4px;
-}
-
-/* =========================
-   SEARCH
-========================= */
-
-.search-page-box {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 25px;
-}
-
-.search-page-box input {
-  flex: 1;
-  height: 50px;
-  border-radius: 13px;
-  border: 1px solid var(--border);
-  background: var(--panel);
-  color: white;
-  padding: 0 15px;
-  outline: none;
-}
-
-/* =========================
-   LIBRARY
-========================= */
-
-.tabs {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 7px;
-  margin-bottom: 20px;
-}
-
-.tab {
-  min-height: 40px;
-  padding: 0 14px;
-  border-radius: 10px;
-  color: var(--muted);
-  background: #11151d;
-  border: 1px solid var(--border);
-}
-
-.tab.active {
-  color: white;
-  background: rgba(139,92,246,.17);
-  border-color: rgba(139,92,246,.4);
-}
-
-.list {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.list-row {
-  display: grid;
-  grid-template-columns: 52px 1fr auto;
-  gap: 13px;
-  align-items: center;
-  padding: 10px;
-  border-radius: 13px;
-  background: var(--panel);
-  border: 1px solid var(--border);
-}
-
-.list-cover {
-  width: 52px;
-  height: 52px;
-  border-radius: 9px;
-  overflow: hidden;
-  background: #191e29;
-}
-
-.list-cover img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.list-title {
-  font-weight: 700;
-}
-
-.list-artist {
-  color: var(--muted);
-  font-size: 12px;
-  margin-top: 4px;
-}
-
-.list-actions {
-  display: flex;
-  gap: 6px;
-}
-
-/* =========================
-   EMPTY STATE
-========================= */
-
-.empty {
-  min-height: 180px;
-  border: 1px dashed var(--border);
-  border-radius: 18px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  text-align: center;
-  color: var(--muted);
-  padding: 25px;
-}
-
-.empty-icon {
-  font-size: 36px;
-  margin-bottom: 10px;
-}
-
-/* =========================
-   PLAYER
-========================= */
-
-.player {
-  position: fixed;
-  left: 240px;
-  right: 0;
-  bottom: 0;
-  height: var(--player-height);
-  z-index: 50;
-  background: rgba(11,14,21,.97);
-  backdrop-filter: blur(20px);
-  border-top: 1px solid var(--border);
-  display: grid;
-  grid-template-columns: minmax(190px,1fr) minmax(250px,1.5fr) minmax(170px,1fr);
-  align-items: center;
-  gap: 20px;
-  padding: 10px 20px;
-}
-
-.now-playing {
-  min-width: 0;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.now-cover {
-  width: 56px;
-  height: 56px;
-  border-radius: 9px;
-  overflow: hidden;
-  background: #191e29;
-  flex: 0 0 auto;
-}
-
-.now-cover img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.now-info {
-  min-width: 0;
-}
-
-.now-title {
-  font-size: 13px;
-  font-weight: 700;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.now-artist {
-  color: var(--muted);
-  font-size: 11px;
-  margin-top: 4px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.player-like {
-  background: transparent;
-  color: var(--muted);
-  font-size: 18px;
-  margin-left: auto;
-}
-
-.player-like.active {
-  color: #f472b6;
-}
-
-.player-center {
-  display: flex;
-  flex-direction: column;
-  gap: 7px;
-}
-
-.player-controls {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 13px;
-}
-
-.control {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  background: transparent;
-  color: #d8dce5;
-}
-
-.control:hover {
-  background: #1a1f2b;
-}
-
-.control.main {
-  width: 38px;
-  height: 38px;
-  background: white;
-  color: #080a10;
-  font-size: 16px;
-}
-
-.progress-line {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.time {
-  color: var(--muted);
-  font-size: 10px;
-  min-width: 30px;
-  text-align: center;
-}
-
-.range {
-  flex: 1;
-  accent-color: var(--accent);
-}
-
-.player-right {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  gap: 9px;
-}
-
-.volume {
-  width: 100px;
-  accent-color: var(--accent);
-}
-
-/* =========================
-   MODAL
-========================= */
-
-.modal-backdrop {
-  position: fixed;
-  inset: 0;
-  z-index: 100;
-  background: rgba(0,0,0,.68);
-  display: none;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-}
-
-.modal-backdrop.show {
-  display: flex;
-}
-
-.modal {
-  width: min(480px,100%);
-  background: #11151e;
-  border: 1px solid var(--border);
-  border-radius: 20px;
-  padding: 23px;
-  box-shadow: 0 25px 70px rgba(0,0,0,.5);
-}
-
-.modal h2 {
-  margin-bottom: 8px;
-}
-
-.modal p {
-  color: var(--muted);
-  font-size: 13px;
-  line-height: 1.6;
-}
-
-.modal input {
-  width: 100%;
-  height: 46px;
-  margin-top: 17px;
-  padding: 0 13px;
-  border-radius: 11px;
-  border: 1px solid var(--border);
-  background: #0a0d13;
-  color: white;
-  outline: none;
-}
-
-.modal-actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 8px;
-  margin-top: 18px;
-}
-
-/* =========================
-   TOAST
-========================= */
-
-.toast {
-  position: fixed;
-  left: 50%;
-  bottom: 105px;
-  transform: translate(-50%,20px);
-  opacity: 0;
-  pointer-events: none;
-  z-index: 200;
-  max-width: calc(100% - 30px);
-  padding: 12px 17px;
-  border-radius: 12px;
-  background: #191e29;
-  border: 1px solid var(--border);
-  color: white;
-  transition: .25s;
-  text-align: center;
-  font-size: 13px;
-}
-
-.toast.show {
-  opacity: 1;
-  transform: translate(-50%,0);
-}
-
-/* =========================
-   MOBILE
-========================= */
-
-.mobile-nav {
-  display: none;
-}
-
-@media (max-width: 1100px) {
-  .track-grid {
-    grid-template-columns: repeat(3,minmax(0,1fr));
+    linear-gradient(135deg,rgba(124,92,255,.23),rgba(0,212,255,.07)),
+    #111625;
+  box-shadow:var(--shadow);
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+}
+.hero h1{
+  font-size:clamp(34px,5vw,62px);
+  margin:0 0 12px;
+  letter-spacing:-2px;
+}
+.hero p{color:var(--muted);font-size:16px}
+.ai-box{
+  margin-top:25px;
+  display:flex;
+  gap:10px;
+  max-width:850px;
+}
+.ai-box input{
+  flex:1;
+  background:#090d17;
+  border:1px solid var(--border);
+  color:white;
+  padding:16px;
+  border-radius:15px;
+  outline:none;
+}
+.primary{
+  border:0;
+  border-radius:14px;
+  padding:13px 19px;
+  color:white;
+  background:linear-gradient(135deg,var(--accent),#5b7cff);
+  font-weight:800;
+  box-shadow:0 8px 25px rgba(124,92,255,.25);
+}
+.secondary{
+  border:1px solid var(--border);
+  background:#151b2a;
+  color:white;
+  padding:11px 15px;
+  border-radius:12px;
+}
+.section-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin:32px 0 15px;
+}
+.section-head h2{margin:0;font-size:21px}
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(180px,1fr));
+  gap:16px;
+}
+.card{
+  background:rgba(16,21,34,.85);
+  border:1px solid var(--border);
+  border-radius:17px;
+  padding:13px;
+  transition:.2s;
+}
+.card:hover{transform:translateY(-3px);border-color:rgba(124,92,255,.4)}
+.cover{
+  aspect-ratio:1;
+  width:100%;
+  border-radius:13px;
+  object-fit:cover;
+  background:linear-gradient(135deg,#222943,#121727);
+}
+.card-title{
+  font-weight:800;
+  margin-top:11px;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.card-sub{
+  color:var(--muted);
+  font-size:13px;
+  margin-top:5px;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.card-actions{
+  display:flex;
+  gap:7px;
+  margin-top:11px;
+}
+.icon-btn{
+  width:36px;
+  height:36px;
+  border:1px solid var(--border);
+  background:#151b2a;
+  color:white;
+  border-radius:10px;
+}
+.icon-btn:hover{background:#20283c}
+.result-list{display:flex;flex-direction:column;gap:8px}
+.result{
+  display:flex;
+  align-items:center;
+  gap:13px;
+  padding:10px;
+  border:1px solid var(--border);
+  border-radius:13px;
+  background:#101522;
+}
+.result img{
+  width:55px;
+  height:55px;
+  border-radius:10px;
+  object-fit:cover;
+}
+.result-info{flex:1;min-width:0}
+.result-title{
+  font-weight:800;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.result-sub{font-size:12px;color:var(--muted);margin-top:4px}
+.empty{
+  padding:35px;
+  text-align:center;
+  color:var(--muted);
+  border:1px dashed var(--border);
+  border-radius:18px;
+}
+.chips{
+  display:flex;
+  flex-wrap:wrap;
+  gap:9px;
+  margin-top:18px;
+}
+.chip{
+  border:1px solid var(--border);
+  background:#121827;
+  color:#ccd2e0;
+  border-radius:30px;
+  padding:9px 14px;
+}
+.player{
+  position:fixed;
+  bottom:0;
+  left:245px;
+  right:0;
+  height:88px;
+  z-index:60;
+  background:rgba(12,16,27,.96);
+  backdrop-filter:blur(18px);
+  border-top:1px solid var(--border);
+  display:flex;
+  align-items:center;
+  gap:15px;
+  padding:10px 20px;
+}
+.now-cover{
+  width:58px;
+  height:58px;
+  border-radius:10px;
+  object-fit:cover;
+}
+.now-info{width:210px;min-width:0}
+.now-title{font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.now-artist{font-size:12px;color:var(--muted);margin-top:5px}
+.controls{display:flex;align-items:center;gap:8px}
+.play{
+  width:43px;
+  height:43px;
+  border-radius:50%;
+  border:0;
+  background:white;
+  color:#080b14;
+  font-weight:900;
+}
+.progress-area{flex:1;display:flex;align-items:center;gap:8px}
+.progress{
+  width:100%;
+  accent-color:var(--accent);
+}
+.volume{width:100px;accent-color:var(--accent)}
+.modal-bg{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.72);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:100;
+  padding:20px;
+}
+.modal-bg.show{display:flex}
+.modal{
+  width:min(560px,100%);
+  max-height:90vh;
+  overflow:auto;
+  background:#111725;
+  border:1px solid var(--border);
+  border-radius:22px;
+  padding:25px;
+  box-shadow:var(--shadow);
+}
+.modal h2{margin-top:0}
+.field{margin:15px 0}
+.field label{
+  display:block;
+  color:#aeb6c7;
+  font-size:13px;
+  margin-bottom:7px;
+}
+.field input,.field select{
+  width:100%;
+  padding:13px;
+  border-radius:12px;
+  background:#080d17;
+  border:1px solid var(--border);
+  color:white;
+  outline:none;
+}
+.modal-actions{
+  display:flex;
+  justify-content:flex-end;
+  gap:9px;
+  margin-top:20px;
+}
+.mobile-nav{
+  display:none;
+}
+.toast{
+  position:fixed;
+  left:50%;
+  bottom:105px;
+  transform:translateX(-50%) translateY(20px);
+  background:#20283a;
+  border:1px solid var(--border);
+  padding:12px 18px;
+  border-radius:12px;
+  opacity:0;
+  pointer-events:none;
+  transition:.3s;
+  z-index:200;
+}
+.toast.show{
+  opacity:1;
+  transform:translateX(-50%) translateY(0);
+}
+.stat-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+  gap:13px;
+}
+.stat{
+  padding:20px;
+  background:#111725;
+  border:1px solid var(--border);
+  border-radius:16px;
+}
+.stat b{font-size:28px}
+.stat span{display:block;color:var(--muted);font-size:13px;margin-top:5px}
+.upload{
+  border:1px dashed rgba(124,92,255,.5);
+  padding:25px;
+  text-align:center;
+  border-radius:17px;
+  background:rgba(124,92,255,.06);
+}
+.ltr{text-align:left}
+.rtl{text-align:right;direction:rtl}
+@media(max-width:850px){
+  .sidebar{display:none}
+  .main{margin-left:0;width:100%;padding-bottom:150px}
+  .topbar{padding:0 14px;height:65px}
+  .content{padding:16px}
+  .hero{padding:25px;min-height:330px}
+  .ai-box{flex-direction:column}
+  .grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}
+  .player{
+    left:0;
+    height:92px;
+    bottom:58px;
+    padding:8px 12px;
   }
-
-  .player {
-    grid-template-columns: 1fr 1.5fr;
+  .now-info{width:125px}
+  .volume{display:none}
+  .progress-area{position:absolute;left:12px;right:12px;bottom:2px}
+  .controls{gap:4px}
+  .controls .optional{display:none}
+  .mobile-nav{
+    display:flex;
+    position:fixed;
+    left:0;right:0;bottom:0;
+    height:58px;
+    z-index:80;
+    background:#0b0f19;
+    border-top:1px solid var(--border);
+    justify-content:space-around;
   }
-
-  .player-right {
-    display: none;
+  .mobile-nav button{
+    border:0;
+    background:transparent;
+    color:#8992a6;
+    font-size:10px;
   }
-}
-
-@media (max-width: 800px) {
-  .sidebar {
-    display: none;
-  }
-
-  .main {
-    width: 100%;
-    margin-left: 0;
-  }
-
-  .topbar {
-    height: 64px;
-    padding: 10px 13px;
-  }
-
-  .content {
-    padding: 18px 13px 20px;
-  }
-
-  .hero {
-    padding: 27px 20px;
-    min-height: 350px;
-  }
-
-  .hero h1 {
-    font-size: 36px;
-  }
-
-  .track-grid {
-    grid-template-columns: repeat(2,minmax(0,1fr));
-    gap: 10px;
-  }
-
-  .quick-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .player {
-    left: 0;
-    height: 78px;
-    padding: 8px 10px;
-    grid-template-columns: 1fr;
-  }
-
-  .now-cover {
-    width: 50px;
-    height: 50px;
-  }
-
-  .player-center {
-    position: absolute;
-    right: 10px;
-    top: 20px;
-  }
-
-  .progress-line {
-    position: fixed;
-    left: 0;
-    right: 0;
-    bottom: 77px;
-    padding: 0;
-  }
-
-  .progress-line .time {
-    display: none;
-  }
-
-  .player-center .progress-line {
-    display: none;
-  }
-
-  .mobile-nav {
-    display: flex;
-    position: fixed;
-    left: 0;
-    right: 0;
-    bottom: 78px;
-    height: 52px;
-    background: rgba(11,14,21,.98);
-    border-top: 1px solid var(--border);
-    z-index: 45;
-    justify-content: space-around;
-  }
-
-  .mobile-nav button {
-    flex: 1;
-    color: var(--muted);
-    background: transparent;
-    font-size: 11px;
-  }
-
-  .mobile-nav button.active {
-    color: #a78bfa;
-  }
-
-  .ai-box {
-    flex-direction: column;
-  }
-
-  .search-page-box {
-    flex-direction: column;
-  }
-}
-
-@media (max-width: 450px) {
-  .track-grid {
-    grid-template-columns: repeat(2,minmax(0,1fr));
-  }
-
-  .track-card {
-    padding: 9px;
-  }
-
-  .track-card-actions {
-    flex-direction: column;
-  }
-
-  .hero h1 {
-    font-size: 31px;
-  }
-
-  .list-row {
-    grid-template-columns: 45px 1fr;
-  }
-
-  .list-actions {
-    grid-column: 2;
-  }
-
-  .list-cover {
-    width: 45px;
-    height: 45px;
-  }
-}
-
-/* RTL */
-
-[dir="rtl"] .sidebar {
-  left: auto;
-  right: 0;
-  border-right: 0;
-  border-left: 1px solid var(--border);
-}
-
-[dir="rtl"] .main {
-  margin-left: 0;
-  margin-right: 240px;
-}
-
-[dir="rtl"] .player {
-  left: 0;
-  right: 240px;
-}
-
-[dir="rtl"] .search-box input {
-  padding: 0 16px 0 45px;
-}
-
-[dir="rtl"] .search-icon {
-  right: auto;
-  left: 15px;
-}
-
-@media (max-width: 800px) {
-  [dir="rtl"] .main {
-    margin-right: 0;
-  }
-
-  [dir="rtl"] .player {
-    left: 0;
-    right: 0;
-  }
+  .mobile-nav button.active{color:white}
 }
 </style>
 </head>
@@ -1110,4048 +436,1609 @@ button:disabled {
 
 <div class="app">
 
-  <!-- =========================
-       SIDEBAR
-  ========================== -->
+<aside class="sidebar">
+  <div class="logo">Harmoniq <span>AI</span></div>
 
-  <aside class="sidebar">
+  <div class="nav-title" data-i18n="menu">Menu</div>
 
-    <div class="logo">
-      <div class="logo-icon">♫</div>
-      <div class="logo-text">Harmoniq<span> AI</span></div>
+  <button class="nav-btn active" data-page="home">🏠 <span data-i18n="home">Home</span></button>
+  <button class="nav-btn" data-page="search">🔎 <span data-i18n="search">Search</span></button>
+  <button class="nav-btn" data-page="library">📚 <span data-i18n="library">Library</span></button>
+  <button class="nav-btn" data-page="favorites">❤️ <span data-i18n="favorites">Favorites</span></button>
+  <button class="nav-btn" data-page="playlists">🎵 <span data-i18n="playlists">Playlists</span></button>
+  <button class="nav-btn" data-page="recent">🕘 <span data-i18n="recent">Recently Played</span></button>
+
+  <div class="nav-title" data-i18n="personal">Personal</div>
+
+  <button class="nav-btn" onclick="openSettings()">⚙️ <span data-i18n="settings">Settings</span></button>
+</aside>
+
+<main class="main">
+
+<header class="topbar">
+  <div class="search-box">
+    <span class="search-icon">🔎</span>
+    <input id="topSearch" data-placeholder="searchPlaceholder" placeholder="Search music, artists, moods..." autocomplete="off">
+  </div>
+  <button class="secondary" onclick="openSettings()">⚙️</button>
+</header>
+
+<div class="content">
+
+<!-- HOME -->
+<section class="page active" id="page-home">
+
+  <div class="hero">
+    <h1>Harmoniq <span style="color:var(--accent)">AI</span></h1>
+    <p data-i18n="heroText">Tell Harmoniq what you want to hear.</p>
+
+    <div class="ai-box">
+      <input id="aiInput" data-placeholder="aiPlaceholder"
+             placeholder="Try: relaxing music for sleep">
+      <button class="primary" onclick="aiSearch()">✨ <span data-i18n="askAI">Ask AI</span></button>
     </div>
 
-    <div class="nav-title" data-i18n="menu">Menu</div>
-
-    <nav class="nav">
-
-      <button class="active" data-page="home" onclick="showPage('home')">
-        <span class="nav-icon">⌂</span>
-        <span data-i18n="home">Home</span>
-      </button>
-
-      <button data-page="search" onclick="showPage('search')">
-        <span class="nav-icon">⌕</span>
-        <span data-i18n="search">Search</span>
-      </button>
-
-      <button data-page="library" onclick="showPage('library')">
-        <span class="nav-icon">▤</span>
-        <span data-i18n="library">Library</span>
-      </button>
-
-      <button data-page="favorites" onclick="showLibraryTab('favorites')">
-        <span class="nav-icon">♡</span>
-        <span data-i18n="favorites">Favorites</span>
-      </button>
-
-      <button data-page="playlists" onclick="showLibraryTab('playlists')">
-        <span class="nav-icon">☷</span>
-        <span data-i18n="playlists">Playlists</span>
-      </button>
-
-      <button data-page="recent" onclick="showLibraryTab('recent')">
-        <span class="nav-icon">◷</span>
-        <span data-i18n="recent">Recently Played</span>
-      </button>
-
-    </nav>
-
-    <div class="sidebar-bottom">
-
-      <button class="nav" style="width:100%;margin:0" onclick="openSettings()">
-        <span style="display:flex;align-items:center;gap:12px;padding:12px;color:var(--muted)">
-          <span>⚙</span>
-          <span data-i18n="settings">Settings</span>
-        </span>
-      </button>
-
+    <div class="chips">
+      <button class="chip" onclick="quickAI('relaxing music')">😌 Relax</button>
+      <button class="chip" onclick="quickAI('music for sleep')">🌙 Sleep</button>
+      <button class="chip" onclick="quickAI('chill music')">🌊 Chill</button>
+      <button class="chip" onclick="quickAI('happy music')">😊 Happy</button>
+      <button class="chip" onclick="quickAI('meditation music')">🧘 Meditation</button>
+      <button class="chip" onclick="quickAI('instrumental music')">🎹 Instrumental</button>
     </div>
-
-  </aside>
-
-
-  <!-- =========================
-       MAIN
-  ========================== -->
-
-  <main class="main">
-
-    <header class="topbar">
-
-      <div class="search-box">
-        <input
-          id="topSearch"
-          type="search"
-          placeholder="Search music, artists, moods..."
-          onkeydown="if(event.key==='Enter') performSearch(this.value)"
-        >
-        <span class="search-icon">⌕</span>
-      </div>
-
-      <div class="top-actions">
-
-        <button class="icon-button" onclick="toggleLanguage()" title="Language">
-          🌐
-        </button>
-
-        <button class="icon-button" onclick="openSettings()" title="Settings">
-          ⚙
-        </button>
-
-      </div>
-
-    </header>
-
-
-    <div class="content">
-
-      <!-- =========================
-           HOME
-      ========================== -->
-
-      <section id="page-home" class="page active">
-
-        <div class="hero">
-
-          <div class="eyebrow">HARMONIQ AI</div>
-
-          <h1 data-i18n="heroTitle">
-            Music that moves with you.
-          </h1>
-
-          <p data-i18n="heroText">
-            Discover music, play your own files, build playlists and explore music through AI-powered search.
-          </p>
-
-          <div class="ai-box">
-
-            <input
-              id="aiInput"
-              type="text"
-              placeholder="Try: relaxing music, jazz, electronic..."
-              onkeydown="if(event.key==='Enter') aiSearch()"
-            >
-
-            <button class="primary-button" onclick="aiSearch()">
-              ✨ <span data-i18n="askAI">Ask AI</span>
-            </button>
-
-          </div>
-
-        </div>
-
-
-        <div class="section">
-
-          <div class="section-header">
-            <div>
-              <div class="section-title" data-i18n="quickAccess">Quick Access</div>
-            </div>
-          </div>
-
-          <div class="quick-grid">
-
-            <div class="quick-card" onclick="showPage('device')">
-              <div class="quick-icon">📱</div>
-              <strong data-i18n="myDevice">My Device Music</strong>
-              <span data-i18n="myDeviceText">
-                Play music directly from your phone.
-              </span>
-            </div>
-
-            <div class="quick-card" onclick="showPage('search')">
-              <div class="quick-icon">🔎</div>
-              <strong data-i18n="aiMusicSearch">AI Music Search</strong>
-              <span data-i18n="aiMusicSearchText">
-                Search available music from Audius.
-              </span>
-            </div>
-
-            <div class="quick-card" onclick="showLibraryTab('favorites')">
-              <div class="quick-icon">❤️</div>
-              <strong data-i18n="yourFavorites">Your Favorites</strong>
-              <span data-i18n="yourFavoritesText">
-                Keep the tracks you love.
-              </span>
-            </div>
-
-          </div>
-
-        </div>
-
-
-        <div class="section">
-
-          <div class="section-header">
-            <div>
-              <div class="section-title" data-i18n="recommended">
-                Recommended
-              </div>
-              <div class="section-subtitle">
-                Harmoniq demo collection
-              </div>
-            </div>
-          </div>
-
-          <div id="recommendedGrid" class="track-grid"></div>
-
-        </div>
-
-      </section>
-
-
-      <!-- =========================
-           DEVICE
-      ========================== -->
-
-      <section id="page-device" class="page">
-
-        <div class="section-header">
-
-          <div>
-            <div class="section-title" data-i18n="myDevice">
-              My Device Music
-            </div>
-
-            <div class="section-subtitle" data-i18n="myDeviceText">
-              Play music directly from your phone.
-            </div>
-          </div>
-
-        </div>
-
-
-        <div class="device-panel">
-
-          <div class="upload-area">
-
-            <div class="big-icon">🎵</div>
-
-            <strong data-i18n="chooseMusic">
-              Choose music from your device
-            </strong>
-
-            <p data-i18n="supportedFormats">
-              MP3, WAV, M4A, AAC, OGG and other browser-supported audio files.
-            </p>
-
-            <label class="primary-button" for="deviceFileInput">
-              📁 <span data-i18n="chooseFiles">Choose Files</span>
-            </label>
-
-            <input
-              id="deviceFileInput"
-              class="file-input"
-              type="file"
-              accept="audio/*,.mp3,.wav,.m4a,.aac,.ogg,.flac"
-              multiple
-            >
-
-          </div>
-
-          <div id="deviceList" class="device-list"></div>
-
-        </div>
-
-      </section>
-
-
-      <!-- =========================
-           SEARCH
-      ========================== -->
-
-      <section id="page-search" class="page">
-
-        <div class="section-header">
-
-          <div>
-            <div class="section-title" data-i18n="searchMusic">
-              Search Music
-            </div>
-
-            <div class="section-subtitle">
-              Audius music catalog
-            </div>
-          </div>
-
-        </div>
-
-
-        <div class="search-page-box">
-
-          <input
-            id="searchInput"
-            type="search"
-            placeholder="Artist, song, genre or mood..."
-            onkeydown="if(event.key==='Enter') performSearch(this.value)"
-          >
-
-          <button class="primary-button" onclick="performSearch()">
-            🔎 <span data-i18n="search">Search</span>
-          </button>
-
-        </div>
-
-
-        <div id="searchStatus"></div>
-
-        <div id="searchResults" class="track-grid"></div>
-
-      </section>
-
-
-      <!-- =========================
-           LIBRARY
-      ========================== -->
-
-      <section id="page-library" class="page">
-
-        <div class="section-header">
-
-          <div>
-            <div class="section-title" data-i18n="library">
-              Library
-            </div>
-
-            <div class="section-subtitle">
-              Your music collection
-            </div>
-          </div>
-
-        </div>
-
-
-        <div class="tabs">
-
-          <button class="tab active" data-tab="favorites" onclick="setLibraryTab('favorites')">
-            ❤️ <span data-i18n="favorites">Favorites</span>
-          </button>
-
-          <button class="tab" data-tab="recent" onclick="setLibraryTab('recent')">
-            ◷ <span data-i18n="recent">Recently Played</span>
-          </button>
-
-          <button class="tab" data-tab="playlists" onclick="setLibraryTab('playlists')">
-            ☷ <span data-i18n="playlists">Playlists</span>
-          </button>
-
-          <button class="tab" data-tab="device" onclick="setLibraryTab('device')">
-            📱 <span data-i18n="deviceMusic">Device Music</span>
-          </button>
-
-        </div>
-
-
-        <div id="libraryContent"></div>
-
-      </section>
-
+  </div>
+
+  <div class="section-head">
+    <h2 data-i18n="quickAccess">Quick Access</h2>
+  </div>
+
+  <div class="stat-grid">
+    <div class="stat">
+      <b id="statFav">0</b>
+      <span data-i18n="favorites">Favorites</span>
     </div>
+    <div class="stat">
+      <b id="statPlaylist">0</b>
+      <span data-i18n="playlists">Playlists</span>
+    </div>
+    <div class="stat">
+      <b id="statRecent">0</b>
+      <span data-i18n="recent">Recently Played</span>
+    </div>
+  </div>
 
-  </main>
+  <div class="section-head">
+    <h2 data-i18n="deviceMusic">My Device Music</h2>
+    <button class="secondary" onclick="document.getElementById('fileInput').click()">＋ Add Music</button>
+  </div>
+
+  <div class="upload">
+    <p data-i18n="deviceText">Play music stored on your device.</p>
+    <button class="primary" onclick="document.getElementById('fileInput').click()">📁 Choose Audio Files</button>
+    <input id="fileInput" type="file" accept="audio/*,.mp3,.wav,.m4a,.aac,.ogg,.flac" multiple hidden>
+  </div>
+
+  <div id="deviceList" style="margin-top:15px"></div>
+
+  <div class="section-head">
+    <h2 data-i18n="recommended">Recommended</h2>
+  </div>
+
+  <div id="demoGrid" class="grid"></div>
+
+</section>
+
+<!-- SEARCH -->
+<section class="page" id="page-search">
+  <div class="section-head">
+    <h2 data-i18n="search">Search</h2>
+  </div>
+
+  <div class="ai-box">
+    <input id="searchInput" data-placeholder="searchPlaceholder" placeholder="Search music, artists, moods...">
+    <button class="primary" onclick="doSearch()">🔎 Search</button>
+  </div>
+
+  <div id="searchStatus" style="margin:18px 0;color:var(--muted)"></div>
+  <div id="searchResults" class="result-list"></div>
+</section>
+
+<!-- LIBRARY -->
+<section class="page" id="page-library">
+  <div class="section-head">
+    <h2 data-i18n="library">Library</h2>
+  </div>
+
+  <div class="grid">
+    <button class="card" onclick="showPage('favorites')">
+      <div style="font-size:48px">❤️</div>
+      <div class="card-title">Favorites</div>
+      <div class="card-sub">Your liked tracks</div>
+    </button>
+
+    <button class="card" onclick="showPage('playlists')">
+      <div style="font-size:48px">🎵</div>
+      <div class="card-title">Playlists</div>
+      <div class="card-sub">Your collections</div>
+    </button>
+
+    <button class="card" onclick="showPage('recent')">
+      <div style="font-size:48px">🕘</div>
+      <div class="card-title">Recently Played</div>
+      <div class="card-sub">Your listening history</div>
+    </button>
+  </div>
+</section>
+
+<!-- FAVORITES -->
+<section class="page" id="page-favorites">
+  <div class="section-head">
+    <h2 data-i18n="favorites">Favorites</h2>
+  </div>
+  <div id="favoriteList" class="result-list"></div>
+</section>
+
+<!-- PLAYLISTS -->
+<section class="page" id="page-playlists">
+  <div class="section-head">
+    <h2 data-i18n="playlists">Playlists</h2>
+    <button class="primary" onclick="createPlaylist()">＋ New Playlist</button>
+  </div>
+  <div id="playlistList" class="grid"></div>
+</section>
+
+<!-- RECENT -->
+<section class="page" id="page-recent">
+  <div class="section-head">
+    <h2 data-i18n="recent">Recently Played</h2>
+  </div>
+  <div id="recentList" class="result-list"></div>
+</section>
 
 </div>
+</main>
+</div>
 
+<!-- PLAYER -->
+<div class="player">
+  <img id="nowCover" class="now-cover" src="" alt="">
+  <div class="now-info">
+    <div id="nowTitle" class="now-title">Harmoniq AI</div>
+    <div id="nowArtist" class="now-artist">Ready to play</div>
+  </div>
 
-<!-- =========================
-     MOBILE NAV
-========================== -->
+  <div class="controls">
+    <button class="icon-btn optional" onclick="previousTrack()">⏮</button>
+    <button class="icon-btn optional" onclick="toggleShuffle()">🔀</button>
+    <button class="play" id="playBtn" onclick="togglePlay()">▶</button>
+    <button class="icon-btn optional" onclick="nextTrack()">⏭</button>
+    <button class="icon-btn optional" onclick="toggleRepeat()">🔁</button>
+  </div>
 
+  <div class="progress-area">
+    <input id="progress" class="progress" type="range" min="0" max="100" value="0">
+  </div>
+
+  <input id="volume" class="volume" type="range" min="0" max="1" step=".01" value=".8">
+</div>
+
+<audio id="audio"></audio>
+
+<!-- MOBILE NAV -->
 <nav class="mobile-nav">
-
-  <button class="active" data-page="home" onclick="showPage('home')">
-    🏠<br>Home
-  </button>
-
-  <button data-page="search" onclick="showPage('search')">
-    🔎<br>Search
-  </button>
-
-  <button data-page="device" onclick="showPage('device')">
-    📱<br>Device
-  </button>
-
-  <button data-page="library" onclick="showPage('library')">
-    📚<br>Library
-  </button>
-
+  <button data-page="home">🏠<br>Home</button>
+  <button data-page="search">🔎<br>Search</button>
+  <button data-page="library">📚<br>Library</button>
+  <button data-page="favorites">❤️<br>Favorites</button>
+  <button onclick="openSettings()">⚙️<br>Settings</button>
 </nav>
 
-
-<!-- =========================
-     PLAYER
-========================== -->
-
-<div class="player">
-
-  <div class="now-playing">
-
-    <div class="now-cover" id="nowCover">
-      <div class="cover-placeholder">♫</div>
-    </div>
-
-    <div class="now-info">
-
-      <div id="nowTitle" class="now-title">
-        No song selected
-      </div>
-
-      <div id="nowArtist" class="now-artist">
-        Harmoniq AI
-      </div>
-
-    </div>
-
-    <button id="playerLike" class="player-like" onclick="toggleCurrentFavorite()">
-      ♡
-    </button>
-
-  </div>
-
-
-  <div class="player-center">
-
-    <div class="player-controls">
-
-      <button id="shuffleButton" class="control" onclick="toggleShuffle()" title="Shuffle">
-        🔀
-      </button>
-
-      <button class="control" onclick="previousTrack()" title="Previous">
-        ⏮
-      </button>
-
-      <button id="playButton" class="control main" onclick="togglePlay()" title="Play">
-        ▶
-      </button>
-
-      <button class="control" onclick="nextTrack()" title="Next">
-        ⏭
-      </button>
-
-      <button id="repeatButton" class="control" onclick="toggleRepeat()" title="Repeat">
-        🔁
-      </button>
-
-    </div>
-
-
-    <div class="progress-line">
-
-      <span id="currentTime" class="time">0:00</span>
-
-      <input
-        id="progress"
-        class="range"
-        type="range"
-        min="0"
-        max="100"
-        value="0"
-        step="0.1"
-      >
-
-      <span id="duration" class="time">0:00</span>
-
-    </div>
-
-  </div>
-
-
-  <div class="player-right">
-
-    <button id="muteButton" class="control" onclick="toggleMute()">
-      🔊
-    </button>
-
-    <input
-      id="volume"
-      class="volume"
-      type="range"
-      min="0"
-      max="1"
-      step="0.01"
-      value="1"
-    >
-
-  </div>
-
-</div>
-
-
-<!-- =========================
-     PLAYLIST MODAL
-========================== -->
-
-<div id="playlistModal" class="modal-backdrop">
-
+<!-- SETTINGS -->
+<div id="settingsModal" class="modal-bg">
   <div class="modal">
+    <h2>⚙️ Settings</h2>
 
-    <h2>Create Playlist</h2>
+    <div class="field">
+      <label>Language</label>
+      <select id="language">
+        <option value="en">English</option>
+        <option value="ar">العربية</option>
+        <option value="tr">Türkçe</option>
+        <option value="fr">Français</option>
+        <option value="es">Español</option>
+        <option value="de">Deutsch</option>
+      </select>
+    </div>
 
-    <p>
-      Create a playlist and add the selected song.
-    </p>
+    <div class="field">
+      <label>Audius API Key</label>
+      <input id="apiKey" type="password" placeholder="Paste your Audius API key here">
+      <small style="color:var(--muted)">
+        Stored only in this browser. Never share your API key with anyone.
+      </small>
+    </div>
 
-    <input
-      id="playlistName"
-      type="text"
-      placeholder="Playlist name"
-    >
+    <div class="field">
+      <label>AI Search Provider</label>
+      <select id="provider">
+        <option value="audius">Audius Music Search</option>
+      </select>
+    </div>
 
     <div class="modal-actions">
-
-      <button class="secondary-button" onclick="closePlaylistModal()">
-        Cancel
-      </button>
-
-      <button class="primary-button" onclick="createPlaylistFromModal()">
-        Create
-      </button>
-
+      <button class="secondary" onclick="closeSettings()">Cancel</button>
+      <button class="primary" onclick="saveSettings()">Save Settings</button>
     </div>
-
   </div>
-
 </div>
 
-
-<!-- =========================
-     SETTINGS MODAL
-========================== -->
-
-<div id="settingsModal" class="modal-backdrop">
-
+<!-- PLAYLIST MODAL -->
+<div id="playlistModal" class="modal-bg">
   <div class="modal">
+    <h2>🎵 New Playlist</h2>
 
-    <h2>Harmoniq AI Settings</h2>
-
-    <p>
-      Enter your Audius API Key here to enable music search.
-      Your key stays in this browser and is not sent to Harmoniq servers.
-    </p>
-
-    <input
-      id="apiKeyInput"
-      type="password"
-      placeholder="Audius API Key"
-      autocomplete="off"
-    >
+    <div class="field">
+      <label>Playlist name</label>
+      <input id="playlistName" placeholder="My Playlist">
+    </div>
 
     <div class="modal-actions">
-
-      <button class="secondary-button" onclick="closeSettings()">
-        Cancel
-      </button>
-
-      <button class="primary-button" onclick="saveSettings()">
-        Save
-      </button>
-
+      <button class="secondary" onclick="closePlaylistModal()">Cancel</button>
+      <button class="primary" onclick="savePlaylist()">Create</button>
     </div>
-
   </div>
-
 </div>
-
 
 <div id="toast" class="toast"></div>
 
-
-<!-- =========================
-     AUDIO ENGINE
-========================== -->
-
 <script>
-
-"use strict";
-
-
 /* ============================================================
    HARMONIQ AI
-   COMPLETE SINGLE-FILE APPLICATION
-============================================================ */
+   SINGLE-FILE EDITION
+   ============================================================ */
 
+const $ = id => document.getElementById(id);
 
-/* =========================
-   STORAGE KEYS
-========================= */
-
-const STORAGE = {
-  favorites: "harmoniq_favorites_v3",
-  recent: "harmoniq_recent_v3",
-  playlists: "harmoniq_playlists_v3",
-  settings: "harmoniq_settings_v3",
-  language: "harmoniq_language_v3",
-  volume: "harmoniq_volume_v3"
-};
-
-
-/* =========================
-   STATE
-========================= */
+const audio = $("audio");
 
 let tracks = [];
 let deviceTracks = [];
-let searchTracks = [];
-
-let currentTrack = null;
 let currentIndex = -1;
 
-let isPlaying = false;
-let isShuffle = false;
-let repeatMode = false;
+let shuffle = false;
+let repeat = false;
 
-let favorites = loadJSON(STORAGE.favorites, []);
-let recent = loadJSON(STORAGE.recent, []);
-let playlists = loadJSON(STORAGE.playlists, []);
+let favorites = JSON.parse(localStorage.getItem("harmoniq_favorites") || "[]");
+let recent = JSON.parse(localStorage.getItem("harmoniq_recent") || "[]");
+let playlists = JSON.parse(localStorage.getItem("harmoniq_playlists") || "[]");
 
-let currentLibraryTab = "favorites";
-let selectedTrackForPlaylist = null;
+let settings = JSON.parse(localStorage.getItem("harmoniq_settings") || "{}");
 
-let language = localStorage.getItem(STORAGE.language) || "en";
-
-
-/* ============================================================
-   IMPORTANT AUDIO PART
-   This is the main fix for phone/device music.
-============================================================ */
-
-const audio = new Audio();
-
-audio.preload = "metadata";
-
-audio.volume = Number(
-  localStorage.getItem(STORAGE.volume) ?? "1"
-);
-
-if (!Number.isFinite(audio.volume)) {
-  audio.volume = 1;
-}
-
-
-/* =========================
-   AUDIO EVENTS
-========================= */
-
-audio.addEventListener("loadedmetadata", function() {
-
-  updateDuration();
-
-  updateProgress();
-
-});
-
-
-audio.addEventListener("timeupdate", function() {
-
-  updateProgress();
-
-});
-
-
-audio.addEventListener("play", function() {
-
-  isPlaying = true;
-
-  updatePlayButton();
-
-});
-
-
-audio.addEventListener("pause", function() {
-
-  isPlaying = false;
-
-  updatePlayButton();
-
-});
-
-
-audio.addEventListener("ended", function() {
-
-  isPlaying = false;
-
-  updatePlayButton();
-
-  if (repeatMode) {
-
-    try {
-      audio.currentTime = 0;
-      audio.play().catch(() => {});
-    } catch(e) {}
-
-    return;
-  }
-
-  nextTrack();
-
-});
-
-
-audio.addEventListener("error", function() {
-
-  isPlaying = false;
-
-  updatePlayButton();
-
-  const error = audio.error;
-
-  let message = "Unable to play this audio file.";
-
-  if (error) {
-
-    if (error.code === 1) {
-      message = "Audio loading was cancelled.";
-    }
-
-    if (error.code === 2) {
-      message = "Network error while loading audio.";
-    }
-
-    if (error.code === 3) {
-      message = "The audio format could not be decoded.";
-    }
-
-    if (error.code === 4) {
-      message = "This audio format is not supported by your browser.";
-    }
-
-  }
-
-  showToast(message);
-
-});
-
-
-/* =========================
-   SAFELY LOAD JSON
-========================= */
-
-function loadJSON(key, fallback) {
-
-  try {
-
-    const value = localStorage.getItem(key);
-
-    if (!value) {
-      return fallback;
-    }
-
-    const parsed = JSON.parse(value);
-
-    return parsed;
-
-  } catch(e) {
-
-    return fallback;
-
-  }
-
-}
-
-
-/* =========================
-   SAVE JSON
-========================= */
-
-function saveJSON(key, value) {
-
-  try {
-
-    localStorage.setItem(
-      key,
-      JSON.stringify(value)
-    );
-
-  } catch(e) {
-
-    console.warn("Storage error:", e);
-
-  }
-
-}
-
-
-/* =========================
-   ESCAPE HTML
-========================= */
-
-function escapeHTML(value) {
-
-  return String(value ?? "")
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&#039;");
-
-}
-
-
-/* =========================
-   ID GENERATOR
-========================= */
-
-function makeId(prefix = "track") {
-
-  return (
-    prefix +
-    "_" +
-    Date.now() +
-    "_" +
-    Math.random()
-      .toString(36)
-      .slice(2, 9)
-  );
-
-}
-
-
-/* =========================
-   DEMO TRACKS
-========================= */
+let language = localStorage.getItem("harmoniq_language") || "en";
 
 const demoTracks = [
-
   {
-    id: "demo_afterglow",
-    title: "Afterglow",
-    artist: "Luna Vale",
-    type: "demo",
-    cover: "",
-    color: "1"
+    id:"demo1",
+    title:"Afterglow",
+    artist:"Luna Vale",
+    genre:"Chill",
+    color:"linear-gradient(135deg,#7357ff,#00c6ff)"
   },
-
   {
-    id: "demo_velvet",
-    title: "Velvet Sky",
-    artist: "Noah Kade",
-    type: "demo",
-    cover: "",
-    color: "2"
+    id:"demo2",
+    title:"Velvet Sky",
+    artist:"Noah Kade",
+    genre:"Relax",
+    color:"linear-gradient(135deg,#ff6aa2,#7357ff)"
   },
-
   {
-    id: "demo_openwater",
-    title: "Open Water",
-    artist: "Kairo Field",
-    type: "demo",
-    cover: "",
-    color: "3"
+    id:"demo3",
+    title:"Open Water",
+    artist:"Kairo Field",
+    genre:"Ambient",
+    color:"linear-gradient(135deg,#00d4ff,#1266e8)"
   },
-
   {
-    id: "demo_lucid",
-    title: "Lucid Dream",
-    artist: "Harmoniq",
-    type: "demo",
-    cover: "",
-    color: "4"
+    id:"demo4",
+    title:"Lucid Dream",
+    artist:"Harmoniq",
+    genre:"Meditation",
+    color:"linear-gradient(135deg,#9d6bff,#ff7ccf)"
   }
-
 ];
 
-tracks = [...demoTracks];
-
-
 /* ============================================================
-   DEMO AUDIO
-   Generates an internal test sound.
-============================================================ */
-
-function createDemoAudio(track) {
-
-  const duration = 12;
-
-  const sampleRate = 22050;
-
-  const frameCount = duration * sampleRate;
-
-  const buffer =
-    new ArrayBuffer(44 + frameCount * 2);
-
-  const view = new DataView(buffer);
-
-  writeString(view, 0, "RIFF");
-  view.setUint32(4, 36 + frameCount * 2, true);
-  writeString(view, 8, "WAVE");
-  writeString(view, 12, "fmt ");
-  view.setUint32(16, 16, true);
-  view.setUint16(20, 1, true);
-  view.setUint16(22, 1, true);
-  view.setUint32(24, sampleRate, true);
-  view.setUint32(28, sampleRate * 2, true);
-  view.setUint16(32, 2, true);
-  view.setUint16(34, 16, true);
-  writeString(view, 36, "data");
-  view.setUint32(40, frameCount * 2, true);
-
-  const frequencies = {
-    demo_afterglow: 220,
-    demo_velvet: 277.18,
-    demo_openwater: 329.63,
-    demo_lucid: 196
-  };
-
-  const frequency =
-    frequencies[track.id] || 220;
-
-  for (let i = 0; i < frameCount; i++) {
-
-    const t = i / sampleRate;
-
-    const fadeIn = Math.min(1, t / 0.8);
-
-    const fadeOut =
-      Math.min(1, (duration - t) / 1.2);
-
-    const envelope =
-      Math.max(0, Math.min(fadeIn, fadeOut));
-
-    const wave =
-      Math.sin(
-        2 * Math.PI * frequency * t
-      ) * 0.25;
-
-    const wave2 =
-      Math.sin(
-        2 * Math.PI * frequency * 2 * t
-      ) * 0.08;
-
-    const sample =
-      Math.max(
-        -1,
-        Math.min(
-          1,
-          (wave + wave2) * envelope
-        )
-      );
-
-    view.setInt16(
-      44 + i * 2,
-      sample * 32767,
-      true
-    );
-
-  }
-
-  return URL.createObjectURL(
-    new Blob(
-      [buffer],
-      { type: "audio/wav" }
-    )
-  );
-
-}
-
-
-function writeString(view, offset, string) {
-
-  for (let i = 0; i < string.length; i++) {
-
-    view.setUint8(
-      offset + i,
-      string.charCodeAt(i)
-    );
-
-  }
-
-}
-
-
-/* =========================
-   TRACK SOURCE
-========================= */
-
-function getTrackSource(track) {
-
-  if (!track) {
-    return "";
-  }
-
-  /* DEVICE FILE */
-
-  if (track.type === "device") {
-
-    /*
-      IMPORTANT:
-      Never depend on a blob URL saved in localStorage.
-      The File object is kept in memory while this page is open.
-    */
-
-    if (track.file instanceof File) {
-
-      if (!track.objectUrl) {
-
-        track.objectUrl =
-          URL.createObjectURL(track.file);
-
-      }
-
-      return track.objectUrl;
-
-    }
-
-    if (track.objectUrl) {
-      return track.objectUrl;
-    }
-
-    return "";
-
-  }
-
-
-  /* DEMO */
-
-  if (track.type === "demo") {
-
-    if (!track.objectUrl) {
-
-      track.objectUrl =
-        createDemoAudio(track);
-
-    }
-
-    return track.objectUrl;
-
-  }
-
-
-  /* AUDIUS */
-
-  if (track.type === "audius") {
-
-    if (track.streamUrl) {
-      return track.streamUrl;
-    }
-
-    return "";
-
-  }
-
-
-  return track.url || "";
-
-}
-
-
-/* ============================================================
-   PLAY TRACK
-============================================================ */
-
-async function playTrack(track, index = -1) {
-
-  if (!track) {
-    return;
-  }
-
-  try {
-
-    currentTrack = track;
-
-    currentIndex = index;
-
-    const source =
-      getTrackSource(track);
-
-    if (!source) {
-
-      showToast(
-        "This track does not have a playable audio source."
-      );
-
-      return;
-
-    }
-
-
-    /* Stop old playback */
-
-    try {
-
-      audio.pause();
-
-      audio.removeAttribute("src");
-
-      audio.load();
-
-    } catch(e) {}
-
-
-    /* Set NEW source */
-
-    audio.src = source;
-
-    audio.load();
-
-
-    /* Update UI before play */
-
-    updateNowPlaying();
-
-    updateFavoriteButton();
-
-    updatePlayButton();
-
-
-    /*
-      IMPORTANT:
-      play() is called from the user action chain
-      whenever possible.
-    */
-
-    await audio.play();
-
-    isPlaying = true;
-
-    updatePlayButton();
-
-    addToRecent(track);
-
-  } catch(error) {
-
-    console.error(
-      "Playback error:",
-      error
-    );
-
-    isPlaying = false;
-
-    updatePlayButton();
-
-    showToast(
-      "Music could not be played. Try another file or format."
-    );
-
-  }
-
-}
-
-
-/* =========================
-   TOGGLE PLAY
-========================= */
-
-async function togglePlay() {
-
-  if (!currentTrack) {
-
-    if (tracks.length > 0) {
-
-      await playTrack(
-        tracks[0],
-        0
-      );
-
-    }
-
-    return;
-
-  }
-
-
-  if (!audio.src) {
-
-    await playTrack(
-      currentTrack,
-      currentIndex
-    );
-
-    return;
-
-  }
-
-
-  if (audio.paused) {
-
-    try {
-
-      await audio.play();
-
-      isPlaying = true;
-
-    } catch(e) {
-
-      showToast(
-        "Press Play again to start the audio."
-      );
-
-    }
-
-  } else {
-
-    audio.pause();
-
-  }
-
-  updatePlayButton();
-
-}
-
-
-/* =========================
-   PLAY BUTTON
-========================= */
-
-function updatePlayButton() {
-
-  const button =
-    document.getElementById("playButton");
-
-  if (!button) {
-    return;
-  }
-
-  button.textContent =
-    isPlaying ? "❚❚" : "▶";
-
-}
-
-
-/* =========================
-   NOW PLAYING
-========================= */
-
-function updateNowPlaying() {
-
-  const title =
-    document.getElementById("nowTitle");
-
-  const artist =
-    document.getElementById("nowArtist");
-
-  const cover =
-    document.getElementById("nowCover");
-
-
-  if (!currentTrack) {
-
-    title.textContent =
-      "No song selected";
-
-    artist.textContent =
-      "Harmoniq AI";
-
-    cover.innerHTML =
-      '<div class="cover-placeholder">♫</div>';
-
-    return;
-
-  }
-
-
-  title.textContent =
-    currentTrack.title || "Unknown Track";
-
-  artist.textContent =
-    currentTrack.artist || "Unknown Artist";
-
-
-  if (currentTrack.cover) {
-
-    cover.innerHTML =
-      `<img src="${escapeHTML(currentTrack.cover)}" alt="">`;
-
-  } else {
-
-    cover.innerHTML =
-      '<div class="cover-placeholder">♫</div>';
-
-  }
-
-}
-
-
-/* =========================
-   DURATION
-========================= */
-
-function updateDuration() {
-
-  const duration =
-    document.getElementById("duration");
-
-  if (!duration) {
-    return;
-  }
-
-  if (
-    Number.isFinite(audio.duration) &&
-    audio.duration > 0
-  ) {
-
-    duration.textContent =
-      formatTime(audio.duration);
-
-  } else {
-
-    duration.textContent =
-      "0:00";
-
-  }
-
-}
-
-
-/* =========================
-   PROGRESS
-========================= */
-
-function updateProgress() {
-
-  const progress =
-    document.getElementById("progress");
-
-  const currentTime =
-    document.getElementById("currentTime");
-
-  if (!progress) {
-    return;
-  }
-
-
-  if (
-    Number.isFinite(audio.duration) &&
-    audio.duration > 0
-  ) {
-
-    progress.value =
-      (audio.currentTime / audio.duration) * 100;
-
-    currentTime.textContent =
-      formatTime(audio.currentTime);
-
-  } else {
-
-    progress.value = 0;
-
-    currentTime.textContent =
-      "0:00";
-
-  }
-
-}
-
-
-/* =========================
-   PROGRESS SEEK
-========================= */
-
-document
-  .getElementById("progress")
-  .addEventListener("input", function() {
-
-    if (
-      Number.isFinite(audio.duration) &&
-      audio.duration > 0
-    ) {
-
-      audio.currentTime =
-        (Number(this.value) / 100) *
-        audio.duration;
-
-    }
-
-  });
-
-
-/* =========================
-   VOLUME
-========================= */
-
-document
-  .getElementById("volume")
-  .addEventListener("input", function() {
-
-    audio.volume =
-      Number(this.value);
-
-    localStorage.setItem(
-      STORAGE.volume,
-      String(audio.volume)
-    );
-
-    updateMuteIcon();
-
-  });
-
-
-function toggleMute() {
-
-  audio.muted =
-    !audio.muted;
-
-  updateMuteIcon();
-
-}
-
-
-function updateMuteIcon() {
-
-  const button =
-    document.getElementById("muteButton");
-
-  if (!button) {
-    return;
-  }
-
-  if (audio.muted || audio.volume === 0) {
-
-    button.textContent = "🔇";
-
-  } else {
-
-    button.textContent = "🔊";
-
-  }
-
-}
-
-
-/* =========================
-   TIME FORMAT
-========================= */
-
-function formatTime(seconds) {
-
-  if (
-    !Number.isFinite(seconds) ||
-    seconds < 0
-  ) {
-
-    return "0:00";
-
-  }
-
-  const minutes =
-    Math.floor(seconds / 60);
-
-  const secs =
-    Math.floor(seconds % 60);
-
-  return (
-    minutes +
-    ":" +
-    String(secs).padStart(2, "0")
-  );
-
-}
-
-
-/* =========================
-   NEXT
-========================= */
-
-async function nextTrack() {
-
-  const list =
-    getPlaybackList();
-
-  if (!list.length) {
-    return;
-  }
-
-
-  let nextIndex;
-
-
-  if (isShuffle) {
-
-    nextIndex =
-      Math.floor(
-        Math.random() * list.length
-      );
-
-  } else {
-
-    const currentId =
-      currentTrack?.id;
-
-    const currentPosition =
-      list.findIndex(
-        t => t.id === currentId
-      );
-
-    nextIndex =
-      currentPosition >= 0
-        ? currentPosition + 1
-        : 0;
-
-    if (nextIndex >= list.length) {
-      nextIndex = 0;
-    }
-
-  }
-
-
-  await playTrack(
-    list[nextIndex],
-    nextIndex
-  );
-
-}
-
-
-/* =========================
-   PREVIOUS
-========================= */
-
-async function previousTrack() {
-
-  if (audio.currentTime > 4) {
-
-    audio.currentTime = 0;
-
-    return;
-
-  }
-
-
-  const list =
-    getPlaybackList();
-
-  if (!list.length) {
-    return;
-  }
-
-
-  const currentPosition =
-    list.findIndex(
-      t => t.id === currentTrack?.id
-    );
-
-  let previousIndex =
-    currentPosition - 1;
-
-  if (previousIndex < 0) {
-    previousIndex =
-      list.length - 1;
-  }
-
-
-  await playTrack(
-    list[previousIndex],
-    previousIndex
-  );
-
-}
-
-
-/* =========================
-   PLAYBACK LIST
-========================= */
-
-function getPlaybackList() {
-
-  /*
-    Device music is included with demo music.
-    Search results are added when searching.
-  */
-
-  const map = new Map();
-
-  [
-    ...tracks,
-    ...deviceTracks,
-    ...searchTracks
-  ].forEach(track => {
-
-    if (track?.id) {
-      map.set(track.id, track);
-    }
-
-  });
-
-  return Array.from(map.values());
-
-}
-
-
-/* =========================
-   SHUFFLE
-========================= */
-
-function toggleShuffle() {
-
-  isShuffle =
-    !isShuffle;
-
-  const button =
-    document.getElementById("shuffleButton");
-
-  button.style.color =
-    isShuffle
-      ? "#a78bfa"
-      : "";
-
-}
-
-
-/* =========================
-   REPEAT
-========================= */
-
-function toggleRepeat() {
-
-  repeatMode =
-    !repeatMode;
-
-  const button =
-    document.getElementById("repeatButton");
-
-  button.style.color =
-    repeatMode
-      ? "#a78bfa"
-      : "";
-
-}
-
-
-/* ============================================================
-   DEVICE MUSIC
-============================================================ */
-
-document
-  .getElementById("deviceFileInput")
-  .addEventListener("change", function(event) {
-
-    const files =
-      Array.from(
-        event.target.files || []
-      );
-
-    addDeviceFiles(files);
-
-    /*
-      Reset input so the same file can be
-      selected again later.
-    */
-
-    event.target.value = "";
-
-  });
-
-
-function addDeviceFiles(files) {
-
-  if (!files.length) {
-    return;
-  }
-
-
-  let added = 0;
-
-
-  for (const file of files) {
-
-    if (!file.type.startsWith("audio/")) {
-
-      /*
-        Some Android files may have an empty MIME type.
-        Check extension too.
-      */
-
-      const name =
-        file.name.toLowerCase();
-
-      const allowed =
-        /\.(mp3|wav|m4a|aac|ogg|flac|opus)$/i.test(name);
-
-      if (!allowed) {
-        continue;
-      }
-
-    }
-
-
-    const track = {
-
-      id: makeId("device"),
-
-      title:
-        removeExtension(file.name),
-
-      artist:
-        "My Device",
-
-      type:
-        "device",
-
-      file:
-        file,
-
-      objectUrl:
-        null,
-
-      cover:
-        "",
-
-      size:
-        file.size,
-
-      mime:
-        file.type || "audio/*"
-
-    };
-
-
-    deviceTracks.push(track);
-
-    added++;
-
-  }
-
-
-  renderDeviceList();
-
-  renderLibrary();
-
-  showPage("device");
-
-
-  if (added === 1) {
-
-    showToast(
-      "Music file added. Press Play to start it."
-    );
-
-  } else if (added > 1) {
-
-    showToast(
-      added + " music files added."
-    );
-
-  } else {
-
-    showToast(
-      "No supported audio files were selected."
-    );
-
-  }
-
-}
-
-
-/* =========================
-   REMOVE FILE EXTENSION
-========================= */
-
-function removeExtension(name) {
-
-  return String(name)
-    .replace(/\.[^/.]+$/, "");
-
-}
-
-
-/* =========================
-   DEVICE LIST
-========================= */
-
-function renderDeviceList() {
-
-  const container =
-    document.getElementById("deviceList");
-
-  if (!container) {
-    return;
-  }
-
-
-  if (!deviceTracks.length) {
-
-    container.innerHTML = `
-      <div class="empty">
-        <div class="empty-icon">🎵</div>
-        <strong>No device music yet</strong>
-        <div style="margin-top:6px">
-          Choose an audio file from your phone.
-        </div>
-      </div>
-    `;
-
-    return;
-
-  }
-
-
-  container.innerHTML =
-    deviceTracks
-      .map((track,index) => `
-
-        <div class="device-row">
-
-          <div class="device-thumb">
-            🎵
-          </div>
-
-          <div>
-
-            <div class="device-name">
-              ${escapeHTML(track.title)}
-            </div>
-
-            <div class="device-meta">
-              ${escapeHTML(track.artist)}
-              •
-              ${formatFileSize(track.size)}
-            </div>
-
-          </div>
-
-          <div style="display:flex;gap:6px">
-
-            <button
-              class="small-button"
-              onclick="playDeviceTrack(${index})"
-            >
-              ▶
-            </button>
-
-            <button
-              class="small-button"
-              onclick="toggleFavoriteById('${track.id}')"
-            >
-              ♡
-            </button>
-
-          </div>
-
-        </div>
-
-      `)
-      .join("");
-
-}
-
-
-/* =========================
-   PLAY DEVICE TRACK
-========================= */
-
-async function playDeviceTrack(index) {
-
-  const track =
-    deviceTracks[index];
-
-  if (!track) {
-    return;
-  }
-
-
-  /*
-    This is intentionally a direct function.
-    It does NOT wait for another asynchronous
-    operation before audio.play().
-  */
-
-  await playTrack(
-    track,
-    index
-  );
-
-}
-
-
-/* =========================
-   FILE SIZE
-========================= */
-
-function formatFileSize(bytes) {
-
-  if (!bytes) {
-    return "0 KB";
-  }
-
-  if (bytes < 1024) {
-    return bytes + " B";
-  }
-
-  if (bytes < 1024 * 1024) {
-
-    return (
-      (bytes / 1024).toFixed(1) +
-      " KB"
-    );
-
-  }
-
-  return (
-    (bytes / (1024 * 1024)).toFixed(1) +
-    " MB"
-  );
-
-}
-
-
-/* ============================================================
-   FAVORITES
-============================================================ */
-
-function isFavorite(id) {
-
-  return favorites.includes(id);
-
-}
-
-
-function toggleCurrentFavorite() {
-
-  if (!currentTrack) {
-
-    showToast(
-      "Select a song first."
-    );
-
-    return;
-
-  }
-
-  toggleFavoriteById(
-    currentTrack.id
-  );
-
-}
-
-
-function toggleFavoriteById(id) {
-
-  const index =
-    favorites.indexOf(id);
-
-  if (index >= 0) {
-
-    favorites.splice(index,1);
-
-  } else {
-
-    favorites.push(id);
-
-  }
-
-  saveJSON(
-    STORAGE.favorites,
-    favorites
-  );
-
-  updateFavoriteButton();
-
-  renderRecommended();
-
-  renderLibrary();
-
-  showToast(
-    index >= 0
-      ? "Removed from favorites."
-      : "Added to favorites."
-  );
-
-}
-
-
-function updateFavoriteButton() {
-
-  const button =
-    document.getElementById("playerLike");
-
-  if (!button) {
-    return;
-  }
-
-
-  if (
-    currentTrack &&
-    isFavorite(currentTrack.id)
-  ) {
-
-    button.textContent = "♥";
-
-    button.classList.add("active");
-
-  } else {
-
-    button.textContent = "♡";
-
-    button.classList.remove("active");
-
-  }
-
-}
-
-
-/* ============================================================
-   RECENT
-============================================================ */
-
-function addToRecent(track) {
-
-  if (!track?.id) {
-    return;
-  }
-
-
-  recent =
-    recent.filter(
-      id => id !== track.id
-    );
-
-
-  recent.unshift(
-    track.id
-  );
-
-
-  recent =
-    recent.slice(0,50);
-
-
-  saveJSON(
-    STORAGE.recent,
-    recent
-  );
-
-}
-
-
-/* =========================
-   FIND TRACK BY ID
-========================= */
-
-function findTrackById(id) {
-
-  return getPlaybackList()
-    .find(
-      track => track.id === id
-    );
-
-}
-
-
-/* ============================================================
-   PLAYLISTS
-============================================================ */
-
-function openPlaylistModal(track) {
-
-  selectedTrackForPlaylist =
-    track;
-
-  document
-    .getElementById("playlistName")
-    .value = "";
-
-  document
-    .getElementById("playlistModal")
-    .classList.add("show");
-
-}
-
-
-function closePlaylistModal() {
-
-  document
-    .getElementById("playlistModal")
-    .classList.remove("show");
-
-  selectedTrackForPlaylist =
-    null;
-
-}
-
-
-function createPlaylistFromModal() {
-
-  const input =
-    document.getElementById("playlistName");
-
-  const name =
-    input.value.trim();
-
-
-  if (!name) {
-
-    showToast(
-      "Enter a playlist name."
-    );
-
-    return;
-
-  }
-
-
-  let playlist =
-    playlists.find(
-      p => p.name.toLowerCase() === name.toLowerCase()
-    );
-
-
-  if (!playlist) {
-
-    playlist = {
-
-      id: makeId("playlist"),
-
-      name:
-        name,
-
-      tracks:
-        []
-
-    };
-
-    playlists.push(
-      playlist
-    );
-
-  }
-
-
-  if (
-    selectedTrackForPlaylist &&
-    !playlist.tracks.includes(
-      selectedTrackForPlaylist.id
-    )
-  ) {
-
-    playlist.tracks.push(
-      selectedTrackForPlaylist.id
-    );
-
-  }
-
-
-  saveJSON(
-    STORAGE.playlists,
-    playlists
-  );
-
-
-  closePlaylistModal();
-
-  renderLibrary();
-
-  showToast(
-    "Playlist saved."
-  );
-
-}
-
-
-/* ============================================================
-   SEARCH / AUDIUS
-============================================================ */
-
-/*
-  The API key is stored locally in the user's browser.
-  NEVER put a Bearer Token here.
-*/
-
-function getAudiusApiKey() {
-
-  const settings =
-    loadJSON(
-      STORAGE.settings,
-      {}
-    );
-
-  return (
-    settings.apiKey ||
-    localStorage.getItem(
-      "harmoniq_audius_key"
-    ) ||
-    ""
-  );
-
-}
-
-
-/* =========================
-   SETTINGS
-========================= */
-
-function openSettings() {
-
-  const settings =
-    loadJSON(
-      STORAGE.settings,
-      {}
-    );
-
-
-  document
-    .getElementById("apiKeyInput")
-    .value =
-      settings.apiKey || "";
-
-
-  document
-    .getElementById("settingsModal")
-    .classList.add("show");
-
-}
-
-
-function closeSettings() {
-
-  document
-    .getElementById("settingsModal")
-    .classList.remove("show");
-
-}
-
-
-function saveSettings() {
-
-  const key =
-    document
-      .getElementById("apiKeyInput")
-      .value
-      .trim();
-
-
-  saveJSON(
-    STORAGE.settings,
-    {
-      apiKey: key
-    }
-  );
-
-
-  /*
-    Compatibility with previous version.
-  */
-
-  if (key) {
-
-    localStorage.setItem(
-      "harmoniq_audius_key",
-      key
-    );
-
-  } else {
-
-    localStorage.removeItem(
-      "harmoniq_audius_key"
-    );
-
-  }
-
-
-  closeSettings();
-
-  showToast(
-    key
-      ? "Audius API Key saved."
-      : "Audius API Key removed."
-  );
-
-}
-
-
-/* =========================
-   AI SEARCH
-========================= */
-
-async function aiSearch() {
-
-  const input =
-    document.getElementById("aiInput");
-
-  const query =
-    input.value.trim();
-
-
-  if (!query) {
-
-    showToast(
-      "Tell Harmoniq what music you want."
-    );
-
-    return;
-
-  }
-
-
-  showPage("search");
-
-  document
-    .getElementById("searchInput")
-    .value = query;
-
-
-  await performSearch(query);
-
-}
-
-
-/* =========================
-   NORMAL SEARCH
-========================= */
-
-async function performSearch(value) {
-
-  let query =
-    value;
-
-
-  if (!query) {
-
-    query =
-      document
-        .getElementById("searchInput")
-        .value
-        .trim();
-
-  }
-
-
-  if (!query) {
-
-    showToast(
-      "Enter an artist, song, genre or mood."
-    );
-
-    return;
-
-  }
-
-
-  showPage("search");
-
-
-  const status =
-    document.getElementById(
-      "searchStatus"
-    );
-
-  const results =
-    document.getElementById(
-      "searchResults"
-    );
-
-
-  status.innerHTML = `
-    <div style="color:var(--muted);padding:10px 0 20px">
-      Searching for
-      <strong style="color:white">
-        ${escapeHTML(query)}
-      </strong>...
-    </div>
-  `;
-
-  results.innerHTML = "";
-
-
-  const apiKey =
-    getAudiusApiKey();
-
-
-  if (!apiKey) {
-
-    status.innerHTML = `
-
-      <div class="device-panel" style="margin-bottom:20px">
-
-        <strong>🔑 Audius API Key required</strong>
-
-        <p style="margin-top:8px">
-          Add your Audius API Key in Settings to search the
-          available Audius music catalog.
-        </p>
-
-        <button
-          class="primary-button"
-          style="margin-top:15px"
-          onclick="openSettings()"
-        >
-          Enter API Key
-        </button>
-
-      </div>
-
-    `;
-
-    return;
-
-  }
-
-
-  try {
-
-    /*
-      Audius API search.
-      The API key is safe for frontend use according
-      to Audius frontend SDK documentation.
-    */
-
-    const url =
-      "https://api.audius.co/v1/tracks/search" +
-      "?query=" +
-      encodeURIComponent(query) +
-      "&limit=20" +
-      "&api_key=" +
-      encodeURIComponent(apiKey);
-
-
-    const response =
-      await fetch(
-        url,
-        {
-          method: "GET",
-          headers: {
-            "Accept": "application/json"
-          }
-        }
-      );
-
-
-    if (!response.ok) {
-
-      throw new Error(
-        "Audius HTTP " +
-        response.status
-      );
-
-    }
-
-
-    const json =
-      await response.json();
-
-
-    const data =
-      Array.isArray(json?.data)
-        ? json.data
-        : [];
-
-
-    searchTracks =
-      data.map(
-        normalizeAudiusTrack
-      );
-
-
-    /*
-      Only keep playable results.
-    */
-
-    searchTracks =
-      searchTracks.filter(
-        track =>
-          track.id &&
-          track.streamUrl
-      );
-
-
-    status.innerHTML =
-      searchTracks.length
-        ? `
-          <div style="color:var(--muted);padding:10px 0 20px">
-            ${searchTracks.length} result(s) found.
-          </div>
-        `
-        : `
-          <div class="empty" style="margin-bottom:20px">
-            <div class="empty-icon">🔎</div>
-            <strong>No playable results found</strong>
-            <div style="margin-top:7px">
-              Try another artist, song, genre or mood.
-            </div>
-          </div>
-        `;
-
-
-    renderSearchResults();
-
-
-  } catch(error) {
-
-    console.error(
-      "Audius search error:",
-      error
-    );
-
-
-    status.innerHTML = `
-
-      <div class="empty">
-
-        <div class="empty-icon">⚠️</div>
-
-        <strong>Search could not be completed</strong>
-
-        <div style="margin-top:8px">
-          Check your Audius API Key and internet connection.
-        </div>
-
-        <button
-          class="primary-button"
-          style="margin-top:15px"
-          onclick="openSettings()"
-        >
-          Check API Key
-        </button>
-
-      </div>
-
-    `;
-
-  }
-
-}
-
-
-/* =========================
-   NORMALIZE AUDIUS TRACK
-========================= */
-
-function normalizeAudiusTrack(track) {
-
-  const artwork =
-    track?.artwork || {};
-
-
-  /*
-    Audius commonly uses keys such as:
-    _480x480
-    _150x150
-    _1000x1000
-  */
-
-  const cover =
-    artwork._480x480 ||
-    artwork._1000x1000 ||
-    artwork._150x150 ||
-    artwork["480x480"] ||
-    artwork["150x150"] ||
-    "";
-
-
-  const artist =
-    track?.user?.name ||
-    track?.user?.handle ||
-    "Audius Artist";
-
-
-  return {
-
-    id:
-      "audius_" +
-      String(track.id),
-
-    audiusId:
-      String(track.id),
-
-    title:
-      track.title ||
-      "Unknown Track",
-
-    artist:
-      artist,
-
-    type:
-      "audius",
-
-    cover:
-      cover,
-
-    streamUrl:
-      "https://api.audius.co/v1/tracks/" +
-      encodeURIComponent(track.id) +
-      "/stream?api_key=" +
-      encodeURIComponent(
-        getAudiusApiKey()
-      ),
-
-    duration:
-      Number(track.duration || 0),
-
-    permalink:
-      track.permalink || "",
-
-    genre:
-      track.genre || ""
-
-  };
-
-}
-
-
-/* =========================
-   SEARCH RESULTS
-========================= */
-
-function renderSearchResults() {
-
-  const container =
-    document.getElementById(
-      "searchResults"
-    );
-
-
-  if (!container) {
-    return;
-  }
-
-
-  if (!searchTracks.length) {
-
-    container.innerHTML = "";
-
-    return;
-
-  }
-
-
-  container.innerHTML =
-    searchTracks
-      .map(
-        (track,index) =>
-          createTrackCardHTML(
-            track,
-            "search",
-            index
-          )
-      )
-      .join("");
-
-}
-
-
-/* ============================================================
-   TRACK CARDS
-============================================================ */
-
-function createTrackCardHTML(
-  track,
-  collection = "main",
-  index = 0
-) {
-
-  const isFav =
-    isFavorite(track.id);
-
-
-  const coverHTML =
-    track.cover
-      ? `
-        <img
-          src="${escapeHTML(track.cover)}"
-          alt=""
-          loading="lazy"
-        >
-      `
-      : `
-        <div class="cover-placeholder">
-          🎵
-        </div>
-      `;
-
-
-  return `
-
-    <div class="track-card">
-
-      <div
-        class="cover"
-        onclick="playFromCollection('${escapeHTML(collection)}',${index})"
-      >
-        ${coverHTML}
-      </div>
-
-      <div class="track-title">
-        ${escapeHTML(track.title)}
-      </div>
-
-      <div class="track-artist">
-        ${escapeHTML(track.artist)}
-      </div>
-
-      <div class="track-card-actions">
-
-        <button
-          class="small-button"
-          onclick="playFromCollection('${escapeHTML(collection)}',${index})"
-        >
-          ▶
-        </button>
-
-        <button
-          class="small-button favorite ${isFav ? "active" : ""}"
-          onclick="toggleFavoriteById('${escapeHTML(track.id)}')"
-        >
-          ${isFav ? "♥" : "♡"}
-        </button>
-
-        <button
-          class="small-button"
-          onclick="openPlaylistModal(findTrackById('${escapeHTML(track.id)}'))"
-        >
-          +
-        </button>
-
-      </div>
-
-    </div>
-
-  `;
-
-}
-
-
-/* =========================
-   PLAY FROM COLLECTION
-========================= */
-
-async function playFromCollection(
-  collection,
-  index
-) {
-
-  let list = [];
-
-
-  if (collection === "search") {
-
-    list =
-      searchTracks;
-
-  } else if (collection === "device") {
-
-    list =
-      deviceTracks;
-
-  } else {
-
-    list =
-      tracks;
-
-  }
-
-
-  const track =
-    list[index];
-
-
-  if (!track) {
-    return;
-  }
-
-
-  /*
-    Important:
-    Device file playback goes directly through
-    the File object and object URL.
-  */
-
-  await playTrack(
-    track,
-    index
-  );
-
-}
-
-
-/* ============================================================
-   RECOMMENDED
-============================================================ */
-
-function renderRecommended() {
-
-  const container =
-    document.getElementById(
-      "recommendedGrid"
-    );
-
-
-  if (!container) {
-    return;
-  }
-
-
-  container.innerHTML =
-    tracks
-      .map(
-        (track,index) =>
-          createTrackCardHTML(
-            track,
-            "main",
-            index
-          )
-      )
-      .join("");
-
-}
-
-
-/* ============================================================
-   LIBRARY
-============================================================ */
-
-function showLibraryTab(tab) {
-
-  showPage("library");
-
-  setLibraryTab(tab);
-
-}
-
-
-function setLibraryTab(tab) {
-
-  currentLibraryTab =
-    tab;
-
-
-  document
-    .querySelectorAll(".tab")
-    .forEach(button => {
-
-      button.classList.toggle(
-        "active",
-        button.dataset.tab === tab
-      );
-
-    });
-
-
-  renderLibrary();
-
-}
-
-
-function renderLibrary() {
-
-  const container =
-    document.getElementById(
-      "libraryContent"
-    );
-
-
-  if (!container) {
-    return;
-  }
-
-
-  let list = [];
-
-
-  if (currentLibraryTab === "favorites") {
-
-    list =
-      favorites
-        .map(findTrackById)
-        .filter(Boolean);
-
-  }
-
-
-  else if (
-    currentLibraryTab === "recent"
-  ) {
-
-    list =
-      recent
-        .map(findTrackById)
-        .filter(Boolean);
-
-  }
-
-
-  else if (
-    currentLibraryTab === "device"
-  ) {
-
-    list =
-      deviceTracks;
-
-  }
-
-
-  else if (
-    currentLibraryTab === "playlists"
-  ) {
-
-    renderPlaylists(container);
-
-    return;
-
-  }
-
-
-  if (!list.length) {
-
-    let message =
-      "Nothing here yet.";
-
-    if (
-      currentLibraryTab === "favorites"
-    ) {
-      message =
-        "Favorite songs will appear here.";
-    }
-
-    if (
-      currentLibraryTab === "recent"
-    ) {
-      message =
-        "Songs you play will appear here.";
-    }
-
-    if (
-      currentLibraryTab === "device"
-    ) {
-      message =
-        "Music selected from your phone will appear here.";
-    }
-
-
-    container.innerHTML = `
-
-      <div class="empty">
-
-        <div class="empty-icon">🎵</div>
-
-        <strong>${escapeHTML(message)}</strong>
-
-      </div>
-
-    `;
-
-    return;
-
-  }
-
-
-  container.innerHTML = `
-
-    <div class="list">
-
-      ${
-        list
-          .map(
-            (track,index) =>
-              createListRowHTML(
-                track,
-                index
-              )
-          )
-          .join("")
-      }
-
-    </div>
-
-  `;
-
-}
-
-
-/* =========================
-   LIST ROW
-========================= */
-
-function createListRowHTML(
-  track,
-  index
-) {
-
-  const cover =
-    track.cover
-      ? `
-        <img
-          src="${escapeHTML(track.cover)}"
-          alt=""
-        >
-      `
-      : `
-        <div
-          style="
-            width:100%;
-            height:100%;
-            display:flex;
-            align-items:center;
-            justify-content:center;
-            font-size:22px
-          "
-        >
-          🎵
-        </div>
-      `;
-
-
-  return `
-
-    <div class="list-row">
-
-      <div class="list-cover">
-        ${cover}
-      </div>
-
-      <div>
-
-        <div class="list-title">
-          ${escapeHTML(track.title)}
-        </div>
-
-        <div class="list-artist">
-          ${escapeHTML(track.artist)}
-        </div>
-
-      </div>
-
-      <div class="list-actions">
-
-        <button
-          class="small-button"
-          onclick="playLibraryTrack('${escapeHTML(track.id)}')"
-        >
-          ▶
-        </button>
-
-        <button
-          class="small-button"
-          onclick="openPlaylistModal(findTrackById('${escapeHTML(track.id)}'))"
-        >
-          +
-        </button>
-
-      </div>
-
-    </div>
-
-  `;
-
-}
-
-
-/* =========================
-   PLAY LIBRARY TRACK
-========================= */
-
-async function playLibraryTrack(id) {
-
-  const track =
-    findTrackById(id);
-
-
-  if (!track) {
-    return;
-  }
-
-
-  await playTrack(
-    track,
-    0
-  );
-
-}
-
-
-/* =========================
-   PLAYLIST RENDER
-========================= */
-
-function renderPlaylists(container) {
-
-  if (!playlists.length) {
-
-    container.innerHTML = `
-
-      <div class="empty">
-
-        <div class="empty-icon">☷</div>
-
-        <strong>No playlists yet.</strong>
-
-        <div style="margin-top:7px">
-          Use the + button on a song to create one.
-        </div>
-
-      </div>
-
-    `;
-
-    return;
-
-  }
-
-
-  container.innerHTML =
-    playlists
-      .map(
-        playlist => {
-
-          const items =
-            playlist.tracks
-              .map(findTrackById)
-              .filter(Boolean);
-
-
-          return `
-
-            <div
-              class="device-panel"
-              style="margin-bottom:14px"
-            >
-
-              <div
-                style="
-                  display:flex;
-                  justify-content:space-between;
-                  align-items:center;
-                  gap:10px
-                "
-              >
-
-                <div>
-
-                  <strong>
-                    ${escapeHTML(playlist.name)}
-                  </strong>
-
-                  <div
-                    style="
-                      color:var(--muted);
-                      font-size:12px;
-                      margin-top:5px
-                    "
-                  >
-                    ${items.length} song(s)
-                  </div>
-
-                </div>
-
-                <button
-                  class="small-button"
-                  onclick="deletePlaylist('${playlist.id}')"
-                >
-                  🗑
-                </button>
-
-              </div>
-
-              <div class="list" style="margin-top:13px">
-
-                ${
-                  items.length
-                    ? items
-                        .map(
-                          (track,index) =>
-                            createListRowHTML(
-                              track,
-                              index
-                            )
-                        )
-                        .join("")
-                    : `
-                      <div
-                        style="
-                          color:var(--muted);
-                          font-size:13px;
-                          padding:10px 0
-                        "
-                      >
-                        Empty playlist
-                      </div>
-                    `
-                }
-
-              </div>
-
-            </div>
-
-          `;
-
-        }
-      )
-      .join("");
-
-}
-
-
-/* =========================
-   DELETE PLAYLIST
-========================= */
-
-function deletePlaylist(id) {
-
-  playlists =
-    playlists.filter(
-      playlist =>
-        playlist.id !== id
-    );
-
-
-  saveJSON(
-    STORAGE.playlists,
-    playlists
-  );
-
-
-  renderLibrary();
-
-  showToast(
-    "Playlist deleted."
-  );
-
-}
-
-
-/* ============================================================
-   NAVIGATION
-============================================================ */
-
-function showPage(page) {
-
-  /*
-    Special virtual page:
-    "device" is represented by page-device.
-  */
-
-  document
-    .querySelectorAll(".page")
-    .forEach(section => {
-
-      section.classList.remove(
-        "active"
-      );
-
-    });
-
-
-  const target =
-    document.getElementById(
-      "page-" + page
-    );
-
-
-  if (target) {
-
-    target.classList.add(
-      "active"
-    );
-
-  }
-
-
-  /*
-    Device page exists.
-  */
-
-  if (page === "device") {
-
-    document
-      .getElementById("page-device")
-      ?.classList.add("active");
-
-  }
-
-
-  document
-    .querySelectorAll(".nav button[data-page]")
-    .forEach(button => {
-
-      button.classList.toggle(
-        "active",
-        button.dataset.page === page
-      );
-
-    });
-
-
-  document
-    .querySelectorAll(".mobile-nav button")
-    .forEach(button => {
-
-      button.classList.toggle(
-        "active",
-        button.dataset.page === page
-      );
-
-    });
-
-
-  window.scrollTo({
-    top: 0,
-    behavior: "smooth"
-  });
-
-}
-
-
-/* ============================================================
-   LANGUAGE
-============================================================ */
+   TRANSLATIONS
+   ============================================================ */
 
 const translations = {
 
-  en: {
-
-    menu: "Menu",
-    home: "Home",
-    search: "Search",
-    library: "Library",
-    favorites: "Favorites",
-    playlists: "Playlists",
-    recent: "Recently Played",
-    settings: "Settings",
-
-    heroTitle:
-      "Music that moves with you.",
-
-    heroText:
-      "Discover music, play your own files, build playlists and explore music through AI-powered search.",
-
-    askAI:
-      "Ask AI",
-
-    quickAccess:
-      "Quick Access",
-
-    myDevice:
-      "My Device Music",
-
-    myDeviceText:
-      "Play music directly from your phone.",
-
-    aiMusicSearch:
-      "AI Music Search",
-
-    aiMusicSearchText:
-      "Search available music from Audius.",
-
-    yourFavorites:
-      "Your Favorites",
-
-    yourFavoritesText:
-      "Keep the tracks you love.",
-
-    recommended:
-      "Recommended",
-
-    chooseMusic:
-      "Choose music from your device",
-
-    supportedFormats:
-      "MP3, WAV, M4A, AAC, OGG and other browser-supported audio files.",
-
-    chooseFiles:
-      "Choose Files",
-
-    deviceMusic:
-      "Device Music",
-
-    searchMusic:
-      "Search Music"
-
-  },
-
-
-  ar: {
-
-    menu: "القائمة",
-    home: "الرئيسية",
-    search: "البحث",
-    library: "المكتبة",
-    favorites: "المفضلة",
-    playlists: "قوائم التشغيل",
-    recent: "المشغلة مؤخراً",
-    settings: "الإعدادات",
-
-    heroTitle:
-      "موسيقى تتحرك معك.",
-
-    heroText:
-      "اكتشف الموسيقى وشغّل ملفاتك وأنشئ قوائم التشغيل وابحث عن الموسيقى.",
-
-    askAI:
-      "اسأل الذكاء الاصطناعي",
-
-    quickAccess:
-      "الوصول السريع",
-
-    myDevice:
-      "موسيقى جهازي",
-
-    myDeviceText:
-      "شغّل الموسيقى مباشرة من هاتفك.",
-
-    aiMusicSearch:
-      "البحث بالذكاء الاصطناعي",
-
-    aiMusicSearchText:
-      "ابحث في مكتبة Audius المتاحة.",
-
-    yourFavorites:
-      "المفضلة",
-
-    yourFavoritesText:
-      "احتفظ بالأغاني التي تحبها.",
-
-    recommended:
-      "مقترحات",
-
-    chooseMusic:
-      "اختر الموسيقى من جهازك",
-
-    supportedFormats:
-      "MP3 و WAV و M4A و AAC و OGG وغيرها من صيغ الصوت المدعومة.",
-
-    chooseFiles:
-      "اختيار الملفات",
-
-    deviceMusic:
-      "موسيقى الجهاز",
-
-    searchMusic:
-      "البحث عن الموسيقى"
-
-  },
-
-
-  tr: {
-
-    menu: "Menü",
-    home: "Ana Sayfa",
-    search: "Ara",
-    library: "Kütüphane",
-    favorites: "Favoriler",
-    playlists: "Çalma Listeleri",
-    recent: "Son Çalınanlar",
-    settings: "Ayarlar",
-
-    heroTitle:
-      "Seninle hareket eden müzik.",
-
-    heroText:
-      "Müzik keşfet, kendi dosyalarını çal ve listeler oluştur.",
-
-    askAI:
-      "Yapay Zekaya Sor",
-
-    quickAccess:
-      "Hızlı Erişim",
-
-    myDevice:
-      "Cihaz Müziğim",
-
-    myDeviceText:
-      "Telefonundaki müzikleri çal.",
-
-    aiMusicSearch:
-      "AI Müzik Arama",
-
-    aiMusicSearchText:
-      "Audius kataloğunda müzik ara.",
-
-    yourFavorites:
-      "Favorilerin",
-
-    yourFavoritesText:
-      "Sevdiğin parçaları sakla.",
-
-    recommended:
-      "Önerilen",
-
-    chooseMusic:
-      "Cihazından müzik seç",
-
-    supportedFormats:
-      "MP3, WAV, M4A, AAC, OGG ve desteklenen diğer ses formatları.",
-
-    chooseFiles:
-      "Dosya Seç",
-
-    deviceMusic:
-      "Cihaz Müziği",
-
-    searchMusic:
-      "Müzik Ara"
-
-  },
-
-
-  fr: {
-
-    menu: "Menu",
-    home: "Accueil",
-    search: "Recherche",
-    library: "Bibliothèque",
-    favorites: "Favoris",
-    playlists: "Playlists",
-    recent: "Écoutés récemment",
-    settings: "Paramètres",
-
-    heroTitle:
-      "La musique qui vous accompagne.",
-
-    heroText:
-      "Découvrez de la musique, lisez vos fichiers et créez des playlists.",
-
-    askAI:
-      "Demander à l'IA",
-
-    quickAccess:
-      "Accès rapide",
-
-    myDevice:
-      "Musique de mon appareil",
-
-    myDeviceText:
-      "Lisez la musique de votre téléphone.",
-
-    aiMusicSearch:
-      "Recherche musicale IA",
-
-    aiMusicSearchText:
-      "Recherchez dans le catalogue Audius.",
-
-    yourFavorites:
-      "Vos favoris",
-
-    yourFavoritesText:
-      "Gardez vos morceaux préférés.",
-
-    recommended:
-      "Recommandé",
-
-    chooseMusic:
-      "Choisir de la musique",
-
-    supportedFormats:
-      "MP3, WAV, M4A, AAC, OGG et autres formats pris en charge.",
-
-    chooseFiles:
-      "Choisir des fichiers",
-
-    deviceMusic:
-      "Musique de l'appareil",
-
-    searchMusic:
-      "Rechercher de la musique"
-
-  },
-
-
-  es: {
-
-    menu: "Menú",
-    home: "Inicio",
-    search: "Buscar",
-    library: "Biblioteca",
-    favorites: "Favoritos",
-    playlists: "Listas",
-    recent: "Reproducidos recientemente",
-    settings: "Ajustes",
-
-    heroTitle:
-      "Música que se mueve contigo.",
-
-    heroText:
-      "Descubre música, reproduce tus archivos y crea listas.",
-
-    askAI:
-      "Preguntar a la IA",
-
-    quickAccess:
-      "Acceso rápido",
-
-    myDevice:
-      "Música de mi dispositivo",
-
-    myDeviceText:
-      "Reproduce música directamente desde tu teléfono.",
-
-    aiMusicSearch:
-      "Búsqueda musical IA",
-
-    aiMusicSearchText:
-      "Busca música disponible en Audius.",
-
-    yourFavorites:
-      "Tus favoritos",
-
-    yourFavoritesText:
-      "Guarda tus canciones favoritas.",
-
-    recommended:
-      "Recomendado",
-
-    chooseMusic:
-      "Elegir música del dispositivo",
-
-    supportedFormats:
-      "MP3, WAV, M4A, AAC, OGG y otros formatos compatibles.",
-
-    chooseFiles:
-      "Elegir archivos",
-
-    deviceMusic:
-      "Música del dispositivo",
-
-    searchMusic:
-      "Buscar música"
-
-  },
-
-
-  de: {
-
-    menu: "Menü",
-    home: "Startseite",
-    search: "Suche",
-    library: "Bibliothek",
-    favorites: "Favoriten",
-    playlists: "Playlists",
-    recent: "Zuletzt gespielt",
-    settings: "Einstellungen",
-
-    heroTitle:
-      "Musik, die dich begleitet.",
-
-    heroText:
-      "Entdecke Musik, spiele eigene Dateien und erstelle Playlists.",
-
-    askAI:
-      "KI fragen",
-
-    quickAccess:
-      "Schnellzugriff",
-
-    myDevice:
-      "Meine Gerätemusik",
-
-    myDeviceText:
-      "Musik direkt vom Telefon abspielen.",
-
-    aiMusicSearch:
-      "KI-Musiksuche",
-
-    aiMusicSearchText:
-      "Durchsuche den verfügbaren Audius-Katalog.",
-
-    yourFavorites:
-      "Deine Favoriten",
-
-    yourFavoritesText:
-      "Speichere deine Lieblingssongs.",
-
-    recommended:
-      "Empfohlen",
-
-    chooseMusic:
-      "Musik vom Gerät auswählen",
-
-    supportedFormats:
-      "MP3, WAV, M4A, AAC, OGG und andere unterstützte Audioformate.",
-
-    chooseFiles:
-      "Dateien auswählen",
-
-    deviceMusic:
-      "Gerätemusik",
-
-    searchMusic:
-      "Musik suchen"
-
-  }
+en:{
+menu:"Menu",
+personal:"Personal",
+home:"Home",
+search:"Search",
+library:"Library",
+favorites:"Favorites",
+playlists:"Playlists",
+recent:"Recently Played",
+settings:"Settings",
+heroText:"Tell Harmoniq what you want to hear.",
+askAI:"Ask AI",
+quickAccess:"Quick Access",
+deviceMusic:"My Device Music",
+deviceText:"Play music stored on your device.",
+recommended:"Recommended",
+searchPlaceholder:"Search music, artists, moods..."
+},
+
+ar:{
+menu:"القائمة",
+personal:"شخصي",
+home:"الرئيسية",
+search:"البحث",
+library:"المكتبة",
+favorites:"المفضلة",
+playlists:"قوائم التشغيل",
+recent:"تم تشغيلها مؤخراً",
+settings:"الإعدادات",
+heroText:"أخبر Harmoniq بالموسيقى التي تريد سماعها.",
+askAI:"اسأل الذكاء الاصطناعي",
+quickAccess:"الوصول السريع",
+deviceMusic:"موسيقى جهازي",
+deviceText:"شغّل الموسيقى الموجودة على جهازك.",
+recommended:"مقترحات",
+searchPlaceholder:"ابحث عن موسيقى أو فنان أو مزاج..."
+},
+
+tr:{
+menu:"Menü",
+personal:"Kişisel",
+home:"Ana Sayfa",
+search:"Ara",
+library:"Kütüphane",
+favorites:"Favoriler",
+playlists:"Çalma Listeleri",
+recent:"Son Çalınanlar",
+settings:"Ayarlar",
+heroText:"Harmoniq'e ne dinlemek istediğini söyle.",
+askAI:"AI'ya Sor",
+quickAccess:"Hızlı Erişim",
+deviceMusic:"Cihaz Müziğim",
+deviceText:"Cihazındaki müzikleri çal.",
+recommended:"Önerilen",
+searchPlaceholder:"Müzik, sanatçı veya ruh hali ara..."
+},
+
+fr:{
+menu:"Menu",
+personal:"Personnel",
+home:"Accueil",
+search:"Recherche",
+library:"Bibliothèque",
+favorites:"Favoris",
+playlists:"Playlists",
+recent:"Écoutés récemment",
+settings:"Paramètres",
+heroText:"Dites à Harmoniq ce que vous voulez écouter.",
+askAI:"Demander à l'IA",
+quickAccess:"Accès rapide",
+deviceMusic:"Musique de mon appareil",
+deviceText:"Lisez la musique de votre appareil.",
+recommended:"Recommandé",
+searchPlaceholder:"Rechercher musique, artistes, ambiances..."
+},
+
+es:{
+menu:"Menú",
+personal:"Personal",
+home:"Inicio",
+search:"Buscar",
+library:"Biblioteca",
+favorites:"Favoritos",
+playlists:"Listas",
+recent:"Reproducido recientemente",
+settings:"Configuración",
+heroText:"Dile a Harmoniq qué quieres escuchar.",
+askAI:"Preguntar a la IA",
+quickAccess:"Acceso rápido",
+deviceMusic:"Música de mi dispositivo",
+deviceText:"Reproduce música almacenada en tu dispositivo.",
+recommended:"Recomendado",
+searchPlaceholder:"Buscar música, artistas o estados de ánimo..."
+},
+
+de:{
+menu:"Menü",
+personal:"Persönlich",
+home:"Startseite",
+search:"Suche",
+library:"Bibliothek",
+favorites:"Favoriten",
+playlists:"Playlists",
+recent:"Zuletzt gespielt",
+settings:"Einstellungen",
+heroText:"Sag Harmoniq, was du hören möchtest.",
+askAI:"KI fragen",
+quickAccess:"Schnellzugriff",
+deviceMusic:"Meine Gerätemusik",
+deviceText:"Musik von deinem Gerät abspielen.",
+recommended:"Empfohlen",
+searchPlaceholder:"Musik, Künstler oder Stimmung suchen..."
+}
 
 };
 
+/* ============================================================
+   INIT
+   ============================================================ */
 
-/* =========================
-   APPLY LANGUAGE
-========================= */
+document.addEventListener("DOMContentLoaded",()=>{
 
-function applyLanguage() {
+  $("language").value=language;
+  $("apiKey").value=settings.apiKey || "";
+  $("provider").value=settings.provider || "audius";
 
-  const data =
-    translations[language] ||
-    translations.en;
+  renderDemo();
+  renderAll();
+  updateLanguage();
 
+  $("fileInput").addEventListener("change",handleFiles);
 
-  document.documentElement.lang =
-    language;
+  $("topSearch").addEventListener("keydown",e=>{
+    if(e.key==="Enter"){
+      $("searchInput").value=e.target.value;
+      showPage("search");
+      doSearch();
+    }
+  });
 
+  $("searchInput").addEventListener("keydown",e=>{
+    if(e.key==="Enter") doSearch();
+  });
 
-  document.documentElement.dir =
-    language === "ar"
-      ? "rtl"
-      : "ltr";
+  $("aiInput").addEventListener("keydown",e=>{
+    if(e.key==="Enter") aiSearch();
+  });
 
+  $("progress").addEventListener("input",()=>{
+    if(audio.duration){
+      audio.currentTime=(Number($("progress").value)/100)*audio.duration;
+    }
+  });
 
-  document
-    .querySelectorAll("[data-i18n]")
-    .forEach(element => {
+  $("volume").addEventListener("input",()=>{
+    audio.volume=Number($("volume").value);
+    localStorage.setItem("harmoniq_volume",$("volume").value);
+  });
 
-      const key =
-        element.dataset.i18n;
+  audio.volume=Number(localStorage.getItem("harmoniq_volume") || .8);
 
-      if (
-        data[key]
-      ) {
+  audio.addEventListener("timeupdate",updateProgress);
 
-        element.textContent =
-          data[key];
+  audio.addEventListener("ended",()=>{
+    if(repeat){
+      audio.currentTime=0;
+      audio.play();
+    }else{
+      nextTrack();
+    }
+  });
 
-      }
+  updateStats();
+});
 
+/* ============================================================
+   NAVIGATION
+   ============================================================ */
+
+document.querySelectorAll("[data-page]").forEach(btn=>{
+  btn.addEventListener("click",()=>{
+    showPage(btn.dataset.page);
+  });
+});
+
+function showPage(page){
+
+  document.querySelectorAll(".page").forEach(p=>{
+    p.classList.remove("active");
+  });
+
+  const target=$("page-"+page);
+
+  if(target) target.classList.add("active");
+
+  document.querySelectorAll(".nav-btn").forEach(b=>{
+    b.classList.toggle("active",b.dataset.page===page);
+  });
+
+  document.querySelectorAll(".mobile-nav button[data-page]").forEach(b=>{
+    b.classList.toggle("active",b.dataset.page===page);
+  });
+
+  if(page==="favorites") renderFavorites();
+  if(page==="playlists") renderPlaylists();
+  if(page==="recent") renderRecent();
+}
+
+/* ============================================================
+   DEMO MUSIC
+   ============================================================ */
+
+function renderDemo(){
+
+  $("demoGrid").innerHTML="";
+
+  demoTracks.forEach(track=>{
+
+    const div=document.createElement("div");
+
+    div.className="card";
+
+    div.innerHTML=`
+      <div class="cover" style="background:${track.color}"></div>
+      <div class="card-title">${escapeHTML(track.title)}</div>
+      <div class="card-sub">${escapeHTML(track.artist)} • ${track.genre}</div>
+
+      <div class="card-actions">
+        <button class="icon-btn" onclick="playDemo('${track.id}')">▶</button>
+        <button class="icon-btn" onclick="toggleFavoriteDemo('${track.id}')">❤️</button>
+      </div>
+    `;
+
+    $("demoGrid").appendChild(div);
+  });
+}
+
+function playDemo(id){
+
+  const track=demoTracks.find(t=>t.id===id);
+
+  if(!track)return;
+
+  /*
+    Demo tracks use generated test audio.
+    This keeps the application functional without
+    requiring a paid music API.
+  */
+
+  const wav=createDemoWav(track);
+
+  playTrack({
+    id:track.id,
+    title:track.title,
+    artist:track.artist,
+    artwork:null,
+    url:wav,
+    local:true
+  });
+}
+
+function createDemoWav(track){
+
+  const sampleRate=44100;
+  const duration=8;
+  const samples=sampleRate*duration;
+
+  const buffer=new ArrayBuffer(44+samples*2);
+  const view=new DataView(buffer);
+
+  function writeString(offset,str){
+    for(let i=0;i<str.length;i++){
+      view.setUint8(offset+i,str.charCodeAt(i));
+    }
+  }
+
+  writeString(0,"RIFF");
+  view.setUint32(4,36+samples*2,true);
+  writeString(8,"WAVE");
+  writeString(12,"fmt ");
+  view.setUint32(16,16,true);
+  view.setUint16(20,1,true);
+  view.setUint16(22,1,true);
+  view.setUint32(24,sampleRate,true);
+  view.setUint32(28,sampleRate*2,true);
+  view.setUint16(32,2,true);
+  view.setUint16(34,16,true);
+  writeString(36,"data");
+  view.setUint32(40,samples*2,true);
+
+  let freq=track.id==="demo1"?220:
+           track.id==="demo2"?260:
+           track.id==="demo3"?180:330;
+
+  for(let i=0;i<samples;i++){
+
+    const t=i/sampleRate;
+
+    const wave=
+      Math.sin(2*Math.PI*freq*t)*.12+
+      Math.sin(2*Math.PI*(freq/2)*t)*.05;
+
+    const fade=Math.min(1,i/3000)*Math.min(1,(samples-i)/3000);
+
+    view.setInt16(44+i*2,wave*fade*32767,true);
+  }
+
+  return URL.createObjectURL(
+    new Blob([buffer],{type:"audio/wav"})
+  );
+}
+
+function toggleFavoriteDemo(id){
+
+  const track=demoTracks.find(t=>t.id===id);
+
+  if(!track)return;
+
+  toggleFavorite({
+    id:track.id,
+    title:track.title,
+    artist:track.artist,
+    artwork:null,
+    url:null
+  });
+}
+
+/* ============================================================
+   DEVICE MUSIC
+   ============================================================ */
+
+function handleFiles(e){
+
+  const files=[...e.target.files];
+
+  files.forEach(file=>{
+
+    const track={
+      id:"device_"+Date.now()+"_"+Math.random().toString(36).slice(2),
+      title:file.name.replace(/\.[^/.]+$/,""),
+      artist:"My Device",
+      artwork:null,
+      file:file,
+      url:null,
+      local:true
+    };
+
+    deviceTracks.push(track);
+  });
+
+  renderDeviceTracks();
+
+  toast(files.length+" music file(s) added");
+}
+
+function renderDeviceTracks(){
+
+  if(!deviceTracks.length){
+    $("deviceList").innerHTML="";
+    return;
+  }
+
+  $("deviceList").innerHTML="";
+
+  const list=document.createElement("div");
+  list.className="result-list";
+
+  deviceTracks.forEach(track=>{
+
+    const row=document.createElement("div");
+    row.className="result";
+
+    row.innerHTML=`
+      <div style="
+        width:55px;height:55px;border-radius:10px;
+        display:grid;place-items:center;
+        background:linear-gradient(135deg,#7c5cff,#00d4ff);
+        font-size:24px">🎵</div>
+
+      <div class="result-info">
+        <div class="result-title">${escapeHTML(track.title)}</div>
+        <div class="result-sub">My Device</div>
+      </div>
+
+      <button class="icon-btn"
+        onclick="playDeviceTrack('${track.id}')">▶</button>
+
+      <button class="icon-btn"
+        onclick="toggleFavoriteById('${track.id}')">❤️</button>
+    `;
+
+    list.appendChild(row);
+  });
+
+  $("deviceList").appendChild(list);
+}
+
+function playDeviceTrack(id){
+
+  const track=deviceTracks.find(t=>t.id===id);
+
+  if(!track)return;
+
+  if(!track.url){
+    track.url=URL.createObjectURL(track.file);
+  }
+
+  playTrack(track);
+}
+
+/* ============================================================
+   PLAYER
+   ============================================================ */
+
+function playTrack(track){
+
+  if(!track)return;
+
+  tracks=[
+    ...deviceTracks,
+    ...demoTracks.map(t=>({
+      ...t,
+      url:t.url || null
+    }))
+  ];
+
+  currentIndex=tracks.findIndex(t=>t.id===track.id);
+
+  if(currentIndex<0){
+    tracks.push(track);
+    currentIndex=tracks.length-1;
+  }
+
+  if(track.url){
+    audio.src=track.url;
+  }else{
+    const demo=demoTracks.find(t=>t.id===track.id);
+
+    if(demo){
+      audio.src=createDemoWav(demo);
+    }
+  }
+
+  $("nowTitle").textContent=track.title || "Unknown";
+  $("nowArtist").textContent=track.artist || "Unknown Artist";
+
+  $("nowCover").style.background=
+    "linear-gradient(135deg,#7c5cff,#00d4ff)";
+
+  audio.play().then(()=>{
+    $("playBtn").textContent="⏸";
+  }).catch(()=>{
+    toast("Press play to start audio");
+  });
+
+  addRecent(track);
+}
+
+function togglePlay(){
+
+  if(!audio.src){
+    if(demoTracks.length){
+      playDemo(demoTracks[0].id);
+    }
+    return;
+  }
+
+  if(audio.paused){
+    audio.play();
+    $("playBtn").textContent="⏸";
+  }else{
+    audio.pause();
+    $("playBtn").textContent="▶";
+  }
+}
+
+function nextTrack(){
+
+  if(!tracks.length)return;
+
+  if(shuffle){
+    currentIndex=Math.floor(Math.random()*tracks.length);
+  }else{
+    currentIndex=(currentIndex+1)%tracks.length;
+  }
+
+  const track=tracks[currentIndex];
+
+  if(track.file){
+    if(!track.url)track.url=URL.createObjectURL(track.file);
+  }
+
+  if(track.url){
+    audio.src=track.url;
+  }else{
+    const demo=demoTracks.find(t=>t.id===track.id);
+
+    if(demo)audio.src=createDemoWav(demo);
+  }
+
+  $("nowTitle").textContent=track.title;
+  $("nowArtist").textContent=track.artist;
+
+  audio.play();
+  $("playBtn").textContent="⏸";
+
+  addRecent(track);
+}
+
+function previousTrack(){
+
+  if(!tracks.length)return;
+
+  currentIndex=(currentIndex-1+tracks.length)%tracks.length;
+
+  const track=tracks[currentIndex];
+
+  if(track.file){
+    if(!track.url)track.url=URL.createObjectURL(track.file);
+  }
+
+  if(track.url){
+    audio.src=track.url;
+  }else{
+    const demo=demoTracks.find(t=>t.id===track.id);
+    if(demo)audio.src=createDemoWav(demo);
+  }
+
+  $("nowTitle").textContent=track.title;
+  $("nowArtist").textContent=track.artist;
+
+  audio.play();
+  $("playBtn").textContent="⏸";
+
+  addRecent(track);
+}
+
+function toggleShuffle(){
+  shuffle=!shuffle;
+  toast(shuffle?"Shuffle ON":"Shuffle OFF");
+}
+
+function toggleRepeat(){
+  repeat=!repeat;
+  toast(repeat?"Repeat ON":"Repeat OFF");
+}
+
+function updateProgress(){
+
+  if(!audio.duration)return;
+
+  $("progress").value=(audio.currentTime/audio.duration)*100;
+}
+
+/* ============================================================
+   FAVORITES
+   ============================================================ */
+
+function toggleFavorite(track){
+
+  const index=favorites.findIndex(x=>x.id===track.id);
+
+  if(index>=0){
+    favorites.splice(index,1);
+    toast("Removed from favorites");
+  }else{
+    favorites.unshift({
+      id:track.id,
+      title:track.title,
+      artist:track.artist,
+      artwork:track.artwork||null,
+      url:track.url||null
     });
-
-
-  const aiInput =
-    document.getElementById(
-      "aiInput"
-    );
-
-  if (aiInput) {
-
-    aiInput.placeholder =
-      language === "ar"
-        ? "مثال: موسيقى هادئة، جاز، إلكتروني..."
-        : "Try: relaxing music, jazz, electronic...";
-
+    toast("Added to favorites ❤️");
   }
-
-
-  const searchInput =
-    document.getElementById(
-      "searchInput"
-    );
-
-  if (searchInput) {
-
-    searchInput.placeholder =
-      language === "ar"
-        ? "فنان، أغنية، نوع موسيقي أو مزاج..."
-        : "Artist, song, genre or mood...";
-
-  }
-
-
-  const topSearch =
-    document.getElementById(
-      "topSearch"
-    );
-
-  if (topSearch) {
-
-    topSearch.placeholder =
-      language === "ar"
-        ? "ابحث عن موسيقى أو فنان..."
-        : "Search music, artists, moods...";
-
-  }
-
 
   localStorage.setItem(
-    STORAGE.language,
+    "harmoniq_favorites",
+    JSON.stringify(favorites)
+  );
+
+  renderFavorites();
+  updateStats();
+}
+
+function toggleFavoriteById(id){
+
+  let track=deviceTracks.find(t=>t.id===id);
+
+  if(!track){
+    track=demoTracks.find(t=>t.id===id);
+  }
+
+  if(track)toggleFavorite(track);
+}
+
+function renderFavorites(){
+
+  renderTrackList(
+    $("favoriteList"),
+    favorites,
+    "No favorite tracks yet."
+  );
+}
+
+/* ============================================================
+   RECENT
+   ============================================================ */
+
+function addRecent(track){
+
+  recent=recent.filter(x=>x.id!==track.id);
+
+  recent.unshift({
+    id:track.id,
+    title:track.title,
+    artist:track.artist,
+    artwork:track.artwork||null,
+    url:track.url||null
+  });
+
+  recent=recent.slice(0,50);
+
+  localStorage.setItem(
+    "harmoniq_recent",
+    JSON.stringify(recent)
+  );
+
+  renderRecent();
+  updateStats();
+}
+
+function renderRecent(){
+
+  renderTrackList(
+    $("recentList"),
+    recent,
+    "No recently played music."
+  );
+}
+
+/* ============================================================
+   GENERIC TRACK LIST
+   ============================================================ */
+
+function renderTrackList(container,list,emptyText){
+
+  container.innerHTML="";
+
+  if(!list.length){
+
+    container.innerHTML=`<div class="empty">${emptyText}</div>`;
+
+    return;
+  }
+
+  list.forEach(track=>{
+
+    const row=document.createElement("div");
+
+    row.className="result";
+
+    row.innerHTML=`
+
+      <div style="
+        width:55px;height:55px;border-radius:10px;
+        display:grid;place-items:center;
+        background:linear-gradient(135deg,#7c5cff,#00d4ff);
+        font-size:22px">🎵</div>
+
+      <div class="result-info">
+        <div class="result-title">${escapeHTML(track.title)}</div>
+        <div class="result-sub">${escapeHTML(track.artist||"Unknown")}</div>
+      </div>
+
+      <button class="icon-btn"
+        onclick="playStoredTrack('${escapeAttr(track.id)}')">▶</button>
+
+      <button class="icon-btn"
+        onclick="toggleFavoriteById('${escapeAttr(track.id)}')">❤️</button>
+    `;
+
+    container.appendChild(row);
+  });
+}
+
+function playStoredTrack(id){
+
+  let track=
+    deviceTracks.find(t=>t.id===id) ||
+    demoTracks.find(t=>t.id===id) ||
+    favorites.find(t=>t.id===id) ||
+    recent.find(t=>t.id===id);
+
+  if(!track)return;
+
+  if(track.file){
+    playDeviceTrack(id);
+    return;
+  }
+
+  if(track.id.startsWith("demo")){
+    playDemo(track.id);
+    return;
+  }
+
+  if(track.url){
+    playTrack(track);
+  }
+}
+
+/* ============================================================
+   PLAYLISTS
+   ============================================================ */
+
+function createPlaylist(){
+  $("playlistName").value="";
+  $("playlistModal").classList.add("show");
+  setTimeout(()=>$("playlistName").focus(),100);
+}
+
+function closePlaylistModal(){
+  $("playlistModal").classList.remove("show");
+}
+
+function savePlaylist(){
+
+  const name=$("playlistName").value.trim();
+
+  if(!name){
+    toast("Enter a playlist name");
+    return;
+  }
+
+  playlists.push({
+    id:"pl_"+Date.now(),
+    name:name,
+    tracks:[]
+  });
+
+  localStorage.setItem(
+    "harmoniq_playlists",
+    JSON.stringify(playlists)
+  );
+
+  closePlaylistModal();
+
+  renderPlaylists();
+  updateStats();
+
+  toast("Playlist created 🎵");
+}
+
+function renderPlaylists(){
+
+  $("playlistList").innerHTML="";
+
+  if(!playlists.length){
+
+    $("playlistList").innerHTML=`
+      <div class="empty" style="grid-column:1/-1">
+        No playlists yet. Create your first playlist.
+      </div>
+    `;
+
+    return;
+  }
+
+  playlists.forEach(pl=>{
+
+    const card=document.createElement("div");
+
+    card.className="card";
+
+    card.innerHTML=`
+      <div class="cover"
+           style="display:grid;place-items:center;
+           font-size:60px;
+           background:linear-gradient(135deg,#7c5cff,#00d4ff)">
+        🎵
+      </div>
+
+      <div class="card-title">${escapeHTML(pl.name)}</div>
+
+      <div class="card-sub">
+        ${pl.tracks.length} tracks
+      </div>
+
+      <div class="card-actions">
+        <button class="icon-btn"
+          onclick="deletePlaylist('${pl.id}')">🗑</button>
+      </div>
+    `;
+
+    $("playlistList").appendChild(card);
+  });
+}
+
+function deletePlaylist(id){
+
+  playlists=playlists.filter(p=>p.id!==id);
+
+  localStorage.setItem(
+    "harmoniq_playlists",
+    JSON.stringify(playlists)
+  );
+
+  renderPlaylists();
+  updateStats();
+
+  toast("Playlist deleted");
+}
+
+/* ============================================================
+   SEARCH
+   ============================================================ */
+
+async function doSearch(query=null){
+
+  const q=(query || $("searchInput").value).trim();
+
+  if(!q){
+    toast("Type something to search");
+    return;
+  }
+
+  showPage("search");
+
+  $("searchStatus").textContent="Searching Audius...";
+  $("searchResults").innerHTML="";
+
+  const key=settings.apiKey;
+
+  if(!key){
+
+    $("searchStatus").textContent=
+      "Add your Audius API key in Settings to search online music.";
+
+    $("searchResults").innerHTML=`
+
+      <div class="empty">
+
+        <div style="font-size:40px">🔑</div>
+
+        <h3>Audius API key required</h3>
+
+        <p>
+          Open Settings and add your Audius API key.
+          The key is stored locally in this browser.
+        </p>
+
+        <button class="primary" onclick="openSettings()">
+          Open Settings
+        </button>
+
+      </div>
+    `;
+
+    return;
+  }
+
+  try{
+
+    const url=
+      "https://api.audius.co/v1/tracks/search"+
+      "?query="+encodeURIComponent(q)+
+      "&limit=30"+
+      "&api_key="+encodeURIComponent(key);
+
+    const response=await fetch(url);
+
+    if(!response.ok){
+      throw new Error("Audius request failed");
+    }
+
+    const data=await response.json();
+
+    const results=(data.data || []).map(t=>({
+
+      id:"audius_"+t.id,
+
+      audiusId:t.id,
+
+      title:t.title || "Unknown",
+
+      artist:
+        t.user?.name ||
+        t.user?.handle ||
+        "Unknown Artist",
+
+      artwork:
+        t.artwork?(
+          t.artwork["480x480"] ||
+          t.artwork["1000x1000"] ||
+          t.artwork["150x150"]
+        ):null,
+
+      url:
+        "https://api.audius.co/v1/tracks/"+
+        encodeURIComponent(t.id)+
+        "/stream?api_key="+
+        encodeURIComponent(key),
+
+      source:"Audius"
+
+    }));
+
+    $("searchStatus").textContent=
+      results.length+
+      " result(s) found for “"+
+      q+
+      "”";
+
+    renderSearchResults(results);
+
+  }catch(error){
+
+    console.error(error);
+
+    $("searchStatus").textContent="Search failed.";
+
+    $("searchResults").innerHTML=`
+      <div class="empty">
+        ❌ Could not reach Audius.
+        <br><br>
+        Check your API key or internet connection.
+      </div>
+    `;
+  }
+}
+
+function renderSearchResults(results){
+
+  $("searchResults").innerHTML="";
+
+  if(!results.length){
+
+    $("searchResults").innerHTML=
+      `<div class="empty">No music found.</div>`;
+
+    return;
+  }
+
+  results.forEach(track=>{
+
+    const row=document.createElement("div");
+
+    row.className="result";
+
+    const artwork=track.artwork ||
+      "data:image/svg+xml;charset=UTF-8,"+
+      encodeURIComponent(`
+        <svg xmlns="http://www.w3.org/2000/svg" width="100" height="100">
+          <rect width="100%" height="100%" fill="#171d30"/>
+          <text x="50%" y="55%" text-anchor="middle"
+                fill="white" font-size="38">♪</text>
+        </svg>
+      `);
+
+    row.innerHTML=`
+
+      <img src="${artwork}" alt="">
+
+      <div class="result-info">
+
+        <div class="result-title">
+          ${escapeHTML(track.title)}
+        </div>
+
+        <div class="result-sub">
+          ${escapeHTML(track.artist)}
+          • Audius
+        </div>
+
+      </div>
+
+      <button class="icon-btn"
+        onclick='playOnlineTrack(${JSON.stringify(track)})'>
+        ▶
+      </button>
+
+      <button class="icon-btn"
+        onclick='toggleFavorite(${JSON.stringify(track)})'>
+        ❤️
+      </button>
+
+    `;
+
+    $("searchResults").appendChild(row);
+  });
+}
+
+function playOnlineTrack(track){
+
+  playTrack({
+    id:track.id,
+    title:track.title,
+    artist:track.artist,
+    artwork:track.artwork,
+    url:track.url
+  });
+
+  toast("Playing from Audius 🎵");
+}
+
+/* ============================================================
+   AI SEARCH
+   ============================================================ */
+
+function aiSearch(){
+
+  const text=$("aiInput").value.trim();
+
+  if(!text){
+    toast("Tell Harmoniq what you want to hear");
+    return;
+  }
+
+  const query=understandMusicRequest(text);
+
+  $("searchInput").value=query;
+
+  showPage("search");
+
+  doSearch(query);
+}
+
+function quickAI(text){
+
+  $("aiInput").value=text;
+
+  aiSearch();
+}
+
+function understandMusicRequest(text){
+
+  let q=text.toLowerCase().trim();
+
+  /*
+    Lightweight local AI intent layer.
+    No paid AI API required.
+  */
+
+  const replacements={
+
+    "اغاني نوم":"sleep music",
+    "موسيقى نوم":"sleep music",
+    "موسيقى للنوم":"sleep music",
+    "استرخاء":"relaxing music",
+    "موسيقى استرخاء":"relaxing music",
+    "تأمل":"meditation music",
+    "موسيقى تأمل":"meditation music",
+    "موسيقى هادئة":"calm music",
+    "هادئة":"calm music",
+    "رومانسية":"romantic music",
+    "حزينة":"sad music",
+    "سعيدة":"happy music",
+    "موسيقى حزينة":"sad music",
+    "موسيقى سعيدة":"happy music"
+  };
+
+  for(const key in replacements){
+
+    if(q.includes(key)){
+      q=q.replace(key,replacements[key]);
+    }
+  }
+
+  if(q.includes("sleep"))q+=" ambient";
+  if(q.includes("relax"))q+=" chill";
+  if(q.includes("meditation"))q+=" ambient";
+  if(q.includes("study"))q+=" instrumental";
+  if(q.includes("focus"))q+=" instrumental";
+
+  return q;
+}
+
+/* ============================================================
+   SETTINGS
+   ============================================================ */
+
+function openSettings(){
+
+  $("language").value=language;
+  $("apiKey").value=settings.apiKey || "";
+  $("provider").value=settings.provider || "audius";
+
+  $("settingsModal").classList.add("show");
+}
+
+function closeSettings(){
+  $("settingsModal").classList.remove("show");
+}
+
+function saveSettings(){
+
+  language=$("language").value;
+
+  settings={
+    apiKey:$("apiKey").value.trim(),
+    provider:$("provider").value
+  };
+
+  localStorage.setItem(
+    "harmoniq_settings",
+    JSON.stringify(settings)
+  );
+
+  localStorage.setItem(
+    "harmoniq_language",
     language
   );
 
+  updateLanguage();
+
+  closeSettings();
+
+  toast("Settings saved successfully");
 }
 
+/* ============================================================
+   LANGUAGE
+   ============================================================ */
 
-/* =========================
-   TOGGLE LANGUAGE
-========================= */
+function updateLanguage(){
 
-function toggleLanguage() {
+  const dict=translations[language] || translations.en;
 
-  const languages =
-    ["en","ar","tr","fr","es","de"];
+  document.documentElement.lang=language;
 
-  const current =
-    languages.indexOf(language);
+  document.documentElement.dir=
+    language==="ar" ? "rtl" : "ltr";
 
-  language =
-    languages[
-      (current + 1) %
-      languages.length
-    ];
-
-
-  applyLanguage();
-
-  showToast(
-    "Language: " +
-    language.toUpperCase()
+  document.body.classList.toggle(
+    "rtl",
+    language==="ar"
   );
 
+  document.querySelectorAll("[data-i18n]").forEach(el=>{
+
+    const key=el.dataset.i18n;
+
+    if(dict[key]){
+      el.textContent=dict[key];
+    }
+  });
+
+  document.querySelectorAll("[data-placeholder]").forEach(el=>{
+
+    const key=el.dataset.placeholder;
+
+    if(dict[key]){
+      el.placeholder=dict[key];
+    }
+  });
 }
 
+/* ============================================================
+   STATS
+   ============================================================ */
+
+function updateStats(){
+
+  $("statFav").textContent=favorites.length;
+
+  $("statPlaylist").textContent=playlists.length;
+
+  $("statRecent").textContent=recent.length;
+}
 
 /* ============================================================
    TOAST
-============================================================ */
+   ============================================================ */
 
-let toastTimer = null;
+let toastTimer;
 
+function toast(message){
 
-function showToast(message) {
+  const el=$("toast");
 
-  const toast =
-    document.getElementById(
-      "toast"
-    );
+  el.textContent=message;
 
+  el.classList.add("show");
 
-  toast.textContent =
-    message;
+  clearTimeout(toastTimer);
 
-
-  toast.classList.add(
-    "show"
-  );
-
-
-  clearTimeout(
-    toastTimer
-  );
-
-
-  toastTimer =
-    setTimeout(
-      () => {
-
-        toast.classList.remove(
-          "show"
-        );
-
-      },
-      2800
-    );
-
+  toastTimer=setTimeout(()=>{
+    el.classList.remove("show");
+  },2600);
 }
-
 
 /* ============================================================
-   INITIALIZATION
-============================================================ */
+   HELPERS
+   ============================================================ */
 
-function init() {
+function escapeHTML(value){
 
-  /*
-    IMPORTANT:
-    We intentionally DO NOT restore device object URLs
-    from localStorage.
-    Device files must be selected again after a full
-    browser reload because browsers do not allow a blob
-    URL to be reconstructed from localStorage safely.
-  */
+  return String(value ?? "")
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+}
 
-  applyLanguage();
+function escapeAttr(value){
 
-  renderRecommended();
+  return String(value ?? "")
+    .replace(/\\/g,"\\\\")
+    .replace(/'/g,"\\'");
+}
 
-  renderDeviceList();
+/* ============================================================
+   PLAYLIST MODAL OUTSIDE CLICK
+   ============================================================ */
 
-  renderLibrary();
-
-  updateNowPlaying();
-
-  updateFavoriteButton();
-
-  updatePlayButton();
-
-  updateMuteIcon();
-
-
-  const volume =
-    document.getElementById(
-      "volume"
-    );
-
-  if (volume) {
-
-    volume.value =
-      String(audio.volume);
-
+$("settingsModal").addEventListener("click",e=>{
+  if(e.target===$("settingsModal")){
+    closeSettings();
   }
+});
 
+$("playlistModal").addEventListener("click",e=>{
+  if(e.target===$("playlistModal")){
+    closePlaylistModal();
+  }
+});
 
-  /*
-    Register a helpful before-unload cleanup.
-  */
-
-  window.addEventListener(
-    "beforeunload",
-    cleanupObjectUrls
-  );
-
-}
-
-
-/* =========================
-   CLEAN OBJECT URLS
-========================= */
-
-function cleanupObjectUrls() {
-
-  deviceTracks.forEach(
-    track => {
-
-      if (
-        track.objectUrl
-      ) {
-
-        try {
-
-          URL.revokeObjectURL(
-            track.objectUrl
-          );
-
-        } catch(e) {}
-
-      }
-
-    }
-  );
-
-
-  tracks.forEach(
-    track => {
-
-      if (
-        track.objectUrl &&
-        track.type === "demo"
-      ) {
-
-        try {
-
-          URL.revokeObjectURL(
-            track.objectUrl
-          );
-
-        } catch(e) {}
-
-      }
-
-    }
-  );
-
-}
-
-
-/* =========================
+/* ============================================================
    KEYBOARD SHORTCUTS
-========================= */
+   ============================================================ */
 
-document.addEventListener(
-  "keydown",
-  function(event) {
+document.addEventListener("keydown",e=>{
 
-    /*
-      Do not interfere with text inputs.
-    */
+  if(e.code==="Space" &&
+     document.activeElement.tagName!=="INPUT" &&
+     document.activeElement.tagName!=="SELECT"){
 
-    const tag =
-      document.activeElement?.tagName;
-
-    if (
-      tag === "INPUT" ||
-      tag === "TEXTAREA"
-    ) {
-
-      return;
-
-    }
-
-
-    if (
-      event.code === "Space"
-    ) {
-
-      event.preventDefault();
-
-      togglePlay();
-
-    }
-
-
-    if (
-      event.code === "ArrowRight"
-    ) {
-
-      if (
-        Number.isFinite(audio.duration)
-      ) {
-
-        audio.currentTime =
-          Math.min(
-            audio.duration,
-            audio.currentTime + 5
-          );
-
-      }
-
-    }
-
-
-    if (
-      event.code === "ArrowLeft"
-    ) {
-
-      audio.currentTime =
-        Math.max(
-          0,
-          audio.currentTime - 5
-        );
-
-    }
-
+    e.preventDefault();
+    togglePlay();
   }
-);
 
+  if(e.key==="ArrowRight" && e.ctrlKey){
+    nextTrack();
+  }
 
-/* =========================
-   CLOSE MODALS
-========================= */
+  if(e.key==="ArrowLeft" && e.ctrlKey){
+    previousTrack();
+  }
+});
 
-document
-  .getElementById("playlistModal")
-  .addEventListener(
-    "click",
-    function(event) {
+/* ============================================================
+   PWA INSTALL PREPARATION
+   ============================================================ */
 
-      if (
-        event.target === this
-      ) {
+(function preparePWA(){
 
-        closePlaylistModal();
+  const manifest={
+    name:"Harmoniq AI",
+    short_name:"Harmoniq",
+    description:"Smart AI Music Player",
+    start_url:".",
+    display:"standalone",
+    background_color:"#080b14",
+    theme_color:"#080b14",
+    lang:language,
+    icons:[]
+  };
 
-      }
-
-    }
+  const blob=new Blob(
+    [JSON.stringify(manifest)],
+    {type:"application/manifest+json"}
   );
 
+  const url=URL.createObjectURL(blob);
 
-document
-  .getElementById("settingsModal")
-  .addEventListener(
-    "click",
-    function(event) {
+  const link=document.createElement("link");
 
-      if (
-        event.target === this
-      ) {
+  link.rel="manifest";
+  link.href=url;
 
-        closeSettings();
+  document.head.appendChild(link);
 
-      }
-
-    }
-  );
-
-
-/* =========================
-   START APP
-========================= */
-
-init();
+})();
 
 </script>
 
 </body>
-  </html>
+    </html>
