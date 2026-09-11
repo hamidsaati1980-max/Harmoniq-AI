@@ -1,606 +1,3021 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 
-  <meta name="theme-color" content="#080a10">
-  <meta name="description" content="Harmoniq AI - Modern AI Music Player">
+<meta name="theme-color" content="#080a10">
+<meta name="description" content="Harmoniq AI - Modern AI Music Player">
 
-  <title>Harmoniq AI</title>
+<title>Harmoniq AI</title>
 
-  <link rel="manifest" href="manifest.json">
-  <link rel="stylesheet" href="styles.css">
+<link rel="manifest" href="manifest.json">
+
+<style>
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
+
+:root{
+  --bg:#080a10;
+  --panel:#10131c;
+  --panel2:#151925;
+  --border:rgba(255,255,255,.08);
+  --text:#f5f7fb;
+  --muted:#9299aa;
+  --accent:#8b5cf6;
+  --accent2:#06b6d4;
+  --danger:#ef4444;
+}
+
+body{
+  font-family:Arial,Helvetica,sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  min-height:100vh;
+}
+
+button,
+input,
+select{
+  font:inherit;
+}
+
+button{
+  border:0;
+  cursor:pointer;
+}
+
+.app{
+  min-height:100vh;
+  display:flex;
+}
+
+/* SIDEBAR */
+
+.sidebar{
+  width:240px;
+  background:#0c0f17;
+  border-right:1px solid var(--border);
+  padding:24px 16px;
+  position:fixed;
+  left:0;
+  top:0;
+  bottom:0;
+  z-index:20;
+}
+
+.logo{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  font-size:20px;
+  font-weight:bold;
+  margin-bottom:35px;
+}
+
+.logoIcon{
+  width:40px;
+  height:40px;
+  border-radius:12px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  font-size:23px;
+}
+
+.logo strong{
+  color:#a78bfa;
+}
+
+.nav{
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+}
+
+.navTitle{
+  color:#666d7d;
+  font-size:11px;
+  text-transform:uppercase;
+  letter-spacing:1px;
+  margin:15px 10px 7px;
+}
+
+.navBtn{
+  width:100%;
+  padding:12px;
+  background:transparent;
+  color:var(--muted);
+  border-radius:10px;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  text-align:left;
+}
+
+.navBtn:hover,
+.navBtn.active{
+  background:var(--panel2);
+  color:white;
+}
+
+.sidebarBottom{
+  position:absolute;
+  left:16px;
+  right:16px;
+  bottom:25px;
+}
+
+.aiBadge{
+  padding:12px;
+  border:1px solid var(--border);
+  border-radius:12px;
+  color:#b8becb;
+  font-size:13px;
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+.aiDot{
+  width:8px;
+  height:8px;
+  background:#22c55e;
+  border-radius:50%;
+}
+
+/* MAIN */
+
+.main{
+  margin-left:240px;
+  width:calc(100% - 240px);
+  padding-bottom:120px;
+}
+
+.topbar{
+  height:75px;
+  padding:15px 28px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  border-bottom:1px solid var(--border);
+  background:rgba(8,10,16,.9);
+  position:sticky;
+  top:0;
+  z-index:10;
+}
+
+.searchBox{
+  width:min(550px,65%);
+  display:flex;
+  align-items:center;
+  gap:10px;
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:0 15px;
+}
+
+.searchBox input{
+  width:100%;
+  height:44px;
+  border:0;
+  outline:0;
+  background:transparent;
+  color:white;
+}
+
+.searchIcon{
+  color:#858c9d;
+}
+
+.languageSelect{
+  background:var(--panel);
+  color:white;
+  border:1px solid var(--border);
+  border-radius:9px;
+  padding:9px;
+}
+
+/* PAGES */
+
+.page{
+  display:none;
+  padding:30px;
+}
+
+.page.activePage{
+  display:block;
+}
+
+/* HERO */
+
+.hero{
+  min-height:330px;
+  border-radius:24px;
+  padding:45px;
+  display:flex;
+  align-items:center;
+  background:
+    radial-gradient(circle at 80% 20%,rgba(139,92,246,.28),transparent 35%),
+    radial-gradient(circle at 20% 80%,rgba(6,182,212,.18),transparent 35%),
+    linear-gradient(135deg,#151827,#0e111a);
+  border:1px solid var(--border);
+}
+
+.heroLabel{
+  color:#a78bfa;
+  font-size:12px;
+  letter-spacing:2px;
+  font-weight:bold;
+}
+
+.hero h1{
+  font-size:42px;
+  margin:14px 0 8px;
+}
+
+.hero p{
+  color:var(--muted);
+  margin-bottom:25px;
+}
+
+.aiBox{
+  max-width:800px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  background:#090b12;
+  border:1px solid rgba(139,92,246,.35);
+  border-radius:14px;
+  padding:8px;
+}
+
+.aiIcon{
+  padding-left:10px;
+  color:#a78bfa;
+}
+
+.aiBox input{
+  flex:1;
+  min-width:0;
+  background:transparent;
+  border:0;
+  outline:0;
+  color:white;
+  padding:10px;
+}
+
+.primaryBtn{
+  background:linear-gradient(135deg,var(--accent),#6366f1);
+  color:white;
+  padding:11px 18px;
+  border-radius:9px;
+  font-weight:bold;
+}
+
+.secondaryBtn{
+  background:#252a38;
+  color:white;
+  padding:11px 18px;
+  border-radius:9px;
+}
+
+.aiSuggestions{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin-top:12px;
+}
+
+.aiSuggestions button{
+  background:#181c28;
+  color:#b9bfcc;
+  border:1px solid var(--border);
+  padding:8px 12px;
+  border-radius:20px;
+}
+
+/* SECTIONS */
+
+.section{
+  margin-top:35px;
+}
+
+.sectionHead{
+  display:flex;
+  justify-content:space-between;
+  margin-bottom:18px;
+}
+
+.sectionHead h2{
+  font-size:22px;
+}
+
+.sectionSubtitle,
+.pageHeader p{
+  color:var(--muted);
+  margin-top:5px;
+  font-size:13px;
+}
+
+.quickGrid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:14px;
+}
+
+.quickCard{
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:15px;
+  padding:18px;
+  color:white;
+  display:flex;
+  align-items:center;
+  gap:14px;
+  text-align:left;
+}
+
+.quickCard:hover{
+  border-color:rgba(139,92,246,.5);
+}
+
+.quickCard strong,
+.quickCard span{
+  display:block;
+}
+
+.quickCard span{
+  color:var(--muted);
+  font-size:12px;
+  margin-top:5px;
+}
+
+.quickIcon{
+  width:45px;
+  height:45px;
+  border-radius:12px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:#1b1f2c;
+  font-size:20px;
+}
+
+/* TRACKS */
+
+.trackGrid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(175px,1fr));
+  gap:18px;
+}
+
+.trackCard{
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:15px;
+  padding:12px;
+  overflow:hidden;
+}
+
+.trackCover{
+  width:100%;
+  aspect-ratio:1;
+  border-radius:11px;
+  background:linear-gradient(135deg,#312e81,#0891b2);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:42px;
+  margin-bottom:12px;
+}
+
+.trackTitle{
+  font-weight:bold;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+.trackArtist{
+  color:var(--muted);
+  font-size:12px;
+  margin-top:5px;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+.trackActions{
+  display:flex;
+  gap:6px;
+  margin-top:12px;
+}
+
+.smallBtn{
+  flex:1;
+  background:#202432;
+  color:white;
+  padding:8px;
+  border-radius:8px;
+}
+
+.smallBtn:hover{
+  background:#303647;
+}
+
+/* PAGE HEADER */
+
+.pageHeader{
+  margin-bottom:25px;
+}
+
+.pageHeader h2{
+  font-size:30px;
+}
+
+/* LIBRARY */
+
+.libraryTabs{
+  display:flex;
+  gap:8px;
+  overflow-x:auto;
+  margin-bottom:20px;
+}
+
+.libraryTab{
+  white-space:nowrap;
+  background:#171b27;
+  color:#9da4b4;
+  padding:10px 15px;
+  border-radius:9px;
+}
+
+.libraryTab.active{
+  background:#7c3aed;
+  color:white;
+}
+
+.emptyState{
+  padding:50px 20px;
+  text-align:center;
+  color:var(--muted);
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:15px;
+}
+
+/* PLAYER */
+
+.player{
+  position:fixed;
+  left:240px;
+  right:0;
+  bottom:0;
+  min-height:82px;
+  background:rgba(12,15,23,.97);
+  border-top:1px solid var(--border);
+  display:grid;
+  grid-template-columns:1fr 1.4fr 1fr;
+  align-items:center;
+  gap:20px;
+  padding:10px 22px;
+  z-index:50;
+}
+
+.nowPlaying{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  min-width:0;
+}
+
+.miniCover{
+  width:52px;
+  height:52px;
+  flex-shrink:0;
+  border-radius:9px;
+  background:linear-gradient(135deg,#7c3aed,#0891b2);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:22px;
+}
+
+.nowText{
+  min-width:0;
+}
+
+.nowText strong,
+.nowText span{
+  display:block;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+
+.nowText span{
+  color:var(--muted);
+  font-size:12px;
+  margin-top:4px;
+}
+
+.playerFavorite{
+  background:transparent;
+  color:#aaa;
+  font-size:22px;
+  margin-left:5px;
+}
+
+.playerFavorite.active{
+  color:#ef4444;
+}
+
+.playerCenter{
+  min-width:0;
+}
+
+.controlButtons{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:12px;
+}
+
+.controlBtn{
+  background:transparent;
+  color:#aab0be;
+  font-size:18px;
+  padding:6px;
+}
+
+.controlBtn.active{
+  color:#a78bfa;
+}
+
+.playMain{
+  width:42px;
+  height:42px;
+  border-radius:50%;
+  background:white;
+  color:#080a10;
+  font-weight:bold;
+}
+
+.progressArea{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  color:#777f90;
+  font-size:11px;
+}
+
+#progressBar{
+  flex:1;
+}
+
+.playerRight{
+  display:flex;
+  justify-content:flex-end;
+  align-items:center;
+  gap:8px;
+}
+
+.volume{
+  width:100px;
+}
+
+/* MOBILE NAV */
+
+.mobileNav{
+  display:none;
+}
+
+/* MODAL */
+
+.modal{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.7);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:100;
+  padding:20px;
+}
+
+.modal.show{
+  display:flex;
+}
+
+.modalBox{
+  width:min(430px,100%);
+  background:#121621;
+  border:1px solid var(--border);
+  border-radius:18px;
+  padding:25px;
+  position:relative;
+}
+
+.modalClose{
+  position:absolute;
+  right:15px;
+  top:12px;
+  background:transparent;
+  color:#aaa;
+  font-size:25px;
+}
+
+.modalIcon{
+  font-size:30px;
+  color:#a78bfa;
+  margin-bottom:10px;
+}
+
+.modalBox p{
+  color:var(--muted);
+  margin:8px 0 18px;
+  font-size:13px;
+}
+
+.modalInput{
+  width:100%;
+  background:#090b11;
+  color:white;
+  border:1px solid var(--border);
+  outline:0;
+  border-radius:9px;
+  padding:12px;
+}
+
+.modalActions{
+  display:flex;
+  justify-content:flex-end;
+  gap:8px;
+  margin-top:18px;
+}
+
+/* TOAST */
+
+.toast{
+  position:fixed;
+  left:50%;
+  bottom:110px;
+  transform:translateX(-50%) translateY(20px);
+  background:#202533;
+  color:white;
+  padding:12px 18px;
+  border-radius:10px;
+  opacity:0;
+  pointer-events:none;
+  transition:.25s;
+  z-index:200;
+}
+
+.toast.show{
+  opacity:1;
+  transform:translateX(-50%) translateY(0);
+}
+
+/* DEVICE MUSIC */
+
+.deviceMusic{
+  margin-top:25px;
+  padding:20px;
+  border:1px dashed rgba(139,92,246,.45);
+  border-radius:15px;
+  background:#111522;
+}
+
+.deviceMusic h3{
+  margin-bottom:7px;
+}
+
+.deviceMusic p{
+  color:var(--muted);
+  font-size:13px;
+  margin-bottom:15px;
+}
+
+.deviceInput{
+  display:none;
+}
+
+/* RESPONSIVE */
+
+@media(max-width:900px){
+
+  .sidebar{
+    display:none;
+  }
+
+  .main{
+    margin-left:0;
+    width:100%;
+    padding-bottom:155px;
+  }
+
+  .topbar{
+    padding:12px 15px;
+  }
+
+  .searchBox{
+    width:70%;
+  }
+
+  .page{
+    padding:18px 15px;
+  }
+
+  .hero{
+    padding:25px 20px;
+  }
+
+  .hero h1{
+    font-size:30px;
+  }
+
+  .quickGrid{
+    grid-template-columns:1fr;
+  }
+
+  .player{
+    left:0;
+    grid-template-columns:1fr;
+    gap:5px;
+    padding:8px 12px;
+  }
+
+  .playerRight{
+    display:none;
+  }
+
+  .nowPlaying{
+    display:flex;
+  }
+
+  .playerCenter{
+    order:2;
+  }
+
+  .mobileNav{
+    position:fixed;
+    display:flex;
+    left:0;
+    right:0;
+    bottom:0;
+    height:62px;
+    background:#0c0f17;
+    border-top:1px solid var(--border);
+    z-index:70;
+    justify-content:space-around;
+  }
+
+  .mobileNavBtn{
+    background:transparent;
+    color:#777f90;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:3px;
+    min-width:60px;
+  }
+
+  .mobileNavBtn.active{
+    color:#a78bfa;
+  }
+
+  .mobileNavBtn span{
+    font-size:18px;
+  }
+
+  .mobileNavBtn small{
+    font-size:10px;
+  }
+
+  .player{
+    bottom:62px;
+  }
+}
+
+@media(max-width:500px){
+
+  .aiBox{
+    flex-direction:column;
+    align-items:stretch;
+  }
+
+  .aiIcon{
+    display:none;
+  }
+
+  .aiBox input{
+    padding:12px;
+  }
+
+  .trackGrid{
+    grid-template-columns:repeat(2,1fr);
+    gap:10px;
+  }
+
+  .trackCard{
+    padding:8px;
+  }
+
+  .hero{
+    min-height:300px;
+  }
+
+  .topActions{
+    display:none;
+  }
+
+  .searchBox{
+    width:100%;
+  }
+}
+</style>
 </head>
 
 <body>
 
-  <div class="app">
+<div class="app">
 
-    <!-- SIDEBAR -->
-    <aside class="sidebar">
+<aside class="sidebar">
 
-      <div class="logo">
-        <div class="logoIcon">♫</div>
-        <span>
-          Harmoniq
-          <strong>AI</strong>
-        </span>
-      </div>
-
-      <nav class="nav">
-
-        <div class="navTitle" data-i18n="menu">Menu</div>
-
-        <button class="navBtn active" data-section="home">
-          <span>⌂</span>
-          <span data-i18n="home">Home</span>
-        </button>
-
-        <button class="navBtn" data-section="search">
-          <span>⌕</span>
-          <span data-i18n="search">Search</span>
-        </button>
-
-        <button class="navBtn" data-section="library">
-          <span>▣</span>
-          <span data-i18n="library">Library</span>
-        </button>
-
-        <div class="navTitle" data-i18n="yourMusic">
-          Your Music
-        </div>
-
-        <button class="navBtn" id="favoritesNav" data-section="library">
-          <span>♡</span>
-          <span data-i18n="favorites">Favorites</span>
-        </button>
-
-        <button class="navBtn" id="playlistsNav" data-section="library">
-          <span>＋</span>
-          <span data-i18n="playlists">Playlists</span>
-        </button>
-
-        <button class="navBtn" id="recentNav" data-section="library">
-          <span>◷</span>
-          <span data-i18n="recent">Recently Played</span>
-        </button>
-
-      </nav>
-
-      <div class="sidebarBottom">
-        <div class="aiBadge">
-          <span class="aiDot"></span>
-          <span>Harmoniq AI</span>
-        </div>
-      </div>
-
-    </aside>
-
-
-    <!-- MAIN -->
-    <main class="main">
-
-      <!-- TOP BAR -->
-      <header class="topbar">
-
-        <div class="searchBox">
-
-          <span class="searchIcon">⌕</span>
-
-          <input
-            id="searchInput"
-            type="search"
-            data-placeholder="searchPlaceholder"
-            placeholder="Search music, artists or albums..."
-            autocomplete="off"
-          >
-
-        </div>
-
-        <div class="topActions">
-
-          <select id="language" class="languageSelect">
-            <option value="en">English</option>
-            <option value="ar">العربية</option>
-            <option value="tr">Türkçe</option>
-            <option value="fr">Français</option>
-            <option value="es">Español</option>
-            <option value="de">Deutsch</option>
-          </select>
-
-        </div>
-
-      </header>
-
-
-      <!-- HOME -->
-      <section id="home" class="page activePage">
-
-        <section class="hero">
-
-          <div class="heroContent">
-
-            <span class="heroLabel">
-              ✦ HARMONIQ AI
-            </span>
-
-            <h1 data-i18n="goodEvening">
-              Good evening 👋
-            </h1>
-
-            <p data-i18n="discover">
-              Discover your next favorite sound.
-            </p>
-
-            <!-- AI COMMAND -->
-            <div class="aiBox">
-
-              <span class="aiIcon">✦</span>
-
-              <input
-                id="aiInput"
-                type="text"
-                data-placeholder="aiPlaceholder"
-                placeholder="Ask Harmoniq AI: play relaxing music for sleep..."
-                autocomplete="off"
-              >
-
-              <button
-                id="aiButton"
-                class="primaryBtn"
-                data-action="ai"
-              >
-                <span>✦</span>
-                Harmoniq AI
-              </button>
-
-            </div>
-
-            <div class="aiSuggestions">
-
-              <button data-ai="play relaxing music">
-                🌙 Relax
-              </button>
-
-              <button data-ai="play music for sleep">
-                😴 Sleep
-              </button>
-
-              <button data-ai="play focus music">
-                🎧 Focus
-              </button>
-
-              <button data-ai="play nature music">
-                🌿 Nature
-              </button>
-
-            </div>
-
-          </div>
-
-        </section>
-
-
-        <!-- QUICK ACCESS -->
-        <section class="section">
-
-          <div class="sectionHead">
-
-            <div>
-              <h2 data-i18n="quickAccess">
-                Quick Access
-              </h2>
-
-              <p class="sectionSubtitle">
-                Your music at a glance
-              </p>
-            </div>
-
-          </div>
-
-          <div class="quickGrid">
-
-            <button class="quickCard" id="favoritesCard">
-
-              <div class="quickIcon favoriteIcon">
-                ♡
-              </div>
-
-              <div>
-                <strong data-i18n="favorites">
-                  Favorites
-                </strong>
-
-                <span id="favoriteCount">
-                  0 tracks
-                </span>
-              </div>
-
-            </button>
-
-
-            <button class="quickCard" id="playlistCard">
-
-              <div class="quickIcon playlistIcon">
-                +
-              </div>
-
-              <div>
-                <strong data-i18n="playlists">
-                  My Playlists
-                </strong>
-
-                <span id="playlistCount">
-                  0 playlists
-                </span>
-              </div>
-
-            </button>
-
-
-            <button class="quickCard" id="recentCard">
-
-              <div class="quickIcon recentIcon">
-                ◷
-              </div>
-
-              <div>
-                <strong data-i18n="recent">
-                  Recently Played
-                </strong>
-
-                <span id="recentCount">
-                  0 tracks
-                </span>
-              </div>
-
-            </button>
-
-          </div>
-
-        </section>
-
-
-        <!-- RECOMMENDED -->
-        <section class="section">
-
-          <div class="sectionHead">
-
-            <div>
-              <h2 data-i18n="recommended">
-                Recommended for you
-              </h2>
-
-              <p class="sectionSubtitle">
-                Selected by Harmoniq
-              </p>
-            </div>
-
-          </div>
-
-          <div id="trackGrid" class="trackGrid"></div>
-
-        </section>
-
-
-        <!-- AD PLACEHOLDER -->
-        <div class="adContainer">
-
-          <span>
-            ADVERTISEMENT
-          </span>
-
-          <small>
-            Harmoniq monetization placement
-          </small>
-
-        </div>
-
-      </section>
-
-
-      <!-- SEARCH -->
-      <section id="search" class="page">
-
-        <div class="pageHeader">
-
-          <h2 data-i18n="searchResults">
-            Search Results
-          </h2>
-
-          <p>
-            Find your favorite music
-          </p>
-
-        </div>
-
-        <div id="searchResults" class="trackGrid"></div>
-
-      </section>
-
-
-      <!-- LIBRARY -->
-      <section id="library" class="page">
-
-        <div class="pageHeader">
-
-          <h2 data-i18n="library">
-            Library
-          </h2>
-
-          <p>
-            Your personal music collection
-          </p>
-
-        </div>
-
-
-        <div class="libraryTabs">
-
-          <button
-            class="libraryTab active"
-            data-library="favorites"
-          >
-            ♡ Favorites
-          </button>
-
-          <button
-            class="libraryTab"
-            data-library="recent"
-          >
-            ◷ Recently Played
-          </button>
-
-          <button
-            class="libraryTab"
-            data-library="playlists"
-          >
-            + Playlists
-          </button>
-
-        </div>
-
-        <div id="libraryContent"></div>
-
-      </section>
-
-    </main>
-
+  <div class="logo">
+    <div class="logoIcon">♫</div>
+    <span>Harmoniq <strong>AI</strong></span>
   </div>
 
+  <nav class="nav">
 
-  <!-- MOBILE NAVIGATION -->
-  <nav class="mobileNav">
+    <div class="navTitle">Menu</div>
 
-    <button
-      class="mobileNavBtn active"
-      data-section="home"
-    >
+    <button class="navBtn active" data-section="home">
       <span>⌂</span>
-      <small>Home</small>
+      <span>Home</span>
     </button>
 
-    <button
-      class="mobileNavBtn"
-      data-section="search"
-    >
+    <button class="navBtn" data-section="search">
       <span>⌕</span>
-      <small>Search</small>
+      <span>Search</span>
     </button>
 
-    <button
-      class="mobileNavBtn"
-      data-section="library"
-    >
+    <button class="navBtn" data-section="library">
       <span>▣</span>
-      <small>Library</small>
+      <span>Library</span>
     </button>
 
-    <button
-      class="mobileNavBtn"
-      id="mobileFavorites"
-      data-section="library"
-    >
+    <div class="navTitle">Your Music</div>
+
+    <button class="navBtn" data-section="library" data-library-target="favorites">
       <span>♡</span>
-      <small>Favorites</small>
+      <span>Favorites</span>
+    </button>
+
+    <button class="navBtn" data-section="library" data-library-target="playlists">
+      <span>＋</span>
+      <span>Playlists</span>
+    </button>
+
+    <button class="navBtn" data-section="library" data-library-target="recent">
+      <span>◷</span>
+      <span>Recently Played</span>
     </button>
 
   </nav>
 
-
-  <!-- MUSIC PLAYER -->
-  <div class="player">
-
-    <div class="nowPlaying">
-
-      <div id="miniCover" class="miniCover">
-        ♫
-      </div>
-
-      <div class="nowText">
-
-        <strong id="nowTitle">
-          Nothing playing
-        </strong>
-
-        <span id="nowArtist">
-          Choose a track
-        </span>
-
-      </div>
-
-      <button
-        id="playerFavorite"
-        class="playerFavorite"
-        data-action="favorite"
-      >
-        ♡
-      </button>
-
+  <div class="sidebarBottom">
+    <div class="aiBadge">
+      <span class="aiDot"></span>
+      <span>Harmoniq AI</span>
     </div>
+  </div>
 
+</aside>
 
-    <div class="playerCenter">
+<main class="main">
 
-      <div class="controlButtons">
+<header class="topbar">
 
-        <button
-          id="shuffleBtn"
-          class="controlBtn"
-          data-action="shuffle"
-        >
-          ⤨
-        </button>
+  <div class="searchBox">
+    <span class="searchIcon">⌕</span>
 
-        <button
-          id="previousBtn"
-          class="controlBtn"
-          data-action="previous"
-        >
-          ↶
-        </button>
+    <input
+      id="searchInput"
+      type="search"
+      placeholder="Search music, artists or albums..."
+      autocomplete="off"
+    >
+  </div>
 
-        <button
-          id="playButton"
-          class="playMain"
-          data-action="play-toggle"
-          aria-label="Play"
-        >
-          ▶
-        </button>
+  <div class="topActions">
 
-        <button
-          id="nextBtn"
-          class="controlBtn"
-          data-action="next"
-        >
-          ↷
-        </button>
-
-        <button
-          id="repeatBtn"
-          class="controlBtn"
-          data-action="repeat"
-        >
-          ↻
-        </button>
-
-      </div>
-
-
-      <div class="progressArea">
-
-        <span id="currentTime">
-          0:00
-        </span>
-
-        <input
-          id="progressBar"
-          data-role="progress-input"
-          type="range"
-          min="0"
-          max="180"
-          value="0"
-          step="1"
-        >
-
-        <span id="duration">
-          3:00
-        </span>
-
-      </div>
-
-    </div>
-
-
-    <div class="playerRight">
-
-      <button
-        id="muteBtn"
-        class="controlBtn"
-        data-action="mute"
-      >
-        🔊
-      </button>
-
-      <input
-        id="volumeControl"
-        data-role="volume"
-        class="volume"
-        type="range"
-        min="0"
-        max="1"
-        step="0.01"
-        value="0.8"
-      >
-
-    </div>
+    <select id="language" class="languageSelect">
+      <option value="en">English</option>
+      <option value="ar">العربية</option>
+      <option value="tr">Türkçe</option>
+      <option value="fr">Français</option>
+      <option value="es">Español</option>
+      <option value="de">Deutsch</option>
+    </select>
 
   </div>
 
+</header>
 
-  <!-- PLAYLIST MODAL -->
-  <div id="playlistModal" class="modal">
+<section id="home" class="page activePage">
 
-    <div class="modalBox">
+<div class="hero">
 
-      <button
-        id="closeModal"
-        class="modalClose"
-      >
-        ×
+<div class="heroContent">
+
+<span class="heroLabel">✦ HARMONIQ AI</span>
+
+<h1>Good evening 👋</h1>
+
+<p>Discover your next favorite sound.</p>
+
+<div class="aiBox">
+
+<span class="aiIcon">✦</span>
+
+<input
+  id="aiInput"
+  type="text"
+  placeholder="Ask Harmoniq AI to find music..."
+  autocomplete="off"
+>
+
+<button id="aiButton" class="primaryBtn">
+  ✦ Harmoniq AI
+</button>
+
+</div>
+
+<div class="aiSuggestions">
+
+<button data-ai="relaxing music">🌙 Relax</button>
+<button data-ai="sleep music">😴 Sleep</button>
+<button data-ai="focus music">🎧 Focus</button>
+<button data-ai="nature music">🌿 Nature</button>
+
+</div>
+
+</div>
+
+</div>
+
+<section class="section">
+
+<div class="sectionHead">
+<div>
+<h2>Quick Access</h2>
+<p class="sectionSubtitle">Your music at a glance</p>
+</div>
+</div>
+
+<div class="quickGrid">
+
+<button class="quickCard" data-section="library" data-library-target="favorites">
+
+<div class="quickIcon">♡</div>
+
+<div>
+<strong>Favorites</strong>
+<span id="favoriteCount">0 tracks</span>
+</div>
+
+</button>
+
+<button class="quickCard" id="openPlaylist">
+
+<div class="quickIcon">+</div>
+
+<div>
+<strong>My Playlists</strong>
+<span id="playlistCount">0 playlists</span>
+</div>
+
+</button>
+
+<button class="quickCard" data-section="library" data-library-target="recent">
+
+<div class="quickIcon">◷</div>
+
+<div>
+<strong>Recently Played</strong>
+<span id="recentCount">0 tracks</span>
+</div>
+
+</button>
+
+</div>
+
+</section>
+
+<section class="section">
+
+<div class="sectionHead">
+<div>
+<h2>Recommended for you</h2>
+<p class="sectionSubtitle">Selected by Harmoniq</p>
+</div>
+</div>
+
+<div id="trackGrid" class="trackGrid"></div>
+
+</section>
+
+<div class="deviceMusic">
+
+<h3>🎵 My Device Music</h3>
+
+<p>
+Choose music files from your phone and play them directly inside Harmoniq AI.
+</p>
+
+<label for="deviceFiles" class="primaryBtn">
+  ＋ Choose Music From Device
+</label>
+
+<input
+  id="deviceFiles"
+  class="deviceInput"
+  type="file"
+  accept="audio/*"
+  multiple
+>
+
+</div>
+
+</section>
+
+<section id="search" class="page">
+
+<div class="pageHeader">
+
+<h2>Search Music</h2>
+
+<p>Search Audius music and your device music.</p>
+
+</div>
+
+<div id="searchResults" class="trackGrid"></div>
+
+</section>
+
+<section id="library" class="page">
+
+<div class="pageHeader">
+
+<h2>Library</h2>
+
+<p>Your personal music collection.</p>
+
+</div>
+
+<div class="libraryTabs">
+
+<button class="libraryTab active" data-library="favorites">
+♡ Favorites
+</button>
+
+<button class="libraryTab" data-library="recent">
+◷ Recently Played
+</button>
+
+<button class="libraryTab" data-library="playlists">
++ Playlists
+</button>
+
+<button class="libraryTab" data-library="device">
+🎵 Device Music
+</button>
+
+</div>
+
+<div id="libraryContent"></div>
+
+</section>
+
+</main>
+
+</div>
+
+<nav class="mobileNav">
+
+<button class="mobileNavBtn active" data-section="home">
+<span>⌂</span>
+<small>Home</small>
+</button>
+
+<button class="mobileNavBtn" data-section="search">
+<span>⌕</span>
+<small>Search</small>
+</button>
+
+<button class="mobileNavBtn" data-section="library">
+<span>▣</span>
+<small>Library</small>
+</button>
+
+<button class="mobileNavBtn" data-section="library" data-library-target="favorites">
+<span>♡</span>
+<small>Favorites</small>
+</button>
+
+</nav>
+
+<div class="player">
+
+<div class="nowPlaying">
+
+<div id="miniCover" class="miniCover">♫</div>
+
+<div class="nowText">
+
+<strong id="nowTitle">Nothing playing</strong>
+
+<span id="nowArtist">Choose a track</span>
+
+</div>
+
+<button id="playerFavorite" class="playerFavorite">♡</button>
+
+</div>
+
+<div class="playerCenter">
+
+<div class="controlButtons">
+
+<button id="shuffleBtn" class="controlBtn">⤨</button>
+
+<button id="previousBtn" class="controlBtn">↶</button>
+
+<button id="playButton" class="playMain">▶</button>
+
+<button id="nextBtn" class="controlBtn">↷</button>
+
+<button id="repeatBtn" class="controlBtn">↻</button>
+
+</div>
+
+<div class="progressArea">
+
+<span id="currentTime">0:00</span>
+
+<input
+  id="progressBar"
+  type="range"
+  min="0"
+  max="100"
+  value="0"
+  step="0.1"
+>
+
+<span id="duration">0:00</span>
+
+</div>
+
+</div>
+
+<div class="playerRight">
+
+<button id="muteBtn" class="controlBtn">🔊</button>
+
+<input
+  id="volumeControl"
+  class="volume"
+  type="range"
+  min="0"
+  max="1"
+  step="0.01"
+  value="0.8"
+>
+
+</div>
+
+</div>
+
+<div id="playlistModal" class="modal">
+
+<div class="modalBox">
+
+<button id="closeModal" class="modalClose">×</button>
+
+<div class="modalIcon">+</div>
+
+<h2>Create Playlist</h2>
+
+<p>Create a new collection for your favorite sounds.</p>
+
+<input
+  id="playlistName"
+  class="modalInput"
+  type="text"
+  placeholder="Playlist name"
+  maxlength="60"
+>
+
+<div class="modalActions">
+
+<button id="cancelPlaylist" class="secondaryBtn">
+Cancel
+</button>
+
+<button id="createPlaylistBtn" class="primaryBtn">
+Create
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+<div id="toast" class="toast"></div>
+
+<!--<script>
+/* =========================================================
+   HARMONIQ AI - APPLICATION ENGINE
+   ========================================================= */
+
+const audio = new Audio();
+audio.preload = "metadata";
+
+let currentTrack = null;
+let currentIndex = -1;
+let shuffle = false;
+let repeat = false;
+let searchTimer = null;
+
+let tracks = [
+  {
+    id: "demo-1",
+    title: "Afterglow",
+    artist: "Luna Vale",
+    type: "demo"
+  },
+  {
+    id: "demo-2",
+    title: "Velvet Sky",
+    artist: "Noah Kade",
+    type: "demo"
+  },
+  {
+    id: "demo-3",
+    title: "Open Water",
+    artist: "Kairo Field",
+    type: "demo"
+  },
+  {
+    id: "demo-4",
+    title: "Lucid Dream",
+    artist: "Harmoniq",
+    type: "demo"
+  }
+];
+
+let deviceTracks =
+  JSON.parse(localStorage.getItem("harmoniq_device_tracks") || "[]");
+
+let favorites =
+  JSON.parse(localStorage.getItem("harmoniq_favorites") || "[]");
+
+let recent =
+  JSON.parse(localStorage.getItem("harmoniq_recent") || "[]");
+
+let playlists =
+  JSON.parse(localStorage.getItem("harmoniq_playlists") || "[]");
+
+let audiusResults = [];
+
+
+/* =========================================================
+   ELEMENTS
+   ========================================================= */
+
+const $ = id => document.getElementById(id);
+
+const trackGrid = $("trackGrid");
+const searchResults = $("searchResults");
+const libraryContent = $("libraryContent");
+
+const playButton = $("playButton");
+const previousBtn = $("previousBtn");
+const nextBtn = $("nextBtn");
+const shuffleBtn = $("shuffleBtn");
+const repeatBtn = $("repeatBtn");
+
+const progressBar = $("progressBar");
+const currentTime = $("currentTime");
+const duration = $("duration");
+
+const volumeControl = $("volumeControl");
+const muteBtn = $("muteBtn");
+
+const nowTitle = $("nowTitle");
+const nowArtist = $("nowArtist");
+const miniCover = $("miniCover");
+
+const playerFavorite = $("playerFavorite");
+
+const toast = $("toast");
+
+
+/* =========================================================
+   STORAGE
+   ========================================================= */
+
+function saveData(){
+
+  localStorage.setItem(
+    "harmoniq_favorites",
+    JSON.stringify(favorites)
+  );
+
+  localStorage.setItem(
+    "harmoniq_recent",
+    JSON.stringify(recent)
+  );
+
+  localStorage.setItem(
+    "harmoniq_playlists",
+    JSON.stringify(playlists)
+  );
+
+  localStorage.setItem(
+    "harmoniq_device_tracks",
+    JSON.stringify(deviceTracks)
+  );
+}
+
+
+/* =========================================================
+   TOAST
+   ========================================================= */
+
+function showToast(message){
+
+  toast.textContent = message;
+  toast.classList.add("show");
+
+  clearTimeout(window.toastTimer);
+
+  window.toastTimer = setTimeout(() => {
+    toast.classList.remove("show");
+  }, 2500);
+}
+
+
+/* =========================================================
+   TIME
+   ========================================================= */
+
+function formatTime(seconds){
+
+  if (!Number.isFinite(seconds)) {
+    return "0:00";
+  }
+
+  const minutes = Math.floor(seconds / 60);
+  const secs = Math.floor(seconds % 60);
+
+  return minutes + ":" + String(secs).padStart(2,"0");
+}
+
+
+/* =========================================================
+   DEMO MUSIC
+   ========================================================= */
+
+let audioContext = null;
+let oscillator = null;
+let gainNode = null;
+
+function startDemoMusic(track){
+
+  stopDemoMusic();
+
+  try{
+
+    audioContext =
+      audioContext ||
+      new (window.AudioContext || window.webkitAudioContext)();
+
+    gainNode = audioContext.createGain();
+
+    gainNode.gain.value =
+      Number(volumeControl.value) * 0.08;
+
+    gainNode.connect(audioContext.destination);
+
+    oscillator = audioContext.createOscillator();
+
+    oscillator.type = "sine";
+
+    const frequencies = [
+      261.63,
+      329.63,
+      392.00,
+      440.00
+    ];
+
+    oscillator.frequency.value =
+      frequencies[
+        Math.floor(Math.random() * frequencies.length)
+      ];
+
+    oscillator.connect(gainNode);
+
+    oscillator.start();
+
+  }catch(error){
+
+    console.log("Demo audio unavailable",error);
+
+  }
+}
+
+
+function stopDemoMusic(){
+
+  if(oscillator){
+
+    try{
+      oscillator.stop();
+    }catch(e){}
+
+    oscillator.disconnect();
+    oscillator = null;
+  }
+}
+
+
+/* =========================================================
+   PLAY TRACK
+   ========================================================= */
+
+function playTrack(track){
+
+  if(!track){
+    return;
+  }
+
+  currentTrack = track;
+
+  currentIndex =
+    tracks.findIndex(t => String(t.id) === String(track.id));
+
+  nowTitle.textContent =
+    track.title || "Unknown Track";
+
+  nowArtist.textContent =
+    track.artist || "Unknown Artist";
+
+  miniCover.textContent = "♫";
+
+  updateFavoriteButton();
+
+  addToRecent(track);
+
+  if(track.type === "device"){
+
+    stopDemoMusic();
+
+    audio.src = track.url;
+
+    audio.play().catch(error => {
+      console.log(error);
+    });
+
+  }else if(track.type === "audius"){
+
+    stopDemoMusic();
+
+    if(track.streamUrl){
+
+      audio.src = track.streamUrl;
+
+      audio.play().catch(error => {
+        console.log("Audius playback error",error);
+        showToast("Unable to play this track");
+      });
+
+    }else{
+
+      showToast("No playable stream found");
+
+    }
+
+  }else{
+
+    audio.pause();
+    audio.removeAttribute("src");
+
+    startDemoMusic(track);
+
+  }
+
+  playButton.textContent = "❚❚";
+
+  renderAllCounts();
+}
+
+
+/* =========================================================
+   STOP
+   ========================================================= */
+
+function stopPlayback(){
+
+  audio.pause();
+
+  stopDemoMusic();
+
+  playButton.textContent = "▶";
+}
+
+
+/* =========================================================
+   PLAY / PAUSE
+   ========================================================= */
+
+playButton.addEventListener("click", async () => {
+
+  if(!currentTrack){
+
+    if(tracks.length){
+      playTrack(tracks[0]);
+    }
+
+    return;
+  }
+
+  if(currentTrack.type === "demo"){
+
+    if(oscillator){
+
+      stopDemoMusic();
+      playButton.textContent = "▶";
+
+    }else{
+
+      startDemoMusic(currentTrack);
+      playButton.textContent = "❚❚";
+
+    }
+
+    return;
+  }
+
+  if(audio.paused){
+
+    try{
+      await audio.play();
+      playButton.textContent = "❚❚";
+    }catch(error){
+      showToast("Playback could not start");
+    }
+
+  }else{
+
+    audio.pause();
+    playButton.textContent = "▶";
+
+  }
+
+});
+
+
+/* =========================================================
+   NEXT
+   ========================================================= */
+
+function nextTrack(){
+
+  if(!tracks.length){
+    return;
+  }
+
+  let nextIndex;
+
+  if(shuffle){
+
+    nextIndex =
+      Math.floor(Math.random() * tracks.length);
+
+  }else{
+
+    nextIndex = currentIndex + 1;
+
+    if(nextIndex >= tracks.length){
+      nextIndex = 0;
+    }
+
+  }
+
+  playTrack(tracks[nextIndex]);
+}
+
+
+nextBtn.addEventListener("click", nextTrack);
+
+
+/* =========================================================
+   PREVIOUS
+   ========================================================= */
+
+previousBtn.addEventListener("click", () => {
+
+  if(!tracks.length){
+    return;
+  }
+
+  let index = currentIndex - 1;
+
+  if(index < 0){
+    index = tracks.length - 1;
+  }
+
+  playTrack(tracks[index]);
+
+});
+
+
+/* =========================================================
+   SHUFFLE
+   ========================================================= */
+
+shuffleBtn.addEventListener("click", () => {
+
+  shuffle = !shuffle;
+
+  shuffleBtn.classList.toggle("active",shuffle);
+
+  showToast(
+    shuffle
+      ? "Shuffle enabled"
+      : "Shuffle disabled"
+  );
+
+});
+
+
+/* =========================================================
+   REPEAT
+   ========================================================= */
+
+repeatBtn.addEventListener("click", () => {
+
+  repeat = !repeat;
+
+  repeatBtn.classList.toggle("active",repeat);
+
+  showToast(
+    repeat
+      ? "Repeat enabled"
+      : "Repeat disabled"
+  );
+
+});
+
+
+/* =========================================================
+   AUDIO EVENTS
+   ========================================================= */
+
+audio.addEventListener("timeupdate", () => {
+
+  if(!audio.duration){
+    return;
+  }
+
+  progressBar.max = audio.duration;
+
+  progressBar.value = audio.currentTime;
+
+  currentTime.textContent =
+    formatTime(audio.currentTime);
+
+  duration.textContent =
+    formatTime(audio.duration);
+
+});
+
+
+audio.addEventListener("loadedmetadata", () => {
+
+  progressBar.max = audio.duration || 0;
+
+  duration.textContent =
+    formatTime(audio.duration);
+
+});
+
+
+audio.addEventListener("ended", () => {
+
+  if(repeat){
+
+    if(currentTrack?.type === "demo"){
+
+      startDemoMusic(currentTrack);
+
+    }else{
+
+      audio.currentTime = 0;
+
+      audio.play();
+
+    }
+
+    return;
+  }
+
+  nextTrack();
+
+});
+
+
+/* =========================================================
+   PROGRESS
+   ========================================================= */
+
+progressBar.addEventListener("input", () => {
+
+  if(
+    currentTrack &&
+    currentTrack.type !== "demo"
+  ){
+
+    audio.currentTime =
+      Number(progressBar.value);
+
+  }
+
+});
+
+
+/* =========================================================
+   VOLUME
+   ========================================================= */
+
+volumeControl.addEventListener("input", () => {
+
+  audio.volume =
+    Number(volumeControl.value);
+
+  if(gainNode){
+    gainNode.gain.value =
+      Number(volumeControl.value) * 0.08;
+  }
+
+});
+
+
+audio.volume =
+  Number(volumeControl.value);
+
+
+muteBtn.addEventListener("click", () => {
+
+  audio.muted = !audio.muted;
+
+  muteBtn.textContent =
+    audio.muted ? "🔇" : "🔊";
+
+});
+
+
+/* =========================================================
+   FAVORITES
+   ========================================================= */
+
+function isFavorite(track){
+
+  return favorites.some(
+    item => String(item.id) === String(track.id)
+  );
+
+}
+
+
+function toggleFavorite(track){
+
+  if(!track){
+    return;
+  }
+
+  const index =
+    favorites.findIndex(
+      item => String(item.id) === String(track.id)
+    );
+
+  if(index >= 0){
+
+    favorites.splice(index,1);
+
+    showToast("Removed from favorites");
+
+  }else{
+
+    favorites.push({
+      id:track.id,
+      title:track.title,
+      artist:track.artist,
+      cover:track.cover || "",
+      type:track.type || "audius",
+      streamUrl:track.streamUrl || ""
+    });
+
+    showToast("Added to favorites");
+
+  }
+
+  saveData();
+
+  updateFavoriteButton();
+
+  renderAllCounts();
+
+  renderLibrary("favorites");
+}
+
+
+function updateFavoriteButton(){
+
+  if(!currentTrack){
+    playerFavorite.textContent = "♡";
+    playerFavorite.classList.remove("active");
+    return;
+  }
+
+  const active =
+    isFavorite(currentTrack);
+
+  playerFavorite.textContent =
+    active ? "♥" : "♡";
+
+  playerFavorite.classList.toggle(
+    "active",
+    active
+  );
+
+}
+
+
+playerFavorite.addEventListener("click", () => {
+
+  toggleFavorite(currentTrack);
+
+});
+
+
+/* =========================================================
+   RECENT
+   ========================================================= */
+
+function addToRecent(track){
+
+  if(!track){
+    return;
+  }
+
+  const saved = {
+
+    id:track.id,
+
+    title:track.title,
+
+    artist:track.artist,
+
+    cover:track.cover || "",
+
+    type:track.type || "audius",
+
+    streamUrl:track.streamUrl || "",
+
+    url:track.url || ""
+
+  };
+
+  recent =
+    recent.filter(
+      item => String(item.id) !== String(track.id)
+    );
+
+  recent.unshift(saved);
+
+  recent =
+    recent.slice(0,30);
+
+  saveData();
+
+}
+
+
+/* =========================================================
+   TRACK CARD
+   ========================================================= */
+
+function createTrackCard(track){
+
+  const card =
+    document.createElement("div");
+
+  card.className = "trackCard";
+
+  const title =
+    escapeHtml(track.title || "Unknown");
+
+  const artist =
+    escapeHtml(track.artist || "Unknown Artist");
+
+  card.innerHTML = `
+
+    <div class="trackCover">
+      ${track.cover
+        ? `<img src="${escapeAttribute(track.cover)}"
+             style="width:100%;height:100%;object-fit:cover;border-radius:11px;">`
+        : "♫"
+      }
+    </div>
+
+    <div class="trackTitle">${title}</div>
+
+    <div class="trackArtist">${artist}</div>
+
+    <div class="trackActions">
+
+      <button class="smallBtn playTrack">
+        ▶
       </button>
 
-      <div class="modalIcon">
-        +
-      </div>
+      <button class="smallBtn favTrack">
+        ${isFavorite(track) ? "♥" : "♡"}
+      </button>
 
-      <h2 data-i18n="createPlaylist">
-        Create Playlist
-      </h2>
+      <button class="smallBtn addPlaylist">
+        +
+      </button>
+
+    </div>
+  `;
+
+  card.querySelector(".playTrack")
+    .addEventListener("click",() => {
+
+      playTrack(track);
+
+    });
+
+
+  card.querySelector(".favTrack")
+    .addEventListener("click",() => {
+
+      toggleFavorite(track);
+
+      renderHome();
+
+    });
+
+
+  card.querySelector(".addPlaylist")
+    .addEventListener("click",() => {
+
+      openPlaylistForTrack(track);
+
+    });
+
+
+  return card;
+}
+
+
+/* =========================================================
+   RENDER HOME
+   ========================================================= */
+
+function renderHome(){
+
+  trackGrid.innerHTML = "";
+
+  tracks.forEach(track => {
+
+    trackGrid.appendChild(
+      createTrackCard(track)
+    );
+
+  });
+
+}
+
+
+/* =========================================================
+   SEARCH
+   ========================================================= */
+
+$("searchInput").addEventListener("keydown", event => {
+
+  if(event.key === "Enter"){
+
+    const query =
+      event.target.value.trim();
+
+    if(query){
+      searchMusic(query);
+    }
+
+  }
+
+});
+
+
+async function searchMusic(query){
+
+  navigateTo("search");
+
+  searchResults.innerHTML = `
+    <div class="emptyState">
+      🔎 Searching Audius...
+    </div>
+  `;
+
+  const apiKey =
+    localStorage.getItem("harmoniq_audius_key");
+
+  if(!apiKey){
+
+    searchResults.innerHTML = `
+
+      <div class="emptyState">
+
+        <h3>Audius API Key Required</h3>
+
+        <p style="margin:10px 0 20px;">
+          Open Settings below and enter your Audius API Key.
+        </p>
+
+        <button
+          class="primaryBtn"
+          onclick="openSettings()"
+        >
+          ⚙ Enter API Key
+        </button>
+
+      </div>
+    `;
+
+    return;
+  }
+
+
+  try{
+
+    const url =
+      "https://api.audius.co/v1/tracks/search" +
+      "?query=" +
+      encodeURIComponent(query) +
+      "&limit=20" +
+      "&api_key=" +
+      encodeURIComponent(apiKey);
+
+    const response =
+      await fetch(url);
+
+    if(!response.ok){
+      throw new Error("Audius request failed");
+    }
+
+    const data =
+      await response.json();
+
+    const results =
+      data.data || [];
+
+    audiusResults =
+      results.map(track => {
+
+        const cover =
+          track.artwork?.["480x480"] ||
+          track.artwork?.["150x150"] ||
+          "";
+
+        const streamUrl =
+          "https://api.audius.co/v1/tracks/" +
+          encodeURIComponent(track.id) +
+          "/stream?api_key=" +
+          encodeURIComponent(apiKey);
+
+        return {
+
+          id:"audius-" + track.id,
+
+          audiusId:track.id,
+
+          title:
+            track.title || "Unknown Track",
+
+          artist:
+            track.user?.name ||
+            track.user?.handle ||
+            "Unknown Artist",
+
+          cover:cover,
+
+          streamUrl:streamUrl,
+
+          type:"audius"
+
+        };
+
+      });
+
+
+    if(!audiusResults.length){
+
+      searchResults.innerHTML = `
+
+        <div class="emptyState">
+          No music found for "${escapeHtml(query)}".
+        </div>
+      `;
+
+      return;
+    }
+
+
+    searchResults.innerHTML = "";
+
+    audiusResults.forEach(track => {
+
+      searchResults.appendChild(
+        createTrackCard(track)
+      );
+
+    });
+
+
+  }catch(error){
+
+    console.error(error);
+
+    searchResults.innerHTML = `
+
+      <div class="emptyState">
+
+        <h3>Search failed</h3>
+
+        <p style="margin:10px 0;">
+          Check your Audius API Key and try again.
+        </p>
+
+        <button
+          class="primaryBtn"
+          onclick="openSettings()"
+        >
+          ⚙ Check API Key
+        </button>
+
+      </div>
+    `;
+
+  }
+
+}
+
+
+/* =========================================================
+   AI SEARCH
+   ========================================================= */
+
+async function runAI(query){
+
+  query = query.trim();
+
+  if(!query){
+    showToast("Tell Harmoniq AI what you want to hear");
+    return;
+  }
+
+  $("searchInput").value = query;
+
+  showToast("Harmoniq AI is searching...");
+
+  await searchMusic(query);
+
+}
+
+
+$("aiButton").addEventListener("click",() => {
+
+  runAI($("aiInput").value);
+
+});
+
+
+$("aiInput").addEventListener("keydown",event => {
+
+  if(event.key === "Enter"){
+
+    runAI(event.target.value);
+
+  }
+
+});
+
+
+document.querySelectorAll("[data-ai]")
+.forEach(button => {
+
+  button.addEventListener("click",() => {
+
+    const query =
+      button.dataset.ai;
+
+    $("aiInput").value = query;
+
+    runAI(query);
+
+  });
+
+});
+
+
+/* =========================================================
+   DEVICE MUSIC
+   ========================================================= */
+
+$("deviceFiles").addEventListener("change", event => {
+
+  const files =
+    Array.from(event.target.files || []);
+
+  if(!files.length){
+    return;
+  }
+
+  let added = 0;
+
+  files.forEach(file => {
+
+    if(!file.type.startsWith("audio/")){
+      return;
+    }
+
+    const track = {
+
+      id:
+        "device-" +
+        Date.now() +
+        "-" +
+        Math.random()
+          .toString(36)
+          .slice(2),
+
+      title:
+        file.name.replace(/\.[^/.]+$/,""),
+
+      artist:
+        "My Device",
+
+      type:"device",
+
+      url:
+        URL.createObjectURL(file),
+
+      cover:""
+
+    };
+
+    deviceTracks.push(track);
+
+    tracks.push(track);
+
+    added++;
+
+  });
+
+
+  saveData();
+
+  renderHome();
+
+  renderAllCounts();
+
+  showToast(
+    added +
+    (added === 1 ? " music file added" : " music files added")
+  );
+
+  event.target.value = "";
+
+});
+
+
+/* =========================================================
+   NAVIGATION
+   ========================================================= */
+
+function navigateTo(section){
+
+  document
+    .querySelectorAll(".page")
+    .forEach(page => {
+
+      page.classList.remove("activePage");
+
+    });
+
+
+  const target =
+    document.getElementById(section);
+
+  if(target){
+    target.classList.add("activePage");
+  }
+
+
+  document
+    .querySelectorAll(".navBtn,.mobileNavBtn")
+    .forEach(button => {
+
+      button.classList.toggle(
+        "active",
+        button.dataset.section === section
+      );
+
+    });
+
+
+  if(section === "library"){
+    renderLibrary("favorites");
+  }
+
+}
+
+
+document
+  .querySelectorAll("[data-section]")
+  .forEach(button => {
+
+    button.addEventListener("click",() => {
+
+      navigateTo(
+        button.dataset.section
+      );
+
+      if(button.dataset.libraryTarget){
+
+        renderLibrary(
+          button.dataset.libraryTarget
+        );
+
+      }
+
+    });
+
+  });
+
+
+/* =========================================================
+   LIBRARY
+   ========================================================= */
+
+document
+  .querySelectorAll(".libraryTab")
+  .forEach(tab => {
+
+    tab.addEventListener("click",() => {
+
+      renderLibrary(
+        tab.dataset.library
+      );
+
+    });
+
+  });
+
+
+function renderLibrary(type){
+
+  document
+    .querySelectorAll(".libraryTab")
+    .forEach(tab => {
+
+      tab.classList.toggle(
+        "active",
+        tab.dataset.library === type
+      );
+
+    });
+
+
+  libraryContent.innerHTML = "";
+
+  let list = [];
+
+
+  if(type === "favorites"){
+    list = favorites;
+  }
+
+  if(type === "recent"){
+    list = recent;
+  }
+
+  if(type === "device"){
+    list = deviceTracks;
+  }
+
+
+  if(type === "playlists"){
+
+    renderPlaylists();
+    return;
+
+  }
+
+
+  if(!list.length){
+
+    libraryContent.innerHTML = `
+
+      <div class="emptyState">
+
+        <h3>No music here yet</h3>
+
+        <p style="margin-top:8px;">
+          Add music to your Harmoniq library.
+        </p>
+
+      </div>
+    `;
+
+    return;
+  }
+
+
+  const grid =
+    document.createElement("div");
+
+  grid.className = "trackGrid";
+
+  list.forEach(track => {
+
+    grid.appendChild(
+      createTrackCard(track)
+    );
+
+  });
+
+  libraryContent.appendChild(grid);
+
+}
+
+
+function renderPlaylists(){
+
+  if(!playlists.length){
+
+    libraryContent.innerHTML = `
+
+      <div class="emptyState">
+
+        <h3>No playlists yet</h3>
+
+        <p style="margin:10px 0 20px;">
+          Create your first playlist.
+        </p>
+
+        <button
+          class="primaryBtn"
+          onclick="openPlaylistModal()"
+        >
+          + Create Playlist
+        </button>
+
+      </div>
+    `;
+
+    return;
+  }
+
+
+  playlists.forEach((playlist,index) => {
+
+    const box =
+      document.createElement("div");
+
+    box.className = "deviceMusic";
+
+    box.style.marginTop = "10px";
+
+    box.innerHTML = `
+
+      <h3>🎵 ${escapeHtml(playlist.name)}</h3>
 
       <p>
-        Create a new collection for your favorite sounds.
+        ${playlist.tracks.length} tracks
       </p>
 
-      <input
-        id="playlistName"
-        class="modalInput"
-        type="text"
-        placeholder="Playlist name"
-        maxlength="60"
-      >
-
-      <div class="modalActions">
-
-        <button
-          id="cancelPlaylist"
-          class="secondaryBtn"
-        >
-          Cancel
-        </button>
-
-        <button
-          id="createPlaylistBtn"
-          class="primaryBtn"
-        >
-          Create
-        </button>
-
+      <div class="trackGrid"
+           id="playlist-${index}">
       </div>
 
-    </div>
+      <button
+        class="secondaryBtn deletePlaylist"
+        style="margin-top:15px;"
+      >
+        Delete Playlist
+      </button>
+    `;
 
-  </div>
+
+    libraryContent.appendChild(box);
 
 
-  <!-- TOAST -->
-  <div id="toast" class="toast"></div>
+    const grid =
+      box.querySelector(".trackGrid");
 
 
-  <!-- APPLICATION ENGINE -->
-  <script src="app.js"></script>
+    playlist.tracks.forEach(track => {
+
+      grid.appendChild(
+        createTrackCard(track)
+      );
+
+    });
+
+
+    box.querySelector(".deletePlaylist")
+      .addEventListener("click",() => {
+
+        if(confirm(
+          "Delete playlist " +
+          playlist.name +
+          "?"
+        )){
+
+          playlists.splice(index,1);
+
+          saveData();
+
+          renderLibrary("playlists");
+
+          renderAllCounts();
+
+        }
+
+      });
+
+  });
+
+}
+
+
+/* =========================================================
+   PLAYLIST
+   ========================================================= */
+
+function openPlaylistModal(){
+
+  $("playlistModal")
+    .classList.add("show");
+
+  $("playlistName").focus();
+
+}
+
+
+function closePlaylistModal(){
+
+  $("playlistModal")
+    .classList.remove("show");
+
+  $("playlistName").value = "";
+
+}
+
+
+$("openPlaylist")
+  .addEventListener("click",() => {
+
+    openPlaylistModal();
+
+  });
+
+
+$("closeModal")
+  .addEventListener("click",closePlaylistModal);
+
+
+$("cancelPlaylist")
+  .addEventListener("click",closePlaylistModal);
+
+
+$("createPlaylistBtn")
+  .addEventListener("click",() => {
+
+    const name =
+      $("playlistName")
+        .value
+        .trim();
+
+    if(!name){
+
+      showToast("Enter a playlist name");
+
+      return;
+    }
+
+
+    playlists.push({
+
+      id:
+        "playlist-" +
+        Date.now(),
+
+      name:name,
+
+      tracks:[]
+
+    });
+
+
+    saveData();
+
+    closePlaylistModal();
+
+    renderAllCounts();
+
+    showToast("Playlist created");
+
+  });
+
+
+let pendingPlaylistTrack = null;
+
+
+function openPlaylistForTrack(track){
+
+  pendingPlaylistTrack = track;
+
+  if(!playlists.length){
+
+    openPlaylistModal();
+
+    showToast(
+      "Create a playlist first"
+    );
+
+    return;
+  }
+
+
+  const names =
+    playlists
+      .map(
+        (p,index) =>
+          (index + 1) +
+          ". " +
+          p.name
+      )
+      .join("\n");
+
+
+  const choice =
+    prompt(
+      "Choose playlist number:\n\n" +
+      names
+    );
+
+
+  if(choice === null){
+    return;
+  }
+
+
+  const index =
+    Number(choice) - 1;
+
+
+  if(
+    index < 0 ||
+    index >= playlists.length
+  ){
+
+    showToast("Invalid playlist");
+
+    return;
+  }
+
+
+  playlists[index].tracks.push({
+    id:track.id,
+    title:track.title,
+    artist:track.artist,
+    cover:track.cover || "",
+    type:track.type || "audius",
+    streamUrl:track.streamUrl || "",
+    url:track.url || ""
+  });
+
+
+  saveData();
+
+  showToast(
+    "Added to " +
+    playlists[index].name
+  );
+
+}
+
+
+/* =========================================================
+   SETTINGS / AUDIUS API KEY
+   ========================================================= */
+
+function openSettings(){
+
+  const current =
+    localStorage.getItem(
+      "harmoniq_audius_key"
+    ) || "";
+
+
+  const key =
+    prompt(
+      "Paste your Audius API Key here.\n\n" +
+      "Do NOT enter a Bearer Token.\n\n" +
+      "Your API Key stays in this browser.",
+      current
+    );
+
+
+  if(key === null){
+    return;
+  }
+
+
+  const cleanKey =
+    key.trim();
+
+
+  if(!cleanKey){
+
+    localStorage.removeItem(
+      "harmoniq_audius_key"
+    );
+
+    showToast(
+      "Audius API Key removed"
+    );
+
+    return;
+  }
+
+
+  localStorage.setItem(
+    "harmoniq_audius_key",
+    cleanKey
+  );
+
+
+  showToast(
+    "Audius API Key saved"
+  );
+
+}
+
+
+window.openSettings =
+  openSettings;
+
+
+/* =========================================================
+   COUNTS
+   ========================================================= */
+
+function renderAllCounts(){
+
+  $("favoriteCount").textContent =
+    favorites.length +
+    (favorites.length === 1
+      ? " track"
+      : " tracks");
+
+
+  $("playlistCount").textContent =
+    playlists.length +
+    (playlists.length === 1
+      ? " playlist"
+      : " playlists");
+
+
+  $("recentCount").textContent =
+    recent.length +
+    (recent.length === 1
+      ? " track"
+      : " tracks");
+
+}
+
+
+/* =========================================================
+   ESCAPE HTML
+   ========================================================= */
+
+function escapeHtml(value){
+
+  return String(value)
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+
+}
+
+
+function escapeAttribute(value){
+
+  return String(value)
+    .replaceAll("&","&amp;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;");
+
+}
+
+
+/* =========================================================
+   LANGUAGE
+   ========================================================= */
+
+const translations = {
+
+  en:{
+    title:"Harmoniq AI",
+    home:"Home",
+    search:"Search",
+    library:"Library"
+  },
+
+  ar:{
+    title:"هارمونيك AI",
+    home:"الرئيسية",
+    search:"بحث",
+    library:"المكتبة"
+  },
+
+  tr:{
+    title:"Harmoniq AI",
+    home:"Ana Sayfa",
+    search:"Ara",
+    library:"Kütüphane"
+  },
+
+  fr:{
+    title:"Harmoniq AI",
+    home:"Accueil",
+    search:"Recherche",
+    library:"Bibliothèque"
+  },
+
+  es:{
+    title:"Harmoniq AI",
+    home:"Inicio",
+    search:"Buscar",
+    library:"Biblioteca"
+  },
+
+  de:{
+    title:"Harmoniq AI",
+    home:"Start",
+    search:"Suche",
+    library:"Bibliothek"
+  }
+
+};
+
+
+$("language")
+  .addEventListener("change",event => {
+
+    const lang =
+      event.target.value;
+
+    localStorage.setItem(
+      "harmoniq_language",
+      lang
+    );
+
+
+    document.documentElement.lang =
+      lang;
+
+
+    document.documentElement.dir =
+      lang === "ar"
+        ? "rtl"
+        : "ltr";
+
+
+    const t =
+      translations[lang] ||
+      translations.en;
+
+
+    document
+      .querySelectorAll(
+        ".navBtn[data-section='home'] span:last-child"
+      )
+      .forEach(el => {
+        el.textContent = t.home;
+      });
+
+
+    document
+      .querySelectorAll(
+        ".navBtn[data-section='search'] span:last-child"
+      )
+      .forEach(el => {
+        el.textContent = t.search;
+      });
+
+
+    document
+      .querySelectorAll(
+        ".navBtn[data-section='library'] span:last-child"
+      )
+      .forEach(el => {
+        el.textContent = t.library;
+      });
+
+  });
+
+
+/* =========================================================
+   LOAD SAVED DEVICE TRACKS
+   ========================================================= */
+
+deviceTracks.forEach(track => {
+
+  /*
+    Object URLs cannot survive a page reload.
+    Therefore previously selected device files
+    are shown only during the current session.
+  */
+
+});
+
+
+/* =========================================================
+   INITIALIZATION
+   ========================================================= */
+
+function initialize(){
+
+  renderHome();
+
+  renderAllCounts();
+
+  audio.volume =
+    Number(volumeControl.value);
+
+  const savedLanguage =
+    localStorage.getItem(
+      "harmoniq_language"
+    );
+
+  if(savedLanguage){
+
+    $("language").value =
+      savedLanguage;
+
+    $("language").dispatchEvent(
+      new Event("change")
+    );
+
+  }
+
+}
+
+
+initialize();
+
+</script>
 
 </body>
-        </html>
+</html> الجزء الثاني سيبدأ من هنا -->
+  
