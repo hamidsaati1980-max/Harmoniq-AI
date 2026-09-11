@@ -1,13 +1,21 @@
-const CACHE_NAME = "harmoniq-ai-v1";
+const CACHE_NAME = "harmoniq-ai-v2";
 
 const APP_FILES = [
   "/Harmoniq-AI/",
   "/Harmoniq-AI/index.html",
   "/Harmoniq-AI/styles.css",
   "/Harmoniq-AI/app.js",
-  "/Harmoniq-AI/manifest.json"
+  "/Harmoniq-AI/manifest.json",
+
+  "/Harmoniq-AI/locales/en.json",
+  "/Harmoniq-AI/locales/ar.json",
+  "/Harmoniq-AI/locales/tr.json",
+  "/Harmoniq-AI/locales/fr.json",
+  "/Harmoniq-AI/locales/es.json",
+  "/Harmoniq-AI/locales/de.json"
 ];
 
+/* Install */
 self.addEventListener("install", (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
@@ -18,6 +26,7 @@ self.addEventListener("install", (event) => {
   self.skipWaiting();
 });
 
+/* Activate */
 self.addEventListener("activate", (event) => {
   event.waitUntil(
     caches.keys().then((keys) => {
@@ -32,6 +41,7 @@ self.addEventListener("activate", (event) => {
   self.clients.claim();
 });
 
+/* Fetch */
 self.addEventListener("fetch", (event) => {
   if (event.request.method !== "GET") {
     return;
@@ -50,17 +60,23 @@ self.addEventListener("fetch", (event) => {
             networkResponse.status === 200 &&
             networkResponse.type === "basic"
           ) {
-            const responseClone = networkResponse.clone();
+            const clonedResponse =
+              networkResponse.clone();
 
             caches.open(CACHE_NAME).then((cache) => {
-              cache.put(event.request, responseClone);
+              cache.put(
+                event.request,
+                clonedResponse
+              );
             });
           }
 
           return networkResponse;
         })
         .catch(() => {
-          return caches.match("/Harmoniq-AI/index.html");
+          return caches.match(
+            "/Harmoniq-AI/index.html"
+          );
         });
     })
   );
