@@ -1,0 +1,2044 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<meta name="theme-color" content="#080b14">
+<meta name="description" content="Harmoniq AI - Smart Music Player">
+<title>Harmoniq AI</title>
+
+<style>
+*{box-sizing:border-box}
+:root{
+  --bg:#080b14;
+  --panel:#101522;
+  --panel2:#151b2b;
+  --text:#f5f7ff;
+  --muted:#8d96aa;
+  --accent:#7c5cff;
+  --accent2:#00d4ff;
+  --danger:#ff5577;
+  --border:rgba(255,255,255,.08);
+  --shadow:0 15px 45px rgba(0,0,0,.35);
+}
+*{scrollbar-width:thin;scrollbar-color:#333b52 transparent}
+body{
+  margin:0;
+  background:
+    radial-gradient(circle at 20% 0%,rgba(124,92,255,.15),transparent 35%),
+    radial-gradient(circle at 90% 10%,rgba(0,212,255,.08),transparent 30%),
+    var(--bg);
+  color:var(--text);
+  font-family:Arial,Helvetica,sans-serif;
+  min-height:100vh;
+}
+button,input,select{font:inherit}
+button{cursor:pointer}
+.app{display:flex;min-height:100vh}
+.sidebar{
+  width:245px;
+  background:rgba(10,13,22,.92);
+  border-right:1px solid var(--border);
+  padding:22px 14px;
+  position:fixed;
+  top:0;bottom:0;left:0;
+  z-index:50;
+}
+.logo{
+  font-size:24px;
+  font-weight:900;
+  padding:8px 12px 28px;
+  letter-spacing:-1px;
+}
+.logo span{color:var(--accent)}
+.nav-title{
+  color:#606a80;
+  font-size:11px;
+  text-transform:uppercase;
+  padding:12px;
+  letter-spacing:1px;
+}
+.nav-btn{
+  width:100%;
+  border:0;
+  background:transparent;
+  color:#aab2c4;
+  padding:12px;
+  border-radius:12px;
+  text-align:left;
+  margin:2px 0;
+  transition:.2s;
+}
+.nav-btn:hover,.nav-btn.active{
+  background:rgba(124,92,255,.14);
+  color:white;
+}
+.main{
+  margin-left:245px;
+  width:calc(100% - 245px);
+  padding-bottom:115px;
+}
+.topbar{
+  height:72px;
+  display:flex;
+  align-items:center;
+  gap:14px;
+  padding:0 28px;
+  position:sticky;
+  top:0;
+  z-index:30;
+  background:rgba(8,11,20,.78);
+  backdrop-filter:blur(18px);
+  border-bottom:1px solid var(--border);
+}
+.search-box{
+  flex:1;
+  max-width:650px;
+  position:relative;
+}
+.search-box input{
+  width:100%;
+  border:1px solid var(--border);
+  background:#121827;
+  color:white;
+  border-radius:14px;
+  padding:13px 18px 13px 44px;
+  outline:none;
+}
+.search-box input:focus{border-color:var(--accent)}
+.search-icon{
+  position:absolute;
+  left:15px;
+  top:12px;
+  color:#788197;
+}
+.content{padding:28px}
+.page{display:none}
+.page.active{display:block}
+.hero{
+  min-height:300px;
+  padding:35px;
+  border:1px solid var(--border);
+  border-radius:26px;
+  background:
+    linear-gradient(135deg,rgba(124,92,255,.23),rgba(0,212,255,.07)),
+    #111625;
+  box-shadow:var(--shadow);
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+}
+.hero h1{
+  font-size:clamp(34px,5vw,62px);
+  margin:0 0 12px;
+  letter-spacing:-2px;
+}
+.hero p{color:var(--muted);font-size:16px}
+.ai-box{
+  margin-top:25px;
+  display:flex;
+  gap:10px;
+  max-width:850px;
+}
+.ai-box input{
+  flex:1;
+  background:#090d17;
+  border:1px solid var(--border);
+  color:white;
+  padding:16px;
+  border-radius:15px;
+  outline:none;
+}
+.primary{
+  border:0;
+  border-radius:14px;
+  padding:13px 19px;
+  color:white;
+  background:linear-gradient(135deg,var(--accent),#5b7cff);
+  font-weight:800;
+  box-shadow:0 8px 25px rgba(124,92,255,.25);
+}
+.secondary{
+  border:1px solid var(--border);
+  background:#151b2a;
+  color:white;
+  padding:11px 15px;
+  border-radius:12px;
+}
+.section-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin:32px 0 15px;
+}
+.section-head h2{margin:0;font-size:21px}
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(180px,1fr));
+  gap:16px;
+}
+.card{
+  background:rgba(16,21,34,.85);
+  border:1px solid var(--border);
+  border-radius:17px;
+  padding:13px;
+  transition:.2s;
+}
+.card:hover{transform:translateY(-3px);border-color:rgba(124,92,255,.4)}
+.cover{
+  aspect-ratio:1;
+  width:100%;
+  border-radius:13px;
+  object-fit:cover;
+  background:linear-gradient(135deg,#222943,#121727);
+}
+.card-title{
+  font-weight:800;
+  margin-top:11px;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.card-sub{
+  color:var(--muted);
+  font-size:13px;
+  margin-top:5px;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.card-actions{
+  display:flex;
+  gap:7px;
+  margin-top:11px;
+}
+.icon-btn{
+  width:36px;
+  height:36px;
+  border:1px solid var(--border);
+  background:#151b2a;
+  color:white;
+  border-radius:10px;
+}
+.icon-btn:hover{background:#20283c}
+.result-list{display:flex;flex-direction:column;gap:8px}
+.result{
+  display:flex;
+  align-items:center;
+  gap:13px;
+  padding:10px;
+  border:1px solid var(--border);
+  border-radius:13px;
+  background:#101522;
+}
+.result img{
+  width:55px;
+  height:55px;
+  border-radius:10px;
+  object-fit:cover;
+}
+.result-info{flex:1;min-width:0}
+.result-title{
+  font-weight:800;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.result-sub{font-size:12px;color:var(--muted);margin-top:4px}
+.empty{
+  padding:35px;
+  text-align:center;
+  color:var(--muted);
+  border:1px dashed var(--border);
+  border-radius:18px;
+}
+.chips{
+  display:flex;
+  flex-wrap:wrap;
+  gap:9px;
+  margin-top:18px;
+}
+.chip{
+  border:1px solid var(--border);
+  background:#121827;
+  color:#ccd2e0;
+  border-radius:30px;
+  padding:9px 14px;
+}
+.player{
+  position:fixed;
+  bottom:0;
+  left:245px;
+  right:0;
+  height:88px;
+  z-index:60;
+  background:rgba(12,16,27,.96);
+  backdrop-filter:blur(18px);
+  border-top:1px solid var(--border);
+  display:flex;
+  align-items:center;
+  gap:15px;
+  padding:10px 20px;
+}
+.now-cover{
+  width:58px;
+  height:58px;
+  border-radius:10px;
+  object-fit:cover;
+}
+.now-info{width:210px;min-width:0}
+.now-title{font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.now-artist{font-size:12px;color:var(--muted);margin-top:5px}
+.controls{display:flex;align-items:center;gap:8px}
+.play{
+  width:43px;
+  height:43px;
+  border-radius:50%;
+  border:0;
+  background:white;
+  color:#080b14;
+  font-weight:900;
+}
+.progress-area{flex:1;display:flex;align-items:center;gap:8px}
+.progress{
+  width:100%;
+  accent-color:var(--accent);
+}
+.volume{width:100px;accent-color:var(--accent)}
+.modal-bg{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.72);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:100;
+  padding:20px;
+}
+.modal-bg.show{display:flex}
+.modal{
+  width:min(560px,100%);
+  max-height:90vh;
+  overflow:auto;
+  background:#111725;
+  border:1px solid var(--border);
+  border-radius:22px;
+  padding:25px;
+  box-shadow:var(--shadow);
+}
+.modal h2{margin-top:0}
+.field{margin:15px 0}
+.field label{
+  display:block;
+  color:#aeb6c7;
+  font-size:13px;
+  margin-bottom:7px;
+}
+.field input,.field select{
+  width:100%;
+  padding:13px;
+  border-radius:12px;
+  background:#080d17;
+  border:1px solid var(--border);
+  color:white;
+  outline:none;
+}
+.modal-actions{
+  display:flex;
+  justify-content:flex-end;
+  gap:9px;
+  margin-top:20px;
+}
+.mobile-nav{
+  display:none;
+}
+.toast{
+  position:fixed;
+  left:50%;
+  bottom:105px;
+  transform:translateX(-50%) translateY(20px);
+  background:#20283a;
+  border:1px solid var(--border);
+  padding:12px 18px;
+  border-radius:12px;
+  opacity:0;
+  pointer-events:none;
+  transition:.3s;
+  z-index:200;
+}
+.toast.show{
+  opacity:1;
+  transform:translateX(-50%) translateY(0);
+}
+.stat-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+  gap:13px;
+}
+.stat{
+  padding:20px;
+  background:#111725;
+  border:1px solid var(--border);
+  border-radius:16px;
+}
+.stat b{font-size:28px}
+.stat span{display:block;color:var(--muted);font-size:13px;margin-top:5px}
+.upload{
+  border:1px dashed rgba(124,92,255,.5);
+  padding:25px;
+  text-align:center;
+  border-radius:17px;
+  background:rgba(124,92,255,.06);
+}
+.ltr{text-align:left}
+.rtl{text-align:right;direction:rtl}
+@media(max-width:850px){
+  .sidebar{display:none}
+  .main{margin-left:0;width:100%;padding-bottom:150px}
+  .topbar{padding:0 14px;height:65px}
+  .content{padding:16px}
+  .hero{padding:25px;min-height:330px}
+  .ai-box{flex-direction:column}
+  .grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}
+  .player{
+    left:0;
+    height:92px;
+    bottom:58px;
+    padding:8px 12px;
+  }
+  .now-info{width:125px}
+  .volume{display:none}
+  .progress-area{position:absolute;left:12px;right:12px;bottom:2px}
+  .controls{gap:4px}
+  .controls .optional{display:none}
+  .mobile-nav{
+    display:flex;
+    position:fixed;
+    left:0;right:0;bottom:0;
+    height:58px;
+    z-index:80;
+    background:#0b0f19;
+    border-top:1px solid var(--border);
+    justify-content:space-around;
+  }
+  .mobile-nav button{
+    border:0;
+    background:transparent;
+    color:#8992a6;
+    font-size:10px;
+  }
+  .mobile-nav button.active{color:white}
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<aside class="sidebar">
+  <div class="logo">Harmoniq <span>AI</span></div>
+
+  <div class="nav-title" data-i18n="menu">Menu</div>
+
+  <button class="nav-btn active" data-page="home">🏠 <span data-i18n="home">Home</span></button>
+  <button class="nav-btn" data-page="search">🔎 <span data-i18n="search">Search</span></button>
+  <button class="nav-btn" data-page="library">📚 <span data-i18n="library">Library</span></button>
+  <button class="nav-btn" data-page="favorites">❤️ <span data-i18n="favorites">Favorites</span></button>
+  <button class="nav-btn" data-page="playlists">🎵 <span data-i18n="playlists">Playlists</span></button>
+  <button class="nav-btn" data-page="recent">🕘 <span data-i18n="recent">Recently Played</span></button>
+
+  <div class="nav-title" data-i18n="personal">Personal</div>
+
+  <button class="nav-btn" onclick="openSettings()">⚙️ <span data-i18n="settings">Settings</span></button>
+</aside>
+
+<main class="main">
+
+<header class="topbar">
+  <div class="search-box">
+    <span class="search-icon">🔎</span>
+    <input id="topSearch" data-placeholder="searchPlaceholder" placeholder="Search music, artists, moods..." autocomplete="off">
+  </div>
+  <button class="secondary" onclick="openSettings()">⚙️</button>
+</header>
+
+<div class="content">
+
+<!-- HOME -->
+<section class="page active" id="page-home">
+
+  <div class="hero">
+    <h1>Harmoniq <span style="color:var(--accent)">AI</span></h1>
+    <p data-i18n="heroText">Tell Harmoniq what you want to hear.</p>
+
+    <div class="ai-box">
+      <input id="aiInput" data-placeholder="aiPlaceholder"
+             placeholder="Try: relaxing music for sleep">
+      <button class="primary" onclick="aiSearch()">✨ <span data-i18n="askAI">Ask AI</span></button>
+    </div>
+
+    <div class="chips">
+      <button class="chip" onclick="quickAI('relaxing music')">😌 Relax</button>
+      <button class="chip" onclick="quickAI('music for sleep')">🌙 Sleep</button>
+      <button class="chip" onclick="quickAI('chill music')">🌊 Chill</button>
+      <button class="chip" onclick="quickAI('happy music')">😊 Happy</button>
+      <button class="chip" onclick="quickAI('meditation music')">🧘 Meditation</button>
+      <button class="chip" onclick="quickAI('instrumental music')">🎹 Instrumental</button>
+    </div>
+  </div>
+
+  <div class="section-head">
+    <h2 data-i18n="quickAccess">Quick Access</h2>
+  </div>
+
+  <div class="stat-grid">
+    <div class="stat">
+      <b id="statFav">0</b>
+      <span data-i18n="favorites">Favorites</span>
+    </div>
+    <div class="stat">
+      <b id="statPlaylist">0</b>
+      <span data-i18n="playlists">Playlists</span>
+    </div>
+    <div class="stat">
+      <b id="statRecent">0</b>
+      <span data-i18n="recent">Recently Played</span>
+    </div>
+  </div>
+
+  <div class="section-head">
+    <h2 data-i18n="deviceMusic">My Device Music</h2>
+    <button class="secondary" onclick="document.getElementById('fileInput').click()">＋ Add Music</button>
+  </div>
+
+  <div class="upload">
+    <p data-i18n="deviceText">Play music stored on your device.</p>
+    <button class="primary" onclick="document.getElementById('fileInput').click()">📁 Choose Audio Files</button>
+    <input id="fileInput" type="file" accept="audio/*,.mp3,.wav,.m4a,.aac,.ogg,.flac" multiple hidden>
+  </div>
+
+  <div id="deviceList" style="margin-top:15px"></div>
+
+  <div class="section-head">
+    <h2 data-i18n="recommended">Recommended</h2>
+  </div>
+
+  <div id="demoGrid" class="grid"></div>
+
+</section>
+
+<!-- SEARCH -->
+<section class="page" id="page-search">
+  <div class="section-head">
+    <h2 data-i18n="search">Search</h2>
+  </div>
+
+  <div class="ai-box">
+    <input id="searchInput" data-placeholder="searchPlaceholder" placeholder="Search music, artists, moods...">
+    <button class="primary" onclick="doSearch()">🔎 Search</button>
+  </div>
+
+  <div id="searchStatus" style="margin:18px 0;color:var(--muted)"></div>
+  <div id="searchResults" class="result-list"></div>
+</section>
+
+<!-- LIBRARY -->
+<section class="page" id="page-library">
+  <div class="section-head">
+    <h2 data-i18n="library">Library</h2>
+  </div>
+
+  <div class="grid">
+    <button class="card" onclick="showPage('favorites')">
+      <div style="font-size:48px">❤️</div>
+      <div class="card-title">Favorites</div>
+      <div class="card-sub">Your liked tracks</div>
+    </button>
+
+    <button class="card" onclick="showPage('playlists')">
+      <div style="font-size:48px">🎵</div>
+      <div class="card-title">Playlists</div>
+      <div class="card-sub">Your collections</div>
+    </button>
+
+    <button class="card" onclick="showPage('recent')">
+      <div style="font-size:48px">🕘</div>
+      <div class="card-title">Recently Played</div>
+      <div class="card-sub">Your listening history</div>
+    </button>
+  </div>
+</section>
+
+<!-- FAVORITES -->
+<section class="page" id="page-favorites">
+  <div class="section-head">
+    <h2 data-i18n="favorites">Favorites</h2>
+  </div>
+  <div id="favoriteList" class="result-list"></div>
+</section>
+
+<!-- PLAYLISTS -->
+<section class="page" id="page-playlists">
+  <div class="section-head">
+    <h2 data-i18n="playlists">Playlists</h2>
+    <button class="primary" onclick="createPlaylist()">＋ New Playlist</button>
+  </div>
+  <div id="playlistList" class="grid"></div>
+</section>
+
+<!-- RECENT -->
+<section class="page" id="page-recent">
+  <div class="section-head">
+    <h2 data-i18n="recent">Recently Played</h2>
+  </div>
+  <div id="recentList" class="result-list"></div>
+</section>
+
+</div>
+</main>
+</div>
+
+<!-- PLAYER -->
+<div class="player">
+  <img id="nowCover" class="now-cover" src="" alt="">
+  <div class="now-info">
+    <div id="nowTitle" class="now-title">Harmoniq AI</div>
+    <div id="nowArtist" class="now-artist">Ready to play</div>
+  </div>
+
+  <div class="controls">
+    <button class="icon-btn optional" onclick="previousTrack()">⏮</button>
+    <button class="icon-btn optional" onclick="toggleShuffle()">🔀</button>
+    <button class="play" id="playBtn" onclick="togglePlay()">▶</button>
+    <button class="icon-btn optional" onclick="nextTrack()">⏭</button>
+    <button class="icon-btn optional" onclick="toggleRepeat()">🔁</button>
+  </div>
+
+  <div class="progress-area">
+    <input id="progress" class="progress" type="range" min="0" max="100" value="0">
+  </div>
+
+  <input id="volume" class="volume" type="range" min="0" max="1" step=".01" value=".8">
+</div>
+
+<audio id="audio"></audio>
+
+<!-- MOBILE NAV -->
+<nav class="mobile-nav">
+  <button data-page="home">🏠<br>Home</button>
+  <button data-page="search">🔎<br>Search</button>
+  <button data-page="library">📚<br>Library</button>
+  <button data-page="favorites">❤️<br>Favorites</button>
+  <button onclick="openSettings()">⚙️<br>Settings</button>
+</nav>
+
+<!-- SETTINGS -->
+<div id="settingsModal" class="modal-bg">
+  <div class="modal">
+    <h2>⚙️ Settings</h2>
+
+    <div class="field">
+      <label>Language</label>
+      <select id="language">
+        <option value="en">English</option>
+        <option value="ar">العربية</option>
+        <option value="tr">Türkçe</option>
+        <option value="fr">Français</option>
+        <option value="es">Español</option>
+        <option value="de">Deutsch</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label>Audius API Key</label>
+      <input id="apiKey" type="password" placeholder="Paste your Audius API key here">
+      <small style="color:var(--muted)">
+        Stored only in this browser. Never share your API key with anyone.
+      </small>
+    </div>
+
+    <div class="field">
+      <label>AI Search Provider</label>
+      <select id="provider">
+        <option value="audius">Audius Music Search</option>
+      </select>
+    </div>
+
+    <div class="modal-actions">
+      <button class="secondary" onclick="closeSettings()">Cancel</button>
+      <button class="primary" onclick="saveSettings()">Save Settings</button>
+    </div>
+  </div>
+</div>
+
+<!-- PLAYLIST MODAL -->
+<div id="playlistModal" class="modal-bg">
+  <div class="modal">
+    <h2>🎵 New Playlist</h2>
+
+    <div class="field">
+      <label>Playlist name</label>
+      <input id="playlistName" placeholder="My Playlist">
+    </div>
+
+    <div class="modal-actions">
+      <button class="secondary" onclick="closePlaylistModal()">Cancel</button>
+      <button class="primary" onclick="savePlaylist()">Create</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast" class="toast"></div>
+
+<script>
+/* ============================================================
+   HARMONIQ AI
+   SINGLE-FILE EDITION
+   ============================================================ */
+
+const $ = id => document.getElementById(id);
+
+const audio = $("audio");
+
+let tracks = [];
+let deviceTracks = [];
+let currentIndex = -1;
+
+let shuffle = false;
+let repeat = false;
+
+let favorites = JSON.parse(localStorage.getItem("harmoniq_favorites") || "[]");
+let recent = JSON.parse(localStorage.getItem("harmoniq_recent") || "[]");
+let playlists = JSON.parse(localStorage.getItem("harmoniq_playlists") || "[]");
+
+let settings = JSON.parse(localStorage.getItem("harmoniq_settings") || "{}");
+
+let language = localStorage.getItem("harmoniq_language") || "en";
+
+const demoTracks = [
+  {
+    id:"demo1",
+    title:"Afterglow",
+    artist:"Luna Vale",
+    genre:"Chill",
+    color:"linear-gradient(135deg,#7357ff,#00c6ff)"
+  },
+  {
+    id:"demo2",
+    title:"Velvet Sky",
+    artist:"Noah Kade",
+    genre:"Relax",
+    color:"linear-gradient(135deg,#ff6aa2,#7357ff)"
+  },
+  {
+    id:"demo3",
+    title:"Open Water",
+    artist:"Kairo Field",
+    genre:"Ambient",
+    color:"linear-gradient(135deg,#00d4ff,#1266e8)"
+  },
+  {
+    id:"demo4",
+    title:"Lucid Dream",
+    artist:"Harmoniq",
+    genre:"Meditation",
+    color:"linear-gradient(135deg,#9d6bff,#ff7ccf)"
+  }
+];
+
+/* ============================================================
+   TRANSLATIONS
+   ============================================================ */
+
+const translations = {
+
+en:{
+menu:"Menu",
+personal:"Personal",
+home:"Home",
+search:"Search",
+library:"Library",
+favorites:"Favorites",
+playlists:"Playlists",
+recent:"Recently Played",
+settings:"Settings",
+heroText:"Tell Harmoniq what you want to hear.",
+askAI:"Ask AI",
+quickAccess:"Quick Access",
+deviceMusic:"My Device Music",
+deviceText:"Play music stored on your device.",
+recommended:"Recommended",
+searchPlaceholder:"Search music, artists, moods..."
+},
+
+ar:{
+menu:"القائمة",
+personal:"شخصي",
+home:"الرئيسية",
+search:"البحث",
+library:"المكتبة",
+favorites:"المفضلة",
+playlists:"قوائم التشغيل",
+recent:"تم تشغيلها مؤخراً",
+settings:"الإعدادات",
+heroText:"أخبر Harmoniq بالموسيقى التي تريد سماعها.",
+askAI:"اسأل الذكاء الاصطناعي",
+quickAccess:"الوصول السريع",
+deviceMusic:"موسيقى جهازي",
+deviceText:"شغّل الموسيقى الموجودة على جهازك.",
+recommended:"مقترحات",
+searchPlaceholder:"ابحث عن موسيقى أو فنان أو مزاج..."
+},
+
+tr:{
+menu:"Menü",
+personal:"Kişisel",
+home:"Ana Sayfa",
+search:"Ara",
+library:"Kütüphane",
+favorites:"Favoriler",
+playlists:"Çalma Listeleri",
+recent:"Son Çalınanlar",
+settings:"Ayarlar",
+heroText:"Harmoniq'e ne dinlemek istediğini söyle.",
+askAI:"AI'ya Sor",
+quickAccess:"Hızlı Erişim",
+deviceMusic:"Cihaz Müziğim",
+deviceText:"Cihazındaki müzikleri çal.",
+recommended:"Önerilen",
+searchPlaceholder:"Müzik, sanatçı veya ruh hali ara..."
+},
+
+fr:{
+menu:"Menu",
+personal:"Personnel",
+home:"Accueil",
+search:"Recherche",
+library:"Bibliothèque",
+favorites:"Favoris",
+playlists:"Playlists",
+recent:"Écoutés récemment",
+settings:"Paramètres",
+heroText:"Dites à Harmoniq ce que vous voulez écouter.",
+askAI:"Demander à l'IA",
+quickAccess:"Accès rapide",
+deviceMusic:"Musique de mon appareil",
+deviceText:"Lisez la musique de votre appareil.",
+recommended:"Recommandé",
+searchPlaceholder:"Rechercher musique, artistes, ambiances..."
+},
+
+es:{
+menu:"Menú",
+personal:"Personal",
+home:"Inicio",
+search:"Buscar",
+library:"Biblioteca",
+favorites:"Favoritos",
+playlists:"Listas",
+recent:"Reproducido recientemente",
+settings:"Configuración",
+heroText:"Dile a Harmoniq qué quieres escuchar.",
+askAI:"Preguntar a la IA",
+quickAccess:"Acceso rápido",
+deviceMusic:"Música de mi dispositivo",
+deviceText:"Reproduce música almacenada en tu dispositivo.",
+recommended:"Recomendado",
+searchPlaceholder:"Buscar música, artistas o estados de ánimo..."
+},
+
+de:{
+menu:"Menü",
+personal:"Persönlich",
+home:"Startseite",
+search:"Suche",
+library:"Bibliothek",
+favorites:"Favoriten",
+playlists:"Playlists",
+recent:"Zuletzt gespielt",
+settings:"Einstellungen",
+heroText:"Sag Harmoniq, was du hören möchtest.",
+askAI:"KI fragen",
+quickAccess:"Schnellzugriff",
+deviceMusic:"Meine Gerätemusik",
+deviceText:"Musik von deinem Gerät abspielen.",
+recommended:"Empfohlen",
+searchPlaceholder:"Musik, Künstler oder Stimmung suchen..."
+}
+
+};
+
+/* ============================================================
+   INIT
+   ============================================================ */
+
+document.addEventListener("DOMContentLoaded",()=>{
+
+  $("language").value=language;
+  $("apiKey").value=settings.apiKey || "";
+  $("provider").value=settings.provider || "audius";
+
+  renderDemo();
+  renderAll();
+  updateLanguage();
+
+  $("fileInput").addEventListener("change",handleFiles);
+
+  $("topSearch").addEventListener("keydown",e=>{
+    if(e.key==="Enter"){
+      $("searchInput").value=e.target.value;
+      showPage("search");
+      doSearch();
+    }
+  });
+
+  $("searchInput").addEventListener("keydown",e=>{
+    if(e.key==="Enter") doSearch();
+  });
+
+  $("aiInput").addEventListener("keydown",e=>{
+    if(e.key==="Enter") aiSearch();
+  });
+
+  $("progress").addEventListener("input",()=>{
+    if(audio.duration){
+      audio.currentTime=(Number($("progress").value)/100)*audio.duration;
+    }
+  });
+
+  $("volume").addEventListener("input",()=>{
+    audio.volume=Number($("volume").value);
+    localStorage.setItem("harmoniq_volume",$("volume").value);
+  });
+
+  audio.volume=Number(localStorage.getItem("harmoniq_volume") || .8);
+
+  audio.addEventListener("timeupdate",updateProgress);
+
+  audio.addEventListener("ended",()=>{
+    if(repeat){
+      audio.currentTime=0;
+      audio.play();
+    }else{
+      nextTrack();
+    }
+  });
+
+  updateStats();
+});
+
+/* ============================================================
+   NAVIGATION
+   ============================================================ */
+
+document.querySelectorAll("[data-page]").forEach(btn=>{
+  btn.addEventListener("click",()=>{
+    showPage(btn.dataset.page);
+  });
+});
+
+function showPage(page){
+
+  document.querySelectorAll(".page").forEach(p=>{
+    p.classList.remove("active");
+  });
+
+  const target=$("page-"+page);
+
+  if(target) target.classList.add("active");
+
+  document.querySelectorAll(".nav-btn").forEach(b=>{
+    b.classList.toggle("active",b.dataset.page===page);
+  });
+
+  document.querySelectorAll(".mobile-nav button[data-page]").forEach(b=>{
+    b.classList.toggle("active",b.dataset.page===page);
+  });
+
+  if(page==="favorites") renderFavorites();
+  if(page==="playlists") renderPlaylists();
+  if(page==="recent") renderRecent();
+}
+
+/* ============================================================
+   DEMO MUSIC
+   ============================================================ */
+
+function renderDemo(){
+
+  $("demoGrid").innerHTML="";
+
+  demoTracks.forEach(track=>{
+
+    const div=document.createElement("div");
+
+    div.className="card";
+
+    div.innerHTML=`
+      <div class="cover" style="background:${track.color}"></div>
+      <div class="card-title">${escapeHTML(track.title)}</div>
+      <div class="card-sub">${escapeHTML(track.artist)} • ${track.genre}</div>
+
+      <div class="card-actions">
+        <button class="icon-btn" onclick="playDemo('${track.id}')">▶</button>
+        <button class="icon-btn" onclick="toggleFavoriteDemo('${track.id}')">❤️</button>
+      </div>
+    `;
+
+    $("demoGrid").appendChild(div);
+  });
+}
+
+function playDemo(id){
+
+  const track=demoTracks.find(t=>t.id===id);
+
+  if(!track)return;
+
+  /*
+    Demo tracks use generated test audio.
+    This keeps the application functional without
+    requiring a paid music API.
+  */
+
+  const wav=createDemoWav(track);
+
+  playTrack({
+    id:track.id,
+    title:track.title,
+    artist:track.artist,
+    artwork:null,
+    url:wav,
+    local:true
+  });
+}
+
+function createDemoWav(track){
+
+  const sampleRate=44100;
+  const duration=8;
+  const samples=sampleRate*duration;
+
+  const buffer=new ArrayBuffer(44+samples*2);
+  const view=new DataView(buffer);
+
+  function writeString(offset,str){
+    for(let i=0;i<str.length;i++){
+      view.setUint8(offset+i,str.charCodeAt(i));
+    }
+  }
+
+  writeString(0,"RIFF");
+  view.setUint32(4,36+samples*2,true);
+  writeString(8,"WAVE");
+  writeString(12,"fmt ");
+  view.setUint32(16,16,true);
+  view.setUint16(20,1,true);
+  view.setUint16(22,1,true);
+  view.setUint32(24,sampleRate,true);
+  view.setUint32(28,sampleRate*2,true);
+  view.setUint16(32,2,true);
+  view.setUint16(34,16,true);
+  writeString(36,"data");
+  view.setUint32(40,samples*2,true);
+
+  let freq=track.id==="demo1"?220:
+           track.id==="demo2"?260:
+           track.id==="demo3"?180:330;
+
+  for(let i=0;i<samples;i++){
+
+    const t=i/sampleRate;
+
+    const wave=
+      Math.sin(2*Math.PI*freq*t)*.12+
+      Math.sin(2*Math.PI*(freq/2)*t)*.05;
+
+    const fade=Math.min(1,i/3000)*Math.min(1,(samples-i)/3000);
+
+    view.setInt16(44+i*2,wave*fade*32767,true);
+  }
+
+  return URL.createObjectURL(
+    new Blob([buffer],{type:"audio/wav"})
+  );
+}
+
+function toggleFavoriteDemo(id){
+
+  const track=demoTracks.find(t=>t.id===id);
+
+  if(!track)return;
+
+  toggleFavorite({
+    id:track.id,
+    title:track.title,
+    artist:track.artist,
+    artwork:null,
+    url:null
+  });
+}
+
+/* ============================================================
+   DEVICE MUSIC
+   ============================================================ */
+
+function handleFiles(e){
+
+  const files=[...e.target.files];
+
+  files.forEach(file=>{
+
+    const track={
+      id:"device_"+Date.now()+"_"+Math.random().toString(36).slice(2),
+      title:file.name.replace(/\.[^/.]+$/,""),
+      artist:"My Device",
+      artwork:null,
+      file:file,
+      url:null,
+      local:true
+    };
+
+    deviceTracks.push(track);
+  });
+
+  renderDeviceTracks();
+
+  toast(files.length+" music file(s) added");
+}
+
+function renderDeviceTracks(){
+
+  if(!deviceTracks.length){
+    $("deviceList").innerHTML="";
+    return;
+  }
+
+  $("deviceList").innerHTML="";
+
+  const list=document.createElement("div");
+  list.className="result-list";
+
+  deviceTracks.forEach(track=>{
+
+    const row=document.createElement("div");
+    row.className="result";
+
+    row.innerHTML=`
+      <div style="
+        width:55px;height:55px;border-radius:10px;
+        display:grid;place-items:center;
+        background:linear-gradient(135deg,#7c5cff,#00d4ff);
+        font-size:24px">🎵</div>
+
+      <div class="result-info">
+        <div class="result-title">${escapeHTML(track.title)}</div>
+        <div class="result-sub">My Device</div>
+      </div>
+
+      <button class="icon-btn"
+        onclick="playDeviceTrack('${track.id}')">▶</button>
+
+      <button class="icon-btn"
+        onclick="toggleFavoriteById('${track.id}')">❤️</button>
+    `;
+
+    list.appendChild(row);
+  });
+
+  $("deviceList").appendChild(list);
+}
+
+function playDeviceTrack(id){
+
+  const track=deviceTracks.find(t=>t.id===id);
+
+  if(!track)return;
+
+  if(!track.url){
+    track.url=URL.createObjectURL(track.file);
+  }
+
+  playTrack(track);
+}
+
+/* ============================================================
+   PLAYER
+   ============================================================ */
+
+function playTrack(track){
+
+  if(!track)return;
+
+  tracks=[
+    ...deviceTracks,
+    ...demoTracks.map(t=>({
+      ...t,
+      url:t.url || null
+    }))
+  ];
+
+  currentIndex=tracks.findIndex(t=>t.id===track.id);
+
+  if(currentIndex<0){
+    tracks.push(track);
+    currentIndex=tracks.length-1;
+  }
+
+  if(track.url){
+    audio.src=track.url;
+  }else{
+    const demo=demoTracks.find(t=>t.id===track.id);
+
+    if(demo){
+      audio.src=createDemoWav(demo);
+    }
+  }
+
+  $("nowTitle").textContent=track.title || "Unknown";
+  $("nowArtist").textContent=track.artist || "Unknown Artist";
+
+  $("nowCover").style.background=
+    "linear-gradient(135deg,#7c5cff,#00d4ff)";
+
+  audio.play().then(()=>{
+    $("playBtn").textContent="⏸";
+  }).catch(()=>{
+    toast("Press play to start audio");
+  });
+
+  addRecent(track);
+}
+
+function togglePlay(){
+
+  if(!audio.src){
+    if(demoTracks.length){
+      playDemo(demoTracks[0].id);
+    }
+    return;
+  }
+
+  if(audio.paused){
+    audio.play();
+    $("playBtn").textContent="⏸";
+  }else{
+    audio.pause();
+    $("playBtn").textContent="▶";
+  }
+}
+
+function nextTrack(){
+
+  if(!tracks.length)return;
+
+  if(shuffle){
+    currentIndex=Math.floor(Math.random()*tracks.length);
+  }else{
+    currentIndex=(currentIndex+1)%tracks.length;
+  }
+
+  const track=tracks[currentIndex];
+
+  if(track.file){
+    if(!track.url)track.url=URL.createObjectURL(track.file);
+  }
+
+  if(track.url){
+    audio.src=track.url;
+  }else{
+    const demo=demoTracks.find(t=>t.id===track.id);
+
+    if(demo)audio.src=createDemoWav(demo);
+  }
+
+  $("nowTitle").textContent=track.title;
+  $("nowArtist").textContent=track.artist;
+
+  audio.play();
+  $("playBtn").textContent="⏸";
+
+  addRecent(track);
+}
+
+function previousTrack(){
+
+  if(!tracks.length)return;
+
+  currentIndex=(currentIndex-1+tracks.length)%tracks.length;
+
+  const track=tracks[currentIndex];
+
+  if(track.file){
+    if(!track.url)track.url=URL.createObjectURL(track.file);
+  }
+
+  if(track.url){
+    audio.src=track.url;
+  }else{
+    const demo=demoTracks.find(t=>t.id===track.id);
+    if(demo)audio.src=createDemoWav(demo);
+  }
+
+  $("nowTitle").textContent=track.title;
+  $("nowArtist").textContent=track.artist;
+
+  audio.play();
+  $("playBtn").textContent="⏸";
+
+  addRecent(track);
+}
+
+function toggleShuffle(){
+  shuffle=!shuffle;
+  toast(shuffle?"Shuffle ON":"Shuffle OFF");
+}
+
+function toggleRepeat(){
+  repeat=!repeat;
+  toast(repeat?"Repeat ON":"Repeat OFF");
+}
+
+function updateProgress(){
+
+  if(!audio.duration)return;
+
+  $("progress").value=(audio.currentTime/audio.duration)*100;
+}
+
+/* ============================================================
+   FAVORITES
+   ============================================================ */
+
+function toggleFavorite(track){
+
+  const index=favorites.findIndex(x=>x.id===track.id);
+
+  if(index>=0){
+    favorites.splice(index,1);
+    toast("Removed from favorites");
+  }else{
+    favorites.unshift({
+      id:track.id,
+      title:track.title,
+      artist:track.artist,
+      artwork:track.artwork||null,
+      url:track.url||null
+    });
+    toast("Added to favorites ❤️");
+  }
+
+  localStorage.setItem(
+    "harmoniq_favorites",
+    JSON.stringify(favorites)
+  );
+
+  renderFavorites();
+  updateStats();
+}
+
+function toggleFavoriteById(id){
+
+  let track=deviceTracks.find(t=>t.id===id);
+
+  if(!track){
+    track=demoTracks.find(t=>t.id===id);
+  }
+
+  if(track)toggleFavorite(track);
+}
+
+function renderFavorites(){
+
+  renderTrackList(
+    $("favoriteList"),
+    favorites,
+    "No favorite tracks yet."
+  );
+}
+
+/* ============================================================
+   RECENT
+   ============================================================ */
+
+function addRecent(track){
+
+  recent=recent.filter(x=>x.id!==track.id);
+
+  recent.unshift({
+    id:track.id,
+    title:track.title,
+    artist:track.artist,
+    artwork:track.artwork||null,
+    url:track.url||null
+  });
+
+  recent=recent.slice(0,50);
+
+  localStorage.setItem(
+    "harmoniq_recent",
+    JSON.stringify(recent)
+  );
+
+  renderRecent();
+  updateStats();
+}
+
+function renderRecent(){
+
+  renderTrackList(
+    $("recentList"),
+    recent,
+    "No recently played music."
+  );
+}
+
+/* ============================================================
+   GENERIC TRACK LIST
+   ============================================================ */
+
+function renderTrackList(container,list,emptyText){
+
+  container.innerHTML="";
+
+  if(!list.length){
+
+    container.innerHTML=`<div class="empty">${emptyText}</div>`;
+
+    return;
+  }
+
+  list.forEach(track=>{
+
+    const row=document.createElement("div");
+
+    row.className="result";
+
+    row.innerHTML=`
+
+      <div style="
+        width:55px;height:55px;border-radius:10px;
+        display:grid;place-items:center;
+        background:linear-gradient(135deg,#7c5cff,#00d4ff);
+        font-size:22px">🎵</div>
+
+      <div class="result-info">
+        <div class="result-title">${escapeHTML(track.title)}</div>
+        <div class="result-sub">${escapeHTML(track.artist||"Unknown")}</div>
+      </div>
+
+      <button class="icon-btn"
+        onclick="playStoredTrack('${escapeAttr(track.id)}')">▶</button>
+
+      <button class="icon-btn"
+        onclick="toggleFavoriteById('${escapeAttr(track.id)}')">❤️</button>
+    `;
+
+    container.appendChild(row);
+  });
+}
+
+function playStoredTrack(id){
+
+  let track=
+    deviceTracks.find(t=>t.id===id) ||
+    demoTracks.find(t=>t.id===id) ||
+    favorites.find(t=>t.id===id) ||
+    recent.find(t=>t.id===id);
+
+  if(!track)return;
+
+  if(track.file){
+    playDeviceTrack(id);
+    return;
+  }
+
+  if(track.id.startsWith("demo")){
+    playDemo(track.id);
+    return;
+  }
+
+  if(track.url){
+    playTrack(track);
+  }
+}
+
+/* ============================================================
+   PLAYLISTS
+   ============================================================ */
+
+function createPlaylist(){
+  $("playlistName").value="";
+  $("playlistModal").classList.add("show");
+  setTimeout(()=>$("playlistName").focus(),100);
+}
+
+function closePlaylistModal(){
+  $("playlistModal").classList.remove("show");
+}
+
+function savePlaylist(){
+
+  const name=$("playlistName").value.trim();
+
+  if(!name){
+    toast("Enter a playlist name");
+    return;
+  }
+
+  playlists.push({
+    id:"pl_"+Date.now(),
+    name:name,
+    tracks:[]
+  });
+
+  localStorage.setItem(
+    "harmoniq_playlists",
+    JSON.stringify(playlists)
+  );
+
+  closePlaylistModal();
+
+  renderPlaylists();
+  updateStats();
+
+  toast("Playlist created 🎵");
+}
+
+function renderPlaylists(){
+
+  $("playlistList").innerHTML="";
+
+  if(!playlists.length){
+
+    $("playlistList").innerHTML=`
+      <div class="empty" style="grid-column:1/-1">
+        No playlists yet. Create your first playlist.
+      </div>
+    `;
+
+    return;
+  }
+
+  playlists.forEach(pl=>{
+
+    const card=document.createElement("div");
+
+    card.className="card";
+
+    card.innerHTML=`
+      <div class="cover"
+           style="display:grid;place-items:center;
+           font-size:60px;
+           background:linear-gradient(135deg,#7c5cff,#00d4ff)">
+        🎵
+      </div>
+
+      <div class="card-title">${escapeHTML(pl.name)}</div>
+
+      <div class="card-sub">
+        ${pl.tracks.length} tracks
+      </div>
+
+      <div class="card-actions">
+        <button class="icon-btn"
+          onclick="deletePlaylist('${pl.id}')">🗑</button>
+      </div>
+    `;
+
+    $("playlistList").appendChild(card);
+  });
+}
+
+function deletePlaylist(id){
+
+  playlists=playlists.filter(p=>p.id!==id);
+
+  localStorage.setItem(
+    "harmoniq_playlists",
+    JSON.stringify(playlists)
+  );
+
+  renderPlaylists();
+  updateStats();
+
+  toast("Playlist deleted");
+}
+
+/* ============================================================
+   SEARCH
+   ============================================================ */
+
+async function doSearch(query=null){
+
+  const q=(query || $("searchInput").value).trim();
+
+  if(!q){
+    toast("Type something to search");
+    return;
+  }
+
+  showPage("search");
+
+  $("searchStatus").textContent="Searching Audius...";
+  $("searchResults").innerHTML="";
+
+  const key=settings.apiKey;
+
+  if(!key){
+
+    $("searchStatus").textContent=
+      "Add your Audius API key in Settings to search online music.";
+
+    $("searchResults").innerHTML=`
+
+      <div class="empty">
+
+        <div style="font-size:40px">🔑</div>
+
+        <h3>Audius API key required</h3>
+
+        <p>
+          Open Settings and add your Audius API key.
+          The key is stored locally in this browser.
+        </p>
+
+        <button class="primary" onclick="openSettings()">
+          Open Settings
+        </button>
+
+      </div>
+    `;
+
+    return;
+  }
+
+  try{
+
+    const url=
+      "https://api.audius.co/v1/tracks/search"+
+      "?query="+encodeURIComponent(q)+
+      "&limit=30"+
+      "&api_key="+encodeURIComponent(key);
+
+    const response=await fetch(url);
+
+    if(!response.ok){
+      throw new Error("Audius request failed");
+    }
+
+    const data=await response.json();
+
+    const results=(data.data || []).map(t=>({
+
+      id:"audius_"+t.id,
+
+      audiusId:t.id,
+
+      title:t.title || "Unknown",
+
+      artist:
+        t.user?.name ||
+        t.user?.handle ||
+        "Unknown Artist",
+
+      artwork:
+        t.artwork?(
+          t.artwork["480x480"] ||
+          t.artwork["1000x1000"] ||
+          t.artwork["150x150"]
+        ):null,
+
+      url:
+        "https://api.audius.co/v1/tracks/"+
+        encodeURIComponent(t.id)+
+        "/stream?api_key="+
+        encodeURIComponent(key),
+
+      source:"Audius"
+
+    }));
+
+    $("searchStatus").textContent=
+      results.length+
+      " result(s) found for “"+
+      q+
+      "”";
+
+    renderSearchResults(results);
+
+  }catch(error){
+
+    console.error(error);
+
+    $("searchStatus").textContent="Search failed.";
+
+    $("searchResults").innerHTML=`
+      <div class="empty">
+        ❌ Could not reach Audius.
+        <br><br>
+        Check your API key or internet connection.
+      </div>
+    `;
+  }
+}
+
+function renderSearchResults(results){
+
+  $("searchResults").innerHTML="";
+
+  if(!results.length){
+
+    $("searchResults").innerHTML=
+      `<div class="empty">No music found.</div>`;
+
+    return;
+  }
+
+  results.forEach(track=>{
+
+    const row=document.createElement("div");
+
+    row.className="result";
+
+    const artwork=track.artwork ||
+      "data:image/svg+xml;charset=UTF-8,"+
+      encodeURIComponent(`
+        <svg xmlns="http://www.w3.org/2000/svg" width="100" height="100">
+          <rect width="100%" height="100%" fill="#171d30"/>
+          <text x="50%" y="55%" text-anchor="middle"
+                fill="white" font-size="38">♪</text>
+        </svg>
+      `);
+
+    row.innerHTML=`
+
+      <img src="${artwork}" alt="">
+
+      <div class="result-info">
+
+        <div class="result-title">
+          ${escapeHTML(track.title)}
+        </div>
+
+        <div class="result-sub">
+          ${escapeHTML(track.artist)}
+          • Audius
+        </div>
+
+      </div>
+
+      <button class="icon-btn"
+        onclick='playOnlineTrack(${JSON.stringify(track)})'>
+        ▶
+      </button>
+
+      <button class="icon-btn"
+        onclick='toggleFavorite(${JSON.stringify(track)})'>
+        ❤️
+      </button>
+
+    `;
+
+    $("searchResults").appendChild(row);
+  });
+}
+
+function playOnlineTrack(track){
+
+  playTrack({
+    id:track.id,
+    title:track.title,
+    artist:track.artist,
+    artwork:track.artwork,
+    url:track.url
+  });
+
+  toast("Playing from Audius 🎵");
+}
+
+/* ============================================================
+   AI SEARCH
+   ============================================================ */
+
+function aiSearch(){
+
+  const text=$("aiInput").value.trim();
+
+  if(!text){
+    toast("Tell Harmoniq what you want to hear");
+    return;
+  }
+
+  const query=understandMusicRequest(text);
+
+  $("searchInput").value=query;
+
+  showPage("search");
+
+  doSearch(query);
+}
+
+function quickAI(text){
+
+  $("aiInput").value=text;
+
+  aiSearch();
+}
+
+function understandMusicRequest(text){
+
+  let q=text.toLowerCase().trim();
+
+  /*
+    Lightweight local AI intent layer.
+    No paid AI API required.
+  */
+
+  const replacements={
+
+    "اغاني نوم":"sleep music",
+    "موسيقى نوم":"sleep music",
+    "موسيقى للنوم":"sleep music",
+    "استرخاء":"relaxing music",
+    "موسيقى استرخاء":"relaxing music",
+    "تأمل":"meditation music",
+    "موسيقى تأمل":"meditation music",
+    "موسيقى هادئة":"calm music",
+    "هادئة":"calm music",
+    "رومانسية":"romantic music",
+    "حزينة":"sad music",
+    "سعيدة":"happy music",
+    "موسيقى حزينة":"sad music",
+    "موسيقى سعيدة":"happy music"
+  };
+
+  for(const key in replacements){
+
+    if(q.includes(key)){
+      q=q.replace(key,replacements[key]);
+    }
+  }
+
+  if(q.includes("sleep"))q+=" ambient";
+  if(q.includes("relax"))q+=" chill";
+  if(q.includes("meditation"))q+=" ambient";
+  if(q.includes("study"))q+=" instrumental";
+  if(q.includes("focus"))q+=" instrumental";
+
+  return q;
+}
+
+/* ============================================================
+   SETTINGS
+   ============================================================ */
+
+function openSettings(){
+
+  $("language").value=language;
+  $("apiKey").value=settings.apiKey || "";
+  $("provider").value=settings.provider || "audius";
+
+  $("settingsModal").classList.add("show");
+}
+
+function closeSettings(){
+  $("settingsModal").classList.remove("show");
+}
+
+function saveSettings(){
+
+  language=$("language").value;
+
+  settings={
+    apiKey:$("apiKey").value.trim(),
+    provider:$("provider").value
+  };
+
+  localStorage.setItem(
+    "harmoniq_settings",
+    JSON.stringify(settings)
+  );
+
+  localStorage.setItem(
+    "harmoniq_language",
+    language
+  );
+
+  updateLanguage();
+
+  closeSettings();
+
+  toast("Settings saved successfully");
+}
+
+/* ============================================================
+   LANGUAGE
+   ============================================================ */
+
+function updateLanguage(){
+
+  const dict=translations[language] || translations.en;
+
+  document.documentElement.lang=language;
+
+  document.documentElement.dir=
+    language==="ar" ? "rtl" : "ltr";
+
+  document.body.classList.toggle(
+    "rtl",
+    language==="ar"
+  );
+
+  document.querySelectorAll("[data-i18n]").forEach(el=>{
+
+    const key=el.dataset.i18n;
+
+    if(dict[key]){
+      el.textContent=dict[key];
+    }
+  });
+
+  document.querySelectorAll("[data-placeholder]").forEach(el=>{
+
+    const key=el.dataset.placeholder;
+
+    if(dict[key]){
+      el.placeholder=dict[key];
+    }
+  });
+}
+
+/* ============================================================
+   STATS
+   ============================================================ */
+
+function updateStats(){
+
+  $("statFav").textContent=favorites.length;
+
+  $("statPlaylist").textContent=playlists.length;
+
+  $("statRecent").textContent=recent.length;
+}
+
+/* ============================================================
+   TOAST
+   ============================================================ */
+
+let toastTimer;
+
+function toast(message){
+
+  const el=$("toast");
+
+  el.textContent=message;
+
+  el.classList.add("show");
+
+  clearTimeout(toastTimer);
+
+  toastTimer=setTimeout(()=>{
+    el.classList.remove("show");
+  },2600);
+}
+
+/* ============================================================
+   HELPERS
+   ============================================================ */
+
+function escapeHTML(value){
+
+  return String(value ?? "")
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+}
+
+function escapeAttr(value){
+
+  return String(value ?? "")
+    .replace(/\\/g,"\\\\")
+    .replace(/'/g,"\\'");
+}
+
+/* ============================================================
+   PLAYLIST MODAL OUTSIDE CLICK
+   ============================================================ */
+
+$("settingsModal").addEventListener("click",e=>{
+  if(e.target===$("settingsModal")){
+    closeSettings();
+  }
+});
+
+$("playlistModal").addEventListener("click",e=>{
+  if(e.target===$("playlistModal")){
+    closePlaylistModal();
+  }
+});
+
+/* ============================================================
+   KEYBOARD SHORTCUTS
+   ============================================================ */
+
+document.addEventListener("keydown",e=>{
+
+  if(e.code==="Space" &&
+     document.activeElement.tagName!=="INPUT" &&
+     document.activeElement.tagName!=="SELECT"){
+
+    e.preventDefault();
+    togglePlay();
+  }
+
+  if(e.key==="ArrowRight" && e.ctrlKey){
+    nextTrack();
+  }
+
+  if(e.key==="ArrowLeft" && e.ctrlKey){
+    previousTrack();
+  }
+});
+
+/* ============================================================
+   PWA INSTALL PREPARATION
+   ============================================================ */
+
+(function preparePWA(){
+
+  const manifest={
+    name:"Harmoniq AI",
+    short_name:"Harmoniq",
+    description:"Smart AI Music Player",
+    start_url:".",
+    display:"standalone",
+    background_color:"#080b14",
+    theme_color:"#080b14",
+    lang:language,
+    icons:[]
+  };
+
+  const blob=new Blob(
+    [JSON.stringify(manifest)],
+    {type:"application/manifest+json"}
+  );
+
+  const url=URL.createObjectURL(blob);
+
+  const link=document.createElement("link");
+
+  link.rel="manifest";
+  link.href=url;
+
+  document.head.appendChild(link);
+
+})();
+
+</script>
+
+</body>
+    </html>

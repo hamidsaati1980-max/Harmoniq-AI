@@ -1,0 +1,139 @@
+{
+  "appName": "Harmoniq AI",
+  "tagline": "La musique qui vous comprend",
+
+  "nav": {
+    "home": "Accueil",
+    "search": "Rechercher",
+    "library": "Bibliothèque",
+    "favorites": "Favoris",
+    "playlists": "Playlists",
+    "recent": "Écoutés récemment"
+  },
+
+  "home": {
+    "greeting": "Bonsoir",
+    "subtitle": "Découvrez la musique qui correspond à votre humeur.",
+    "recommended": "Recommandé pour vous",
+    "quickAccess": "Accès rapide",
+    "madeForYou": "Créé pour vous",
+    "recentlyPlayed": "Écoutés récemment"
+  },
+
+  "ai": {
+    "title": "Harmoniq AI",
+    "description": "Dites-moi ce que vous voulez écouter.",
+    "placeholder": "Exemple : joue une musique relaxante pour dormir",
+    "button": "Demander à Harmoniq AI",
+    "thinking": "Recherche de la musique idéale...",
+    "noResults": "Aucune musique correspondante trouvée."
+  },
+
+  "search": {
+    "title": "Rechercher",
+    "placeholder": "Rechercher des chansons, artistes, albums...",
+    "results": "Résultats de recherche",
+    "noResults": "Aucun résultat trouvé.",
+    "tryAgain": "Essayez une autre recherche."
+  },
+
+  "library": {
+    "title": "Votre bibliothèque",
+    "favorites": "Favoris",
+    "recent": "Écoutés récemment",
+    "playlists": "Playlists",
+    "albums": "Albums enregistrés",
+    "emptyFavorites": "Vous n'avez encore ajouté aucun favori.",
+    "emptyRecent": "Vos titres récemment écoutés apparaîtront ici.",
+    "emptyPlaylists": "Créez une playlist pour organiser votre musique."
+  },
+
+  "playlist": {
+    "title": "Playlists",
+    "create": "Créer une playlist",
+    "name": "Nom de la playlist",
+    "description": "Description",
+    "createButton": "Créer",
+    "cancel": "Annuler",
+    "empty": "Cette playlist est vide."
+  },
+
+  "player": {
+    "play": "Lire",
+    "pause": "Pause",
+    "next": "Suivant",
+    "previous": "Précédent",
+    "shuffle": "Lecture aléatoire",
+    "repeat": "Répéter",
+    "volume": "Volume",
+    "mute": "Couper le son",
+    "unmute": "Réactiver le son",
+    "queue": "File d'attente"
+  },
+
+  "tracks": {
+    "afterglow": {
+      "title": "Afterglow",
+      "artist": "Luna Vale",
+      "album": "Night Signals"
+    },
+    "velvetSky": {
+      "title": "Velvet Sky",
+      "artist": "Noah Kade",
+      "album": "Midnight Roads"
+    },
+    "openWater": {
+      "title": "Open Water",
+      "artist": "Kairo Field",
+      "album": "Blue Horizon"
+    },
+    "lucidDream": {
+      "title": "Lucid Dream",
+      "artist": "Harmoniq",
+      "album": "Dream State"
+    }
+  },
+
+  "moods": {
+    "relax": "Relaxation",
+    "sleep": "Sommeil",
+    "focus": "Concentration",
+    "nature": "Nature",
+    "chill": "Détente",
+    "meditation": "Méditation"
+  },
+
+  "actions": {
+    "addFavorite": "Ajouter aux favoris",
+    "removeFavorite": "Retirer des favoris",
+    "addToPlaylist": "Ajouter à la playlist",
+    "removeFromPlaylist": "Retirer de la playlist",
+    "playNow": "Lire maintenant"
+  },
+
+  "messages": {
+    "addedFavorite": "Ajouté aux favoris",
+    "removedFavorite": "Retiré des favoris",
+    "addedPlaylist": "Ajouté à la playlist",
+    "playlistCreated": "Playlist créée avec succès."
+  },
+
+  "settings": {
+    "language": "Langue",
+    "theme": "Thème",
+    "dark": "Sombre"
+  },
+
+  "common": {
+    "save": "Enregistrer",
+    "close": "Fermer",
+    "back": "Retour",
+    "cancel": "Annuler",
+    "loading": "Chargement..."
+  },
+
+  "advertisement": {
+    "label": "PUBLICITÉ",
+    "ready": "Emplacement AdMob prêt"
+  }
+  }
