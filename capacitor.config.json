@@ -1,5 +1,5 @@
 {
   "appId": "com.harmoniq.ai",
   "appName": "Harmoniq AI",
-  "webDir": "."
+  "webDir": "www"
 }
