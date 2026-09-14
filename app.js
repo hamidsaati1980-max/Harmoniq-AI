@@ -1691,7 +1691,56 @@ async function searchAudius(query) {
   const result = await response.json();
 
   return result.data || [];
+}async function connectAudiusSearch() {
+  const input =
+    document.querySelector("[data-role='search-input']") ||
+    document.querySelector("#searchInput") ||
+    document.querySelector("input[type='search']");
+
+  const container =
+    document.querySelector("[data-role='search-results']") ||
+    document.querySelector("#searchResults");
+
+  if (!input || !container) return;
+
+  input.addEventListener("input", async () => {
+    const query = input.value.trim();
+
+    if (!query) return;
+
+    try {
+      const response = await fetch(
+        "https://harmoniq-ai-proxy.hamidsaati1980.workers.dev/?q=" +
+        encodeURIComponent(query)
+      );
+
+      const result = await response.json();
+      const tracks = result.data || [];
+
+      if (!tracks.length) {
+        container.innerHTML = "<div class='emptyState'>No results found.</div>";
+        return;
+      }
+
+      container.innerHTML = tracks.map(track => `
+        <div class="trackCard">
+          <strong>${escapeHTML(track.title || "Unknown")}</strong>
+          <div>${escapeHTML(track.user?.name || "Unknown artist")}</div>
+        </div>
+      `).join("");
+
+    } catch (error) {
+      container.innerHTML =
+        "<div class='emptyState'>Music search error.</div>";
+    }
+  });
 }
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", connectAudiusSearch, { once: true });
+} else {
+  connectAudiusSearch();
+   }
   window.HarmoniqAI = {
     tracks: TRACKS,
     state,
