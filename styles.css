@@ -2111,3 +2111,21 @@ html[dir="rtl"] .quickCard {
 [data-action="toggle-play"]:active {
   transform: scale(0.94);
      }
+/* HARMONIQ PLAYER BUTTON */
+button[aria-label*="Play"],
+button[title*="Play"] {
+  width: 58px !important;
+  height: 58px !important;
+  min-width: 58px !important;
+  border-radius: 50% !important;
+  border: 0 !important;
+  background: linear-gradient(135deg, #8b5cf6, #ec4899) !important;
+  color: white !important;
+  font-size: 24px !important;
+  box-shadow: 0 8px 25px rgba(139,92,246,.4) !important;
+}
+
+button[aria-label*="Play"]:hover,
+button[title*="Play"]:hover {
+  transform: scale(1.08);
+}
