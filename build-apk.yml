@@ -1,4 +1,4 @@
-name: Build Harmoniq AI APK
+name: Harmoniq AI APK Builder
 
 on:
   workflow_dispatch:
