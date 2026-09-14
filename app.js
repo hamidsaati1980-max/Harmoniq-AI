@@ -1676,7 +1676,22 @@
   /* =========================================================
      PUBLIC API
      ========================================================= */
+async function searchAudius(query) {
+  if (!query) return [];
 
+  const response = await fetch(
+    "https://harmoniq-ai-proxy.hamidsaati1980.workers.dev/?q=" +
+    encodeURIComponent(query)
+  );
+
+  if (!response.ok) {
+    throw new Error("Music search failed");
+  }
+
+  const result = await response.json();
+
+  return result.data || [];
+}
   window.HarmoniqAI = {
     tracks: TRACKS,
     state,
