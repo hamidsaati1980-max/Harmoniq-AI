@@ -2039,6 +2039,14 @@ document.addEventListener("keydown",e=>{
 })();
 
 </script>
-
+<script>
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("/Harmoniq-AI/service-worker.js")
+      .then(() => console.log("Service Worker registered"))
+      .catch((error) => console.error("Service Worker error:", error));
+  });
+}
+</script>
 </body>
     </html>
