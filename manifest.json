@@ -1,16 +1,16 @@
 {
   "name": "Harmoniq AI",
   "short_name": "Harmoniq",
+  "description": "Harmoniq AI is a modern music discovery and streaming app.",
   "id": "/Harmoniq-AI/",
   "start_url": "/Harmoniq-AI/",
   "scope": "/Harmoniq-AI/",
   "display": "standalone",
-  "description": "Harmoniq AI is a smart music player for discovering and listening to music.",
+  "orientation": "portrait-primary",
   "background_color": "#0F0F14",
   "theme_color": "#8B5CF6",
   "lang": "en",
   "dir": "ltr",
-  "orientation": "portrait-primary",
   "categories": [
     "music",
     "entertainment"
@@ -20,7 +20,7 @@
       "src": "icon-192.png",
       "sizes": "192x192",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
     },
     {
       "src": "file_00000000f12081f4acda7efa141a23c3.png",
