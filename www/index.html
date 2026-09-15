@@ -42,7 +42,7 @@
 <div class="player"><div class="now"><img id="nowCover" alt=""><div class="now-text"><div class="title" id="nowTitle">Harmoniq AI</div><div class="sub" id="nowArtist">Ready to play</div></div></div><div class="controls"><button class="btn optional" onclick="previousTrack()">⏮</button><button class="btn optional" onclick="toggleShuffle()">🔀</button><button class="play" id="playBtn" onclick="togglePlay()">▶</button><button class="btn optional" onclick="nextTrack()">⏭</button><button class="btn optional" onclick="toggleRepeat()">🔁</button></div><div class="progress-wrap"><span class="time" id="currentTime">0:00</span><input class="range" id="progress" type="range" min="0" max="100" value="0"><span class="time" id="duration">0:00</span></div><input class="vol" id="volume" type="range" min="0" max="1" step=".01" value=".8"></div>
 <div class="sleep" id="sleepPanel"><button class="btn" onclick="setSleep(15)">15m</button><button class="btn" onclick="setSleep(30)">30m</button><button class="btn" onclick="setSleep(60)">60m</button><button class="btn" onclick="setSleep(0)">Off</button></div>
 <nav class="mobile-nav"><button data-page="home" class="active">⌂<br>Home</button><button data-page="search">⌕<br>Search</button><button data-page="library">▦<br>Library</button><button data-page="favorites">♡<br>Favorites</button><button onclick="toggleSleepPanel()">◷<br>Sleep</button></nav>
-<audio id="audio" preload="auto"></audio>
+<audio id="audio" preload="metadata" playsinline></audio>
 <div class="modal-bg" id="settingsModal"><div class="modal"><h2>⚙ Settings</h2><div class="field"><label>Language</label><select id="language"><option value="en">English</option><option value="ar">العربية</option><option value="tr">Türkçe</option><option value="fr">Français</option><option value="es">Español</option><option value="de">Deutsch</option></select></div><div class="field"><label>Theme Accent</label><select id="accent"><option value="purple">Purple / Cyan</option><option value="blue">Electric Blue</option><option value="pink">Neon Pink</option><option value="green">Aurora Green</option></select></div><div class="field"><label>Background Playback</label><p style="color:var(--muted);font-size:12px">Media Session controls are enabled. Actual locked-screen/background behavior depends on the browser or APK container.</p></div><div class="modal-actions"><button class="btn" onclick="closeSettings()">Cancel</button><button class="btn primary" onclick="saveSettings()">Save</button></div></div></div>
 <div class="modal-bg" id="playlistModal"><div class="modal"><h2>♫ New Playlist</h2><div class="field"><label>Playlist name</label><input id="playlistName" placeholder="My Playlist"></div><div class="modal-actions"><button class="btn" onclick="closePlaylistModal()">Cancel</button><button class="btn primary" onclick="savePlaylist()">Create</button></div></div></div>
 <div id="toast" class="toast"></div>
@@ -67,11 +67,41 @@ function renderSearchResults(list){$('searchResults').innerHTML='';if(!list.leng
 function renderDemos(){const g=$('demoGrid');g.innerHTML='';demos.forEach((d,i)=>{const c=document.createElement('div');c.className='card';c.innerHTML='<div class="cover" style="background:'+demoColors[i]+'"><span class="cover-icon">♫</span></div><div class="title">'+d[1]+'</div><div class="sub">'+d[2]+' · '+d[3]+'</div><div class="actions"><button class="btn icon">▶</button><button class="btn icon">♡</button></div>';c.querySelectorAll('button')[0].onclick=()=>playDemo(d[0]);c.querySelectorAll('button')[1].onclick=()=>toggleFavorite({id:d[0],title:d[1],artist:d[2]});g.appendChild(c)})}
 function createDemoWav(id){const sr=44100,dur=8,n=sr*dur,buf=new ArrayBuffer(44+n*2),v=new DataView(buf);const ws=(o,s)=>{for(let i=0;i<s.length;i++)v.setUint8(o+i,s.charCodeAt(i))};ws(0,'RIFF');v.setUint32(4,36+n*2,true);ws(8,'WAVE');ws(12,'fmt ');v.setUint32(16,16,true);v.setUint16(20,1,true);v.setUint16(22,1,true);v.setUint32(24,sr,true);v.setUint32(28,sr*2,true);v.setUint16(32,2,true);v.setUint16(34,16,true);ws(36,'data');v.setUint32(40,n*2,true);let f=id==='demo1'?220:id==='demo2'?260:id==='demo3'?180:330;for(let i=0;i<n;i++){let t=i/sr,w=Math.sin(2*Math.PI*f*t)*.12+Math.sin(2*Math.PI*f*.5*t)*.05,fade=Math.min(1,i/3000)*Math.min(1,(n-i)/3000);v.setInt16(44+i*2,w*fade*32767,true)}return URL.createObjectURL(new Blob([buf],{type:'audio/wav'}))}
 function playDemo(id){const d=demos.find(x=>x[0]===id);if(!d)return;playTrack({id:d[0],title:d[1],artist:d[2],url:createDemoWav(id),artwork:null,local:true})}
-function streamUrl(t){return WORKER+'/stream?id='+encodeURIComponent(t.audiusId||String(t.id).replace(/^audius_/,'') )}
-function playTrack(track){if(!track)return;tracks=[...deviceTracks,...favorites,...recent.filter(x=>x.url||x.audiusId),...demos.map(d=>({id:d[0],title:d[1],artist:d[2],url:null}))];const unique=[];const seen=new Set();[track,...tracks].forEach(x=>{if(!seen.has(x.id)){seen.add(x.id);unique.push(x)}});tracks=unique;currentIndex=tracks.findIndex(x=>x.id===track.id);if(currentIndex<0){tracks.unshift(track);currentIndex=0}let src=track.url;if(!src&&track.audiusId)src=streamUrl(track);if(!src){const d=demos.find(x=>x[0]===track.id);if(d)src=createDemoWav(d[0])}if(!src)return toast('No playable audio URL');audio.src=src;$('nowTitle').textContent=track.title||'Unknown';$('nowArtist').textContent=track.artist||'Unknown Artist';$('nowCover').src=artwork(track);audio.play().then(()=>{$('playBtn').textContent='⏸';$('visual').classList.remove('paused');setMediaSession(track)}).catch(()=>toast('Press play to start audio'));addRecent(track)}
-function togglePlay(){if(!audio.src){playDemo('demo1');return}if(audio.paused)audio.play().then(()=>{$('playBtn').textContent='⏸';$('visual').classList.remove('paused')});else{audio.pause();$('playBtn').textContent='▶';$('visual').classList.add('paused')}}
+function streamUrl(t){const id=t.audiusId||String(t.id||'').replace(/^audius_/,'');return WORKER+'/stream?id='+encodeURIComponent(id)}
+function setPlayingUI(on){$('playBtn').textContent=on?'⏸':'▶';$('visual').classList.toggle('paused',!on)}
+function audioErrorMessage(){const e=audio.error;return e?('Audio error '+e.code+': '+(e.message||'stream could not be loaded')):'Audio could not be loaded'}
+async function playTrack(track){
+  if(!track)return;
+  tracks=[...deviceTracks,...favorites,...recent.filter(x=>x.url||x.audiusId),...demos.map(d=>({id:d[0],title:d[1],artist:d[2],url:null}))];
+  const unique=[];const seen=new Set();
+  [track,...tracks].forEach(x=>{if(!seen.has(x.id)){seen.add(x.id);unique.push(x)}});
+  tracks=unique;currentIndex=tracks.findIndex(x=>x.id===track.id);
+  if(currentIndex<0){tracks.unshift(track);currentIndex=0}
+  let src=track.url;
+  if(!src&&track.audiusId)src=streamUrl(track);
+  if(!src){const d=demos.find(x=>x[0]===track.id);if(d)src=createDemoWav(d[0])}
+  if(!src)return toast('No playable audio URL');
+  $('nowTitle').textContent=track.title||'Unknown';
+  $('nowArtist').textContent=(track.artist||'Unknown Artist')+' · '+(track.source||'Audius');
+  $('nowCover').src=artwork(track);
+  $('currentTime').textContent='0:00';$('duration').textContent='0:00';$('progress').value=0;
+  audio.pause();audio.removeAttribute('src');audio.load();audio.src=src;audio.load();setPlayingUI(false);
+  try{await audio.play();setPlayingUI(true);setMediaSession(track);addRecent(track)}
+  catch(err){console.error('Harmoniq playback failed',err,src);setPlayingUI(false);toast(audioErrorMessage())}
+}
+async function togglePlay(){
+  if(!audio.src)return playDemo('demo1');
+  if(audio.paused){try{await audio.play();setPlayingUI(true)}catch(err){console.error(err);toast(audioErrorMessage())}}
+  else{audio.pause();setPlayingUI(false)}
+}
 function nextTrack(){if(!tracks.length)return;currentIndex=shuffle?Math.floor(Math.random()*tracks.length):(currentIndex+1)%tracks.length;playTrack(tracks[currentIndex])}function previousTrack(){if(!tracks.length)return;currentIndex=(currentIndex-1+tracks.length)%tracks.length;playTrack(tracks[currentIndex])}function toggleShuffle(){shuffle=!shuffle;toast(shuffle?'Shuffle ON':'Shuffle OFF')}function toggleRepeat(){repeat=!repeat;toast(repeat?'Repeat ON':'Repeat OFF')}
-audio.addEventListener('ended',()=>{if(repeat){audio.currentTime=0;audio.play()}else nextTrack()});audio.addEventListener('timeupdate',()=>{if(audio.duration){$('progress').value=audio.currentTime/audio.duration*100;$('currentTime').textContent=fmt(audio.currentTime)}});audio.addEventListener('loadedmetadata',()=>{$('duration').textContent=fmt(audio.duration)});function fmt(n){if(!isFinite(n))return'0:00';return Math.floor(n/60)+':'+String(Math.floor(n%60)).padStart(2,'0')}
+audio.addEventListener('ended',()=>{if(repeat){audio.currentTime=0;audio.play().catch(()=>{})}else nextTrack()});
+audio.addEventListener('timeupdate',()=>{if(audio.duration){$('progress').value=audio.currentTime/audio.duration*100;$('currentTime').textContent=fmt(audio.currentTime)}});
+audio.addEventListener('loadedmetadata',()=>{$('duration').textContent=fmt(audio.duration)});
+audio.addEventListener('playing',()=>setPlayingUI(true));
+audio.addEventListener('pause',()=>setPlayingUI(false));
+audio.addEventListener('error',()=>{console.error('Harmoniq audio element error',audio.error);setPlayingUI(false)});
+function fmt(n){if(!isFinite(n))return'0:00';return Math.floor(n/60)+':'+String(Math.floor(n%60)).padStart(2,'0')}
 $('progress').addEventListener('input',()=>{if(audio.duration)audio.currentTime=$('progress').value/100*audio.duration});$('volume').addEventListener('input',()=>{audio.volume=+$('volume').value;localStorage.setItem('harmoniq_volume',$('volume').value)});audio.volume=+(localStorage.getItem('harmoniq_volume')||.8);
 function setMediaSession(t){if(!('mediaSession'in navigator))return;try{navigator.mediaSession.metadata=new MediaMetadata({title:t.title||'Harmoniq AI',artist:t.artist||'Harmoniq',album:'Harmoniq AI',artwork:[{src:artwork(t),sizes:'512x512',type:'image/png'}]});['play','pause','nexttrack','previoustrack'].forEach(a=>{try{navigator.mediaSession.setActionHandler(a,a==='play'?()=>audio.play():a==='pause'?()=>audio.pause():a==='nexttrack'?nextTrack:previousTrack)}catch(e){}})}catch(e){}}
 function toggleFavorite(t){const i=favorites.findIndex(x=>x.id===t.id);if(i>=0){favorites.splice(i,1);toast('Removed from favorites')}else{favorites.unshift({id:t.id,title:t.title,artist:t.artist,artwork:t.artwork||null,url:t.url||null,audiusId:t.audiusId||null});toast('Added to favorites ♥')}localStorage.setItem('harmoniq_favorites',JSON.stringify(favorites));updateStats();renderFavorites()}
