@@ -1569,6 +1569,12 @@ function deletePlaylist(id){
 /* ============================================================
    SEARCH
    ============================================================ */
+/* ============================================================
+   SEARCH - CLOUDFLARE WORKER
+   ============================================================ */
+
+const HARMONIQ_WORKER =
+  "https://harmoniq-ai-proxy.hamidsaati1980.workers.dev";
 
 async function doSearch(query=null){
 
@@ -1580,52 +1586,20 @@ async function doSearch(query=null){
   }
 
   showPage("search");
-
   $("searchStatus").textContent="Searching Audius...";
   $("searchResults").innerHTML="";
 
-  const key=settings.apiKey;
-
-  if(!key){
-
-    $("searchStatus").textContent=
-      "Add your Audius API key in Settings to search online music.";
-
-    $("searchResults").innerHTML=`
-
-      <div class="empty">
-
-        <div style="font-size:40px">🔑</div>
-
-        <h3>Audius API key required</h3>
-
-        <p>
-          Open Settings and add your Audius API key.
-          The key is stored locally in this browser.
-        </p>
-
-        <button class="primary" onclick="openSettings()">
-          Open Settings
-        </button>
-
-      </div>
-    `;
-
-    return;
-  }
-
   try{
 
-    const url=
-      "https://harmoniq-ai-proxy.hamidsaati1980.workers.dev/music"+
-      "?query="+encodeURIComponent(q)+
-      "&limit=30"+
-    
+    const url =
+      HARMONIQ_WORKER +
+      "/music?q=" +
+      encodeURIComponent(q);
 
     const response=await fetch(url);
 
     if(!response.ok){
-      throw new Error("Audius request failed");
+      throw new Error("Search request failed");
     }
 
     const data=await response.json();
@@ -1643,27 +1617,25 @@ async function doSearch(query=null){
         t.user?.handle ||
         "Unknown Artist",
 
-      artwork:
-        t.artwork?(
-          t.artwork["480x480"] ||
-          t.artwork["1000x1000"] ||
-          t.artwork["150x150"]
-        ):null,
+      artwork:t.artwork ? (
+        t.artwork["480x480"] ||
+        t.artwork["1000x1000"] ||
+        t.artwork["150x150"]
+      ) : null,
 
       url:
-        "https://api.audius.co/v1/tracks/"+
-        encodeURIComponent(t.id)+
-        "/stream?api_key="+
-        encodeURIComponent(key),
+        HARMONIQ_WORKER +
+        "/stream?id=" +
+        encodeURIComponent(t.id),
 
       source:"Audius"
 
     }));
 
-    $("searchStatus").textContent=
-      results.length+
-      " result(s) found for “"+
-      q+
+    $("searchStatus").textContent =
+      results.length +
+      " result(s) found for “" +
+      q +
       "”";
 
     renderSearchResults(results);
@@ -1676,9 +1648,9 @@ async function doSearch(query=null){
 
     $("searchResults").innerHTML=`
       <div class="empty">
-        ❌ Could not reach Audius.
+        ❌ Could not reach music search.
         <br><br>
-        Check your API key or internet connection.
+        Please try again.
       </div>
     `;
   }
@@ -1689,10 +1661,8 @@ function renderSearchResults(results){
   $("searchResults").innerHTML="";
 
   if(!results.length){
-
     $("searchResults").innerHTML=
       `<div class="empty">No music found.</div>`;
-
     return;
   }
 
@@ -1705,10 +1675,13 @@ function renderSearchResults(results){
     const artwork=track.artwork ||
       "data:image/svg+xml;charset=UTF-8,"+
       encodeURIComponent(`
-        <svg xmlns="http://www.w3.org/2000/svg" width="100" height="100">
+        <svg xmlns="http://www.w3.org/2000/svg"
+             width="100" height="100">
           <rect width="100%" height="100%" fill="#171d30"/>
-          <text x="50%" y="55%" text-anchor="middle"
-                fill="white" font-size="38">♪</text>
+          <text x="50%" y="55%"
+                text-anchor="middle"
+                fill="white"
+                font-size="38">♪</text>
         </svg>
       `);
 
@@ -1723,8 +1696,7 @@ function renderSearchResults(results){
         </div>
 
         <div class="result-sub">
-          ${escapeHTML(track.artist)}
-          • Audius
+          ${escapeHTML(track.artist)} • Audius
         </div>
 
       </div>
@@ -1756,7 +1728,7 @@ function playOnlineTrack(track){
   });
 
   toast("Playing from Audius 🎵");
-}
+  }
 
 /* ============================================================
    AI SEARCH
