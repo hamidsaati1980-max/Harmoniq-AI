@@ -509,6 +509,565 @@ html[data-hq-mood="nature"] #harmoniqAmbientScene{
 
 })();
 </script>
+ <!-- HARMONIQ AI — AUDIO EFFECTS ENGINE -->
+<style>
+#hqEffectsBtn{
+  position:relative;
+}
+
+#hqEffectsBtn::after{
+  content:"";
+  position:absolute;
+  width:6px;
+  height:6px;
+  right:7px;
+  top:7px;
+  border-radius:50%;
+  background:#00d9ff;
+  box-shadow:0 0 10px #00d9ff;
+  opacity:0;
+}
+
+#hqEffectsBtn.active::after{
+  opacity:1;
+}
+
+#hqEffectsPanel{
+  position:fixed;
+  right:22px;
+  bottom:125px;
+  width:min(360px,calc(100vw - 30px));
+  z-index:150;
+  padding:20px;
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:24px;
+  background:linear-gradient(145deg,rgba(20,27,49,.97),rgba(7,10,20,.98));
+  box-shadow:0 25px 80px rgba(0,0,0,.55);
+  backdrop-filter:blur(25px);
+  display:none;
+}
+
+#hqEffectsPanel.show{
+  display:block;
+  animation:hqEffectsIn .22s ease;
+}
+
+@keyframes hqEffectsIn{
+  from{
+    opacity:0;
+    transform:translateY(15px) scale(.97);
+  }
+  to{
+    opacity:1;
+    transform:translateY(0) scale(1);
+  }
+}
+
+.hq-effects-title{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:18px;
+}
+
+.hq-effects-title strong{
+  font-size:18px;
+}
+
+.hq-effects-status{
+  font-size:11px;
+  color:#8f9ab5;
+  margin-top:3px;
+}
+
+.hq-effect-row{
+  margin:14px 0;
+}
+
+.hq-effect-head{
+  display:flex;
+  justify-content:space-between;
+  margin-bottom:7px;
+  font-size:12px;
+  color:#dce4f7;
+}
+
+.hq-effect-head span:last-child{
+  color:#67eaff;
+  font-variant-numeric:tabular-nums;
+}
+
+.hq-effect-range{
+  width:100%;
+  accent-color:#7b5cff;
+}
+
+.hq-effect-presets{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:7px;
+  margin-top:16px;
+}
+
+.hq-effect-preset{
+  border:1px solid rgba(255,255,255,.09);
+  background:rgba(255,255,255,.045);
+  color:#e8edfa;
+  border-radius:12px;
+  padding:9px 5px;
+  font-size:11px;
+}
+
+.hq-effect-preset:hover{
+  background:rgba(123,92,255,.18);
+  border-color:rgba(123,92,255,.35);
+}
+
+#hqEffectsClose{
+  border:0;
+  background:rgba(255,255,255,.06);
+  color:#fff;
+  width:32px;
+  height:32px;
+  border-radius:10px;
+}
+
+@media(max-width:600px){
+  #hqEffectsPanel{
+    right:10px;
+    bottom:180px;
+  }
+}
+</style>
+
+<script>
+(function(){
+
+  const audioEl=document.getElementById("audio");
+
+  if(!audioEl)return;
+
+  /* -------------------------------------------------
+     Web Audio engine
+  ------------------------------------------------- */
+
+  let ctx=null;
+  let source=null;
+  let bass=null;
+  let treble=null;
+  let delay=null;
+  let delayFeedback=null;
+  let delayWet=null;
+  let master=null;
+  let compressor=null;
+  let initialized=false;
+
+  function initAudioEffects(){
+
+    if(initialized)return true;
+
+    try{
+
+      ctx=new (window.AudioContext||window.webkitAudioContext)();
+
+      /*
+       * Important:
+       * The existing <audio> element becomes the source.
+       * Playback still uses audio.play(), pause(), seek, etc.
+       */
+
+      audioEl.crossOrigin="anonymous";
+
+      source=ctx.createMediaElementSource(audioEl);
+
+      bass=ctx.createBiquadFilter();
+      bass.type="lowshelf";
+      bass.frequency.value=180;
+      bass.gain.value=0;
+
+      treble=ctx.createBiquadFilter();
+      treble.type="highshelf";
+      treble.frequency.value=3500;
+      treble.gain.value=0;
+
+      delay=ctx.createDelay(1.0);
+      delay.delayTime.value=.22;
+
+      delayFeedback=ctx.createGain();
+      delayFeedback.gain.value=0;
+
+      delayWet=ctx.createGain();
+      delayWet.gain.value=0;
+
+      master=ctx.createGain();
+      master.gain.value=1;
+
+      compressor=ctx.createDynamicsCompressor();
+      compressor.threshold.value=-12;
+      compressor.knee.value=18;
+      compressor.ratio.value=3;
+      compressor.attack.value=.003;
+      compressor.release.value=.25;
+
+      /*
+       * Dry path:
+       * source → bass → treble → compressor → master
+       */
+
+      source.connect(bass);
+      bass.connect(treble);
+      treble.connect(compressor);
+
+      /*
+       * Echo path:
+       * treble → delay → wet → compressor
+       */
+
+      treble.connect(delay);
+      delay.connect(delayWet);
+      delayWet.connect(compressor);
+
+      /*
+       * Feedback:
+       * delay → feedback → delay
+       */
+
+      delay.connect(delayFeedback);
+      delayFeedback.connect(delay);
+
+      compressor.connect(master);
+      master.connect(ctx.destination);
+
+      initialized=true;
+
+      return true;
+
+    }catch(error){
+
+      console.error("Harmoniq Audio Effects error:",error);
+
+      if(typeof toast==="function"){
+        toast("Audio effects could not start");
+      }
+
+      return false;
+    }
+  }
+
+  function resumeAudio(){
+
+    if(!initAudioEffects())return false;
+
+    if(ctx.state==="suspended"){
+      ctx.resume().catch(()=>{});
+    }
+
+    return true;
+  }
+
+  /* -------------------------------------------------
+     Effects UI
+  ------------------------------------------------- */
+
+  const player=document.querySelector(".player");
+
+  if(!player)return;
+
+  const controls=player.querySelector(".controls");
+
+  if(!controls)return;
+
+  const effectsButton=document.createElement("button");
+
+  effectsButton.id="hqEffectsBtn";
+  effectsButton.className="btn optional";
+  effectsButton.title="Audio Effects";
+  effectsButton.textContent="🎛️";
+
+  controls.appendChild(effectsButton);
+
+  const panel=document.createElement("div");
+
+  panel.id="hqEffectsPanel";
+
+  panel.innerHTML=`
+
+    <div class="hq-effects-title">
+      <div>
+        <strong>🎛️ Audio Effects</strong>
+        <div class="hq-effects-status" id="hqEffectsStatus">
+          Live audio processing
+        </div>
+      </div>
+
+      <button id="hqEffectsClose">×</button>
+    </div>
+
+    <div class="hq-effect-row">
+      <div class="hq-effect-head">
+        <span>🔊 Bass Boost</span>
+        <span id="hqBassValue">0 dB</span>
+      </div>
+      <input
+        id="hqBass"
+        class="hq-effect-range"
+        type="range"
+        min="-12"
+        max="18"
+        step="1"
+        value="0">
+    </div>
+
+    <div class="hq-effect-row">
+      <div class="hq-effect-head">
+        <span>✨ Treble</span>
+        <span id="hqTrebleValue">0 dB</span>
+      </div>
+      <input
+        id="hqTreble"
+        class="hq-effect-range"
+        type="range"
+        min="-12"
+        max="12"
+        step="1"
+        value="0">
+    </div>
+
+    <div class="hq-effect-row">
+      <div class="hq-effect-head">
+        <span>🌊 Echo / Reverb</span>
+        <span id="hqEchoValue">0%</span>
+      </div>
+      <input
+        id="hqEcho"
+        class="hq-effect-range"
+        type="range"
+        min="0"
+        max="60"
+        step="1"
+        value="0">
+    </div>
+
+    <div class="hq-effect-row">
+      <div class="hq-effect-head">
+        <span>🎚️ Output</span>
+        <span id="hqOutputValue">100%</span>
+      </div>
+      <input
+        id="hqOutput"
+        class="hq-effect-range"
+        type="range"
+        min="0"
+        max="120"
+        step="1"
+        value="100">
+    </div>
+
+    <div class="hq-effect-presets">
+
+      <button class="hq-effect-preset" data-preset="flat">
+        🎵 Flat
+      </button>
+
+      <button class="hq-effect-preset" data-preset="bass">
+        🔊 Bass
+      </button>
+
+      <button class="hq-effect-preset" data-preset="soft">
+        🌙 Soft
+      </button>
+
+      <button class="hq-effect-preset" data-preset="room">
+        🏛️ Room
+      </button>
+
+      <button class="hq-effect-preset" data-preset="loud">
+        ⚡ Loud
+      </button>
+
+      <button class="hq-effect-preset" data-preset="reset">
+        ↺ Reset
+      </button>
+
+    </div>
+  `;
+
+  document.body.appendChild(panel);
+
+  /* -------------------------------------------------
+     Open / close
+  ------------------------------------------------- */
+
+  effectsButton.addEventListener("click",function(){
+
+    resumeAudio();
+
+    panel.classList.toggle("show");
+    effectsButton.classList.toggle(
+      "active",
+      panel.classList.contains("show")
+    );
+
+  });
+
+  document.getElementById("hqEffectsClose")
+    .addEventListener("click",function(){
+
+      panel.classList.remove("show");
+      effectsButton.classList.remove("active");
+
+    });
+
+  /* -------------------------------------------------
+     Sliders
+  ------------------------------------------------- */
+
+  const bassSlider=document.getElementById("hqBass");
+  const trebleSlider=document.getElementById("hqTreble");
+  const echoSlider=document.getElementById("hqEcho");
+  const outputSlider=document.getElementById("hqOutput");
+
+  const bassValue=document.getElementById("hqBassValue");
+  const trebleValue=document.getElementById("hqTrebleValue");
+  const echoValue=document.getElementById("hqEchoValue");
+  const outputValue=document.getElementById("hqOutputValue");
+
+  bassSlider.addEventListener("input",function(){
+
+    resumeAudio();
+
+    const v=Number(this.value);
+
+    bass.gain.value=v;
+
+    bassValue.textContent=v+" dB";
+
+  });
+
+  trebleSlider.addEventListener("input",function(){
+
+    resumeAudio();
+
+    const v=Number(this.value);
+
+    treble.gain.value=v;
+
+    trebleValue.textContent=v+" dB";
+
+  });
+
+  echoSlider.addEventListener("input",function(){
+
+    resumeAudio();
+
+    const v=Number(this.value);
+
+    const amount=v/100;
+
+    delayWet.gain.value=amount;
+    delayFeedback.gain.value=Math.min(amount*.55,.45);
+
+    echoValue.textContent=v+"%";
+
+  });
+
+  outputSlider.addEventListener("input",function(){
+
+    resumeAudio();
+
+    const v=Number(this.value);
+
+    master.gain.value=v/100;
+
+    outputValue.textContent=v+"%";
+
+  });
+
+  /* -------------------------------------------------
+     Presets
+  ------------------------------------------------- */
+
+  function applyPreset(name){
+
+    resumeAudio();
+
+    let b=0;
+    let t=0;
+    let e=0;
+    let out=100;
+
+    if(name==="bass"){
+      b=10;
+      t=2;
+      e=5;
+    }
+
+    if(name==="soft"){
+      b=3;
+      t=-4;
+      e=12;
+      out=85;
+    }
+
+    if(name==="room"){
+      b=3;
+      t=2;
+      e=30;
+      out=95;
+    }
+
+    if(name==="loud"){
+      b=7;
+      t=5;
+      e=3;
+      out=105;
+    }
+
+    if(name==="flat" || name==="reset"){
+      b=0;
+      t=0;
+      e=0;
+      out=100;
+    }
+
+    bassSlider.value=b;
+    trebleSlider.value=t;
+    echoSlider.value=e;
+    outputSlider.value=out;
+
+    bass.gain.value=b;
+    treble.gain.value=t;
+
+    const amount=e/100;
+
+    delayWet.gain.value=amount;
+    delayFeedback.gain.value=Math.min(amount*.55,.45);
+
+    master.gain.value=out/100;
+
+    bassValue.textContent=b+" dB";
+    trebleValue.textContent=t+" dB";
+    echoValue.textContent=e+"%";
+    outputValue.textContent=out+"%";
+
+    document.getElementById("hqEffectsStatus").textContent=
+      name==="reset"||name==="flat"
+      ?"Live audio processing"
+      :"Preset: "+name;
+  }
+
+  document
+    .querySelectorAll(".hq-effect-preset")
+    .forEach(button=>{
+
+      button.addEventListener("click",function(){
+        applyPreset(this.dataset.preset);
+      });
+
+    });
+
+})();
+</script>
 <body>
 <div class="orb one"></div><div class="orb two"></div>
 <div class="shell">
