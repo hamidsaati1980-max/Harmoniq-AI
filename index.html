@@ -1569,6 +1569,176 @@ function deletePlaylist(id){
 /* ============================================================
    SEARCH
    ============================================================ */
+  /* ============================================================
+   SEARCH - HARMONIQ CLOUDFLARE WORKER
+   ============================================================ */
+
+const HARMONIQ_WORKER =
+  "https://harmoniq-ai-proxy.hamidsaati1980.workers.dev";
+
+async function doSearch(query=null){
+
+  const q = (query || $("searchInput").value).trim();
+
+  if(!q){
+    toast("Type something to search");
+    return;
+  }
+
+  showPage("search");
+
+  $("searchStatus").textContent = "Searching Audius...";
+  $("searchResults").innerHTML = "";
+
+  try {
+
+    const response = await fetch(
+      HARMONIQ_WORKER +
+      "/music?q=" +
+      encodeURIComponent(q)
+    );
+
+    if(!response.ok){
+      throw new Error("Worker request failed");
+    }
+
+    const data = await response.json();
+
+    const results = (data.data || []).map(t => ({
+
+      id: "audius_" + t.id,
+
+      audiusId: t.id,
+
+      title: t.title || "Unknown",
+
+      artist:
+        t.user?.name ||
+        t.user?.handle ||
+        "Unknown Artist",
+
+      artwork: t.artwork ? (
+        t.artwork["480x480"] ||
+        t.artwork["1000x1000"] ||
+        t.artwork["150x150"]
+      ) : null,
+
+      url:
+        HARMONIQ_WORKER +
+        "/stream?id=" +
+        encodeURIComponent(t.id),
+
+      source: "Audius"
+
+    }));
+
+    $("searchStatus").textContent =
+      results.length +
+      " result(s) found for “" +
+      q +
+      "”";
+
+    renderSearchResults(results);
+
+  } catch(error) {
+
+    console.error(error);
+
+    $("searchStatus").textContent = "Search failed.";
+
+    $("searchResults").innerHTML = `
+      <div class="empty">
+        ❌ Could not reach music search.
+        <br><br>
+        Please try again.
+      </div>
+    `;
+
+  }
+}
+
+function renderSearchResults(results){
+
+  $("searchResults").innerHTML = "";
+
+  if(!results.length){
+
+    $("searchResults").innerHTML =
+      `<div class="empty">No music found.</div>`;
+
+    return;
+  }
+
+  results.forEach(track => {
+
+    const row = document.createElement("div");
+
+    row.className = "result";
+
+    const artwork =
+      track.artwork ||
+      "data:image/svg+xml;charset=UTF-8," +
+      encodeURIComponent(`
+        <svg xmlns="http://www.w3.org/2000/svg"
+             width="100"
+             height="100">
+          <rect width="100%"
+                height="100%"
+                fill="#171d30"/>
+          <text x="50%"
+                y="55%"
+                text-anchor="middle"
+                fill="white"
+                font-size="38">♪</text>
+        </svg>
+      `);
+
+    row.innerHTML = `
+
+      <img src="${artwork}" alt="">
+
+      <div class="result-info">
+
+        <div class="result-title">
+          ${escapeHTML(track.title)}
+        </div>
+
+        <div class="result-sub">
+          ${escapeHTML(track.artist)}
+          • Audius
+        </div>
+
+      </div>
+
+      <button class="icon-btn"
+        onclick='playOnlineTrack(${JSON.stringify(track)})'>
+        ▶
+      </button>
+
+      <button class="icon-btn"
+        onclick='toggleFavorite(${JSON.stringify(track)})'>
+        ❤️
+      </button>
+
+    `;
+
+    $("searchResults").appendChild(row);
+
+  });
+}
+
+function playOnlineTrack(track){
+
+  playTrack({
+    id: track.id,
+    title: track.title,
+    artist: track.artist,
+    artwork: track.artwork,
+    url: track.url
+  });
+
+  toast("Playing from Audius 🎵");
+      }
 /* ============================================================
    SEARCH - CLOUDFLARE WORKER
    ============================================================ */
