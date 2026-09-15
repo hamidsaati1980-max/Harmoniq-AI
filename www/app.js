@@ -1704,3 +1704,122 @@
     init();
   }
 })();
+/* =========================================================
+   HARMONIQ AI — MULTI SOURCE SEARCH
+   Audius + YouTube
+   Safe additive layer — does not replace existing search
+   ========================================================= */
+
+(function () {
+
+  const HQ_MULTI_SOURCE_WORKER =
+    "https://harmoniq-ai-proxy.hamidsaati1980.workers.dev";
+
+  window.HarmoniqMultiSourceSearch = async function (query) {
+
+    const q = String(query || "").trim();
+
+    if (!q) {
+      return {
+        ok: false,
+        results: []
+      };
+    }
+
+    try {
+
+      const response = await fetch(
+        HQ_MULTI_SOURCE_WORKER +
+        "/search?q=" +
+        encodeURIComponent(q) +
+        "&limit=50"
+      );
+
+      if (!response.ok) {
+        throw new Error(
+          "Worker HTTP " + response.status
+        );
+      }
+
+      const data = await response.json();
+
+      return {
+        ok: true,
+        query: data.query || q,
+        sources: data.sources || {},
+        total: data.total || 0,
+        results: Array.isArray(data.results)
+          ? data.results
+          : []
+      };
+
+    } catch (error) {
+
+      console.error(
+        "Harmoniq multi-source search:",
+        error
+      );
+
+      return {
+        ok: false,
+        query: q,
+        results: [],
+        error: error.message || "Search failed"
+      };
+    }
+
+  };
+
+
+  /*
+   * Helper used by the Harmoniq interface.
+   * Audius results can be played through our Worker.
+   * YouTube results open on YouTube.
+   */
+
+  window.HarmoniqOpenResult = function (item) {
+
+    if (!item) return;
+
+    if (
+      item.source === "audius" &&
+      item.streamUrl
+    ) {
+
+      const audio =
+        document.getElementById("audio");
+
+      if (audio) {
+
+        audio.src =
+          HQ_MULTI_SOURCE_WORKER +
+          item.streamUrl;
+
+        audio.play().catch(() => {});
+
+        return;
+      }
+    }
+
+
+    if (
+      item.source === "youtube" &&
+      item.url
+    ) {
+
+      window.open(
+        item.url,
+        "_blank",
+        "noopener,noreferrer"
+      );
+
+    }
+
+  };
+
+
+  console.log(
+    "Harmoniq Multi-Source Search ready"
+  );
+
+})();
