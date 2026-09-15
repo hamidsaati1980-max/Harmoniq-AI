@@ -60,8 +60,44 @@ function showPage(p){document.querySelectorAll('.page').forEach(x=>x.classList.r
 document.querySelectorAll('[data-page]').forEach(x=>x.addEventListener('click',()=>showPage(x.dataset.page)));
 $('topSearch').addEventListener('keydown',e=>{if(e.key==='Enter'){$('searchInput').value=e.target.value;showPage('search');doSearch()}});$('searchInput').addEventListener('keydown',e=>{if(e.key==='Enter')doSearch()});$('aiInput').addEventListener('keydown',e=>{if(e.key==='Enter')aiSearch()});$('fileInput').addEventListener('change',handleFiles);
 function quickAI(q){$('aiInput').value=q;aiSearch()}function aiSearch(){const q=$('aiInput').value.trim();if(!q)return toast('Tell Harmoniq what you want to hear');$('searchInput').value=q;showPage('search');doSearch(q)}
-async function doSearch(query=null){const q=(query||$('searchInput').value).trim();if(!q)return toast('Type something to search');showPage('search');$('searchStatus').textContent='Searching Harmoniq AI…';$('searchResults').innerHTML='';try{const r=await fetch(WORKER+'/music?q='+encodeURIComponent(q));if(!r.ok)throw new Error('Search failed');const data=await r.json();const arr=Array.isArray(data)?data:(data.data||[]);const results=arr.map(t=>normalizeTrack(t)).filter(Boolean);$('searchStatus').textContent=results.length+' result(s) found for “'+q+'”';renderSearchResults(results)}catch(e){console.error(e);$('searchStatus').textContent='Search failed';$('searchResults').innerHTML='<div class="empty">Could not reach the Harmoniq music service. Check your connection and Worker.</div>'}}
-function normalizeTrack(t){if(!t)return null;const id=t.id||t.audiusId||t.track_id;if(!id)return null;return{id:'audius_'+id,audiusId:id,title:t.title||'Unknown',artist:t.artist||t.user?.name||t.user?.handle||'Unknown Artist',artwork:t.artwork?.['480x480']||t.artwork?.['1000x1000']||t.artwork?.['150x150']||t.artwork||null,source:'Audius'}}
+async function doSearch(query=null){
+  const q=(query||$('searchInput').value||'').trim();
+  if(!q)return toast('Type something to search');
+  showPage('search');
+  $('searchStatus').textContent='Searching Harmoniq AI…';
+  $('searchResults').innerHTML='';
+  try{
+    const url=WORKER+'/music?q='+encodeURIComponent(q)+'&_t='+Date.now();
+    const r=await fetch(url,{method:'GET',cache:'no-store',headers:{'Accept':'application/json'}});
+    const text=await r.text();
+    if(!r.ok)throw new Error('Worker HTTP '+r.status+': '+text.slice(0,180));
+    let data;
+    try{data=JSON.parse(text)}catch(e){throw new Error('Worker returned invalid JSON')}
+    const arr=Array.isArray(data)?data:(Array.isArray(data.data)?data.data:Array.isArray(data.results)?data.results:[]);
+    const results=arr.map(normalizeTrack).filter(Boolean);
+    $('searchStatus').textContent=results.length+' result(s) found for “'+q+'”';
+    renderSearchResults(results);
+    if(!results.length)toast('No playable music found');
+  }catch(e){
+    console.error('Harmoniq search failed',e);
+    $('searchStatus').textContent='Search failed';
+    $('searchResults').innerHTML='<div class="empty">Search service error: '+escapeHTML(e.message||'Unknown error')+'</div>';
+  }
+}
+function normalizeTrack(t){
+  if(!t)return null;
+  const id=t.id||t.audiusId||t.track_id;
+  if(!id)return null;
+  const art=t.artwork||t.artwork_url||t.cover_art||null;
+  return{
+    id:'audius_'+id,
+    audiusId:String(id),
+    title:t.title||'Unknown',
+    artist:t.artist||t.user?.name||t.user?.handle||t.user?.username||'Unknown Artist',
+    artwork:(typeof art==='object'?(art['480x480']||art['1000x1000']||art['150x150']||art['100x100']||art['50x50']):art)||null,
+    source:'Audius'
+  };
+}
 function artwork(track){return track.artwork||'data:image/svg+xml;charset=UTF-8,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400"><defs><linearGradient id="g"><stop stop-color="#7b5cff"/><stop offset="1" stop-color="#00d9ff"/></linearGradient></defs><rect width="100%" height="100%" fill="url(#g)"/><text x="50%" y="55%" text-anchor="middle" fill="white" font-size="110">♫</text></svg>')}
 function renderSearchResults(list){$('searchResults').innerHTML='';if(!list.length){$('searchResults').innerHTML='<div class="empty">No music found.</div>';return}list.forEach(t=>{const row=document.createElement('div');row.className='result';row.innerHTML='<img src="'+artwork(t)+'" alt=""><div class="result-info"><div class="title">'+escapeHTML(t.title)+'</div><div class="sub">'+escapeHTML(t.artist)+' · '+escapeHTML(t.source||'Music')+'</div></div><div class="actions"><button class="btn icon" title="Play">▶</button><button class="btn icon" title="Favorite">♡</button></div>';row.querySelectorAll('button')[0].onclick=()=>playTrack(t);row.querySelectorAll('button')[1].onclick=()=>toggleFavorite(t);$('searchResults').appendChild(row)})}
 function renderDemos(){const g=$('demoGrid');g.innerHTML='';demos.forEach((d,i)=>{const c=document.createElement('div');c.className='card';c.innerHTML='<div class="cover" style="background:'+demoColors[i]+'"><span class="cover-icon">♫</span></div><div class="title">'+d[1]+'</div><div class="sub">'+d[2]+' · '+d[3]+'</div><div class="actions"><button class="btn icon">▶</button><button class="btn icon">♡</button></div>';c.querySelectorAll('button')[0].onclick=()=>playDemo(d[0]);c.querySelectorAll('button')[1].onclick=()=>toggleFavorite({id:d[0],title:d[1],artist:d[2]});g.appendChild(c)})}
