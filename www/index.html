@@ -4535,5 +4535,153 @@ label{
 })();
 
 </script>
+  <style>
+/* ===== Harmoniq AI — Natural Night Sky ===== */
+
+#ambient {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 0 !important;
+  overflow: hidden !important;
+  pointer-events: none !important;
+  background:
+    radial-gradient(
+      circle at 50% 18%,
+      rgba(90, 110, 170, 0.16),
+      transparent 32%
+    ),
+    linear-gradient(
+      180deg,
+      #070b18 0%,
+      #0a1022 42%,
+      #111a32 72%,
+      #18223a 100%
+    ) !important;
+}
+
+/* نجوم بدون أي مربع خلفها */
+#ambient canvas {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  background: transparent !important;
+}
+
+/* السماء */
+#ambient .sky-box {
+  position: absolute !important;
+  inset: 0 !important;
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+/* ===== الهلال ===== */
+
+#ambient .moon {
+  position: absolute !important;
+  top: 8% !important;
+  right: 12% !important;
+
+  width: 86px !important;
+  height: 86px !important;
+
+  border-radius: 50% !important;
+
+  /* ضوء ناعم بدل دائرة بيضاء قاسية */
+  background:
+    radial-gradient(
+      circle at 38% 35%,
+      #fffef4 0%,
+      #f4f0d7 42%,
+      #d9d8c3 72%,
+      #b8bdd0 100%
+    ) !important;
+
+  border: 0 !important;
+
+  /* توهج خفيف منسجم مع السماء */
+  box-shadow:
+    0 0 18px rgba(235, 239, 255, 0.20),
+    0 0 42px rgba(150, 170, 220, 0.10) !important;
+
+  overflow: hidden !important;
+}
+
+/* نصنع الهلال بقص جزء منه بلون السماء */
+#ambient .moon::after {
+  content: "" !important;
+
+  position: absolute !important;
+
+  width: 88px !important;
+  height: 88px !important;
+
+  top: -8px !important;
+  left: 25px !important;
+
+  border-radius: 50% !important;
+
+  background:
+    radial-gradient(
+      circle at 45% 40%,
+      #080d1c 0%,
+      #091021 55%,
+      #0b1326 100%
+    ) !important;
+
+  box-shadow: none !important;
+}
+
+/* إلغاء أي بقع/دوائر قديمة */
+#ambient .moon::before {
+  content: none !important;
+}
+
+/* ===== الغيوم ===== */
+
+#ambient .cloud {
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+#ambient .cloud::before,
+#ambient .cloud::after {
+  background: rgba(155, 170, 198, 0.10) !important;
+  box-shadow: none !important;
+}
+
+/* إزالة أي خلفية مربعة من عناصر المشهد */
+#ambient .horizon {
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+/* المحتوى فوق السماء */
+body > *:not(#ambient) {
+  position: relative;
+  z-index: 1;
+}
+
+/* المظهر الليلي يبقى واضح حتى على الهاتف */
+@media (max-width: 600px) {
+  #ambient .moon {
+    width: 64px !important;
+    height: 64px !important;
+    top: 9% !important;
+    right: 10% !important;
+  }
+
+  #ambient .moon::after {
+    width: 66px !important;
+    height: 66px !important;
+    left: 19px !important;
+    top: -6px !important;
+  }
+}
+  </style>
 </body>
       </html>
