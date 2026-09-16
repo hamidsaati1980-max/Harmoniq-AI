@@ -3510,6 +3510,42 @@ window.HarmoniqSearch=
   search;
 
 </script>
+<script>
+(function(){
+  const langButton=document.getElementById("langTop");
+  if(!langButton)return;
 
+  const languages=["en","ar","tr","fr","es","de"];
+  const names={
+    en:"EN",
+    ar:"AR",
+    tr:"TR",
+    fr:"FR",
+    es:"ES",
+    de:"DE"
+  };
+
+  langButton.onclick=function(e){
+    e.preventDefault();
+    e.stopPropagation();
+
+    const current=
+      document.documentElement.lang||"en";
+
+    let i=languages.indexOf(current);
+    i=(i+1)%languages.length;
+
+    if(typeof window.language==="function"){
+      window.language(languages[i]);
+    }else{
+      document.documentElement.lang=languages[i];
+      document.documentElement.dir=
+        languages[i]==="ar"?"rtl":"ltr";
+      langButton.textContent=
+        "🌐 "+names[languages[i]];
+    }
+  };
+})();
+</script>
 </body>
   </html>
