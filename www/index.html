@@ -1,56 +1,3302 @@
 <!doctype html>
 <html lang="en" dir="ltr">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#0b0d18"><meta name="description" content="Harmoniq AI modern music player">
-<link rel="manifest" href="manifest.json"><title>Harmoniq AI</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#080a18">
+<meta name="description" content="Harmoniq AI - Premium AI Music Player">
+<link rel="manifest" href="manifest.json">
+<title>Harmoniq AI</title>
+
 <style>
-:root{--bg:#070914;--panel:rgba(18,22,40,.86);--line:rgba(255,255,255,.1);--text:#fff;--muted:#9da5bd;--a:#7b5cff;--b:#00d9ff;--c:#ff5fd7;--r:20px}*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 15% 10%,#251b55 0,transparent 30%),radial-gradient(circle at 85% 20%,#073d4d 0,transparent 27%),var(--bg);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,sans-serif;min-height:100vh;padding-bottom:100px}button,input{font:inherit}button{cursor:pointer}.app{display:flex}.side{position:fixed;inset:0 auto 0 0;width:230px;background:rgba(7,9,20,.8);backdrop-filter:blur(20px);border-right:1px solid var(--line);padding:18px;z-index:30}.logo{font-size:21px;font-weight:900;padding:10px 6px 24px}.logo i{display:inline-grid;place-items:center;width:38px;height:38px;border-radius:13px;background:linear-gradient(135deg,var(--a),var(--b));font-style:normal;margin-right:8px}.nav{display:grid;gap:7px}.nav button,.mobile button{background:transparent;border:1px solid transparent;color:var(--muted);padding:12px;border-radius:14px;text-align:left}.nav button.active,.nav button:hover,.mobile button.active{color:#fff;background:rgba(123,92,255,.16);border-color:var(--line)}.main{margin-left:230px;width:100%;padding:18px;max-width:1500px}.top{display:flex;gap:10px;align-items:center;margin-bottom:18px}.search{display:flex;gap:8px;flex:1}.input{background:rgba(255,255,255,.06);border:1px solid var(--line);color:#fff;border-radius:15px;padding:12px 14px;outline:0;width:100%}.btn{background:rgba(255,255,255,.07);border:1px solid var(--line);color:#fff;border-radius:14px;padding:11px 14px}.primary{background:linear-gradient(135deg,var(--a),#5c8cff);border:0}.clock{text-align:right;min-width:145px}.clock small{color:var(--muted)}.page{display:none}.page.active{display:block}.hero,.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);box-shadow:0 20px 60px #0006;backdrop-filter:blur(18px)}.hero{padding:28px;overflow:hidden;transform-style:preserve-3d}.hero h1{font-size:clamp(34px,6vw,65px);line-height:1;margin:8px 0}.hero p{color:#bac2d6;max-width:760px}.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}.chip{border:1px solid var(--line);background:#ffffff08;color:#ddd;border-radius:99px;padding:8px 12px}.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:16px 0}.card{padding:16px}.stat b{font-size:27px}.stat span,.sub{display:block;color:var(--muted);font-size:12px}.head{display:flex;justify-content:space-between;align-items:center;margin:22px 0 10px}.demos{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.demo{padding:0;overflow:hidden;cursor:pointer}.cover{width:100%;aspect-ratio:1;object-fit:cover;background:linear-gradient(135deg,var(--a),var(--b))}.demo div{padding:10px}.result{display:flex;align-items:center;gap:11px;padding:10px;margin:8px 0;border:1px solid var(--line);border-radius:16px;background:#ffffff06}.result img{width:58px;height:58px;border-radius:12px;object-fit:cover}.info{flex:1;min-width:0}.title{font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.actions{display:flex;gap:5px}.icon{width:40px;height:40px;padding:0}.empty{text-align:center;color:var(--muted);padding:35px;border:1px dashed var(--line);border-radius:16px}.player{position:fixed;left:230px;right:0;bottom:0;height:88px;background:#080a14ee;backdrop-filter:blur(22px);border-top:1px solid var(--line);z-index:50;display:flex;gap:10px;align-items:center;padding:9px 14px}.now{width:250px;display:flex;gap:9px;align-items:center;min-width:150px}.now img{width:55px;height:55px;border-radius:12px;object-fit:cover}.now div{min-width:0}.now b,.now span{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.now span{font-size:11px;color:var(--muted)}.controls{display:flex;gap:5px}.play{width:44px;height:44px;border-radius:50%;border:0;background:linear-gradient(135deg,var(--a),var(--b));color:#fff}.progress{flex:1}.range{width:100%;accent-color:var(--a)}.times{display:flex;justify-content:space-between;color:var(--muted);font-size:10px}.mobile{display:none}.modal{position:fixed;inset:0;background:#000a;backdrop-filter:blur(8px);z-index:100;display:none;align-items:center;justify-content:center;padding:16px}.modal.show{display:flex}.modalbox{width:min(650px,100%);max-height:90vh;overflow:auto;background:#111526;border:1px solid var(--line);border-radius:22px;padding:18px}.langs,.effectsgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:9px}.option{padding:12px;border-radius:13px;border:1px solid var(--line);background:#ffffff08;color:#fff}.option.selected{border-color:var(--a);background:#7b5cff22}.effects{position:fixed;right:16px;bottom:102px;width:min(350px,calc(100% - 32px));background:#101426f5;border:1px solid var(--line);border-radius:20px;padding:16px;z-index:70;display:none}.effects.show{display:block}.eq{display:grid;grid-template-columns:70px 1fr 35px;gap:8px;align-items:center;margin:10px 0;font-size:12px}.scene{position:fixed;right:15px;top:92px;padding:12px 15px;background:#090c18aa;border:1px solid var(--line);border-radius:18px;z-index:20;backdrop-filter:blur(14px)}#stars{position:fixed;inset:0;pointer-events:none;z-index:-1}.toast{position:fixed;left:50%;bottom:105px;transform:translateX(-50%) translateY(15px);opacity:0;background:#151a2c;border:1px solid var(--line);padding:11px 15px;border-radius:14px;z-index:200;transition:.25s}.toast.show{opacity:1;transform:translateX(-50%)}
-@media(max-width:900px){.grid,.demos{grid-template-columns:repeat(2,1fr)}.side{width:200px}.main{margin-left:200px}.player{left:200px}.now{width:190px}}
-@media(max-width:700px){.side{display:none}.main{margin:0;padding:12px 12px 105px}.top{flex-wrap:wrap}.search{order:2;flex-basis:100%}.clock{margin-left:auto}.hero{padding:21px}.grid{grid-template-columns:repeat(2,1fr)}.demos{grid-template-columns:repeat(2,1fr)}.player{left:0;height:94px;padding:8px}.now{width:130px;min-width:110px}.now img{width:45px;height:45px}.optional{display:none}.progress{position:absolute;left:10px;right:10px;bottom:3px;width:auto}.mobile{position:fixed;display:flex;left:8px;right:8px;bottom:96px;height:52px;background:#0c1020f5;border:1px solid var(--line);border-radius:18px;z-index:55;justify-content:space-around}.mobile button{font-size:10px;text-align:center}.scene{display:none}}
-[dir=rtl] .side{left:auto;right:0;border-left:1px solid var(--line);border-right:0}[dir=rtl] .main{margin-left:0;margin-right:230px}[dir=rtl] .player{left:0;right:230px}[dir=rtl] .nav button{text-align:right}@media(max-width:700px){[dir=rtl] .main{margin-right:0}[dir=rtl] .player{right:0}}
-</style></head><body>
-<canvas id="stars"></canvas>
-<aside class="side"><div class="logo"><i>♫</i>Harmoniq AI</div><nav class="nav"><button data-page="home">⌂ <span data-i18n="home">Home</span></button><button data-page="search">⌕ <span data-i18n="search">Search</span></button><button data-page="library">▦ <span data-i18n="library">Library</span></button><button data-page="favorites">♡ <span data-i18n="favorites">Favorites</span></button><button data-page="playlists">☷ <span data-i18n="playlists">Playlists</span></button><button data-page="recent">◷ <span data-i18n="recent">Recently Played</span></button><button id="settingsBtn">⚙ <span data-i18n="settings">Settings</span></button><button id="effectsBtn">◒ <span data-i18n="effects">Audio Effects</span></button></nav></aside>
-<main class="main"><header class="top"><div class="search"><input id="topSearch" class="input" placeholder="Search music, artists, moods…"><button id="topSearchBtn" class="btn primary">Search</button></div><div class="clock"><b id="clock">--:--:--</b><small id="date">----</small></div><button id="langTop" class="btn">🌐 EN</button></header>
-<section id="page-home" class="page active"><div class="hero"><small style="color:var(--b);font-weight:800;letter-spacing:2px">AI MUSIC DISCOVERY</small><h1 data-i18n="hero">Music that matches your moment.</h1><p data-i18n="intro">Search music, play your own files, build playlists and let Harmoniq AI shape the atmosphere around your listening.</p><div class="search"><input id="aiInput" class="input" placeholder="Ask Harmoniq AI for a mood or song…"><button id="aiBtn" class="btn primary">Ask AI</button></div><div class="chips"><button class="chip">relaxing music</button><button class="chip">music for sleep</button><button class="chip">chill ambient music</button><button class="chip">meditation music</button><button class="chip">instrumental music</button><button class="chip">arabic and andalusian music</button></div></div><div class="grid"><div class="card stat"><b id="favCount">0</b><span data-i18n="favorites">Favorites</span></div><div class="card stat"><b id="recentCount">0</b><span data-i18n="recent">Recently Played</span></div><div class="card stat"><b id="playlistCount">0</b><span data-i18n="playlists">Playlists</span></div><div class="card stat"><b id="deviceCount">0</b><span data-i18n="device">Device Music</span></div></div><div class="head"><h2 data-i18n="deviceMusic">My Device Music</h2><label class="btn">＋ <span data-i18n="add">Add Music</span><input id="files" type="file" accept="audio/*,video/*" multiple hidden></label></div><div id="deviceList"></div><div class="head"><h2>Starter Sounds</h2></div><div class="demos" id="demos"></div></section>
-<section id="page-search" class="page"><div class="card"><div class="head"><h2 data-i18n="searchMusic">Search Music</h2><button id="retry" class="btn">↻</button></div><div class="search"><input id="searchInput" class="input" placeholder="Search music, artists, moods…"><button id="searchBtn" class="btn primary">Search</button></div><p id="status" class="sub"></p><div id="results"></div></div></section>
-<section id="page-library" class="page"><div class="card"><div class="head"><h2>Library</h2></div><div id="library"></div></div></section><section id="page-favorites" class="page"><div class="card"><div class="head"><h2>Favorites</h2></div><div id="favList"></div></div></section><section id="page-playlists" class="page"><div class="card"><div class="head"><h2>Playlists</h2><button id="newPlaylist" class="btn primary">＋ New</button></div><div id="playlists"></div></div></section><section id="page-recent" class="page"><div class="card"><div class="head"><h2>Recently Played</h2></div><div id="recentList"></div></div></section></main>
-<nav class="mobile"><button data-page="home">⌂<br>Home</button><button data-page="search">⌕<br>Search</button><button data-page="library">▦<br>Library</button><button data-page="favorites">♡<br>Fav</button><button id="mobileSettings">⚙<br>Settings</button></nav>
-<div class="player"><div class="now"><img id="cover"><div><b id="nowTitle">Harmoniq AI</b><span id="nowArtist">Ready to play</span></div></div><div class="controls"><button id="prev" class="btn optional">⏮</button><button id="shuffle" class="btn optional">🔀</button><button id="play" class="play">▶</button><button id="next" class="btn optional">⏭</button><button id="repeat" class="btn optional">🔁</button></div><div class="progress"><input id="seek" class="range" type="range" min="0" max="100" value="0"><div class="times"><span id="cur">0:00</span><span id="dur">0:00</span></div></div><button id="mute" class="btn optional">🔊</button><input id="volume" class="range optional" type="range" min="0" max="1" step=".01" value=".85" style="width:80px"><button id="effectsPlayer" class="btn">◒</button></div>
-<div class="scene"><b>Harmoniq 3D</b><div id="mood">🌙 Night / Relax</div><small id="sceneDate"></small></div>
-<div id="effects" class="effects"><div class="head"><b>3D Audio Effects</b><button id="closeFx" class="btn">×</button></div><div style="display:flex;gap:5px;flex-wrap:wrap"><button class="btn preset" data-p="flat">Flat</button><button class="btn preset" data-p="bass">Bass</button><button class="btn preset" data-p="soft">Soft</button><button class="btn preset" data-p="rock">Rock</button><button class="btn preset" data-p="disco">Disco</button><button class="btn preset" data-p="loud">Loud</button><button class="btn preset" data-p="hall">Hall</button></div><div class="eq"><label>Bass</label><input id="bass" class="range" type="range" min="-12" max="12" value="0"><output id="bassV">0</output></div><div class="eq"><label>Treble</label><input id="treble" class="range" type="range" min="-12" max="12" value="0"><output id="trebleV">0</output></div><div class="eq"><label>Echo</label><input id="echo" class="range" type="range" min="0" max=".8" step=".01" value="0"><output id="echoV">0</output></div><div class="eq"><label>Room</label><input id="room" class="range" type="range" min="0" max=".8" step=".01" value="0"><output id="roomV">0</output></div></div>
-<div id="settings" class="modal"><div class="modalbox"><div class="head"><h2>Settings</h2><button id="closeSettings" class="btn">×</button></div><h3>Language / اللغة / Dil</h3><div class="langs" id="langs"><button class="option" data-lang="en">🇬🇧 English</button><button class="option" data-lang="ar">🇸🇦 العربية</button><button class="option" data-lang="tr">🇹🇷 Türkçe</button><button class="option" data-lang="fr">🇫🇷 Français</button><button class="option" data-lang="es">🇪🇸 Español</button><button class="option" data-lang="de">🇩🇪 Deutsch</button></div><h3>Accent</h3><div class="langs"><button class="option accent" data-a="#7b5cff">Violet</button><button class="option accent" data-a="#00d9ff">Cyan</button><button class="option accent" data-a="#ff5fd7">Pink</button><button class="option accent" data-a="#42e695">Green</button></div></div></div>
-<div id="toast" class="toast"></div><audio id="audio" preload="metadata" crossorigin="anonymous"></audio>
+:root{
+  --bg:#070914;
+  --bg2:#0d1020;
+  --panel:rgba(17,21,39,.82);
+  --panel2:rgba(25,29,52,.72);
+  --line:rgba(255,255,255,.10);
+  --text:#fff;
+  --muted:#9da5bd;
+  --a:#7b5cff;
+  --b:#00d9ff;
+  --c:#ff5fd7;
+  --green:#42e695;
+  --danger:#ff5577;
+  --r:20px;
+}
+
+*{box-sizing:border-box}
+
+html,body{
+  margin:0;
+  min-height:100%;
+  background:#070914;
+  color:var(--text);
+  font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+}
+
+body{
+  min-height:100vh;
+  padding-bottom:110px;
+  overflow-x:hidden;
+  background:
+    radial-gradient(circle at 15% 10%,#271b58 0,transparent 32%),
+    radial-gradient(circle at 85% 20%,#063e4d 0,transparent 30%),
+    linear-gradient(180deg,#070914,#090c19 60%,#050611);
+}
+
+button,input{
+  font:inherit;
+}
+
+button{
+  cursor:pointer;
+}
+
+button:active{
+  transform:scale(.97);
+}
+
+/* NIGHT SCENE */
+
+#ambient{
+  position:fixed;
+  inset:0;
+  overflow:hidden;
+  pointer-events:none;
+  z-index:0;
+}
+
+#stars{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+}
+
+.moon{
+  position:absolute;
+  width:145px;
+  height:145px;
+  right:8%;
+  top:10%;
+  border-radius:50%;
+  background:
+    radial-gradient(circle at 35% 30%,#fff 0,#e9f3ff 45%,#b9caff 75%,#8496d7 100%);
+  box-shadow:
+    0 0 30px #b8caff88,
+    0 0 90px #7b5cff55;
+  opacity:.92;
+}
+
+.moon:after{
+  content:"";
+  position:absolute;
+  width:145px;
+  height:145px;
+  border-radius:50%;
+  background:#080a18;
+  left:40px;
+  top:-15px;
+  opacity:.92;
+}
+
+.cloud{
+  position:absolute;
+  width:260px;
+  height:60px;
+  border-radius:60px;
+  background:linear-gradient(180deg,#202844aa,#0b1020aa);
+  filter:blur(1px);
+  opacity:.42;
+}
+
+.cloud:before,
+.cloud:after{
+  content:"";
+  position:absolute;
+  border-radius:50%;
+  background:#202844cc;
+}
+
+.cloud:before{
+  width:100px;
+  height:100px;
+  left:35px;
+  bottom:5px;
+}
+
+.cloud:after{
+  width:130px;
+  height:130px;
+  right:30px;
+  bottom:0;
+}
+
+.cloud.one{
+  top:27%;
+  left:-70px;
+  animation:cloudMove 38s linear infinite;
+}
+
+.cloud.two{
+  top:43%;
+  right:-90px;
+  transform:scale(.75);
+  animation:cloudMove2 50s linear infinite;
+}
+
+.horizon{
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:0;
+  height:28%;
+  background:
+    linear-gradient(180deg,transparent,#050611),
+    radial-gradient(ellipse at 50% 100%,#251b55aa,transparent 65%);
+}
+
+@keyframes cloudMove{
+  from{transform:translateX(-20px)}
+  to{transform:translateX(calc(100vw + 250px))}
+}
+
+@keyframes cloudMove2{
+  from{transform:translateX(20px)}
+  to{transform:translateX(calc(-100vw - 250px))}
+}
+
+.appLayer{
+  position:relative;
+  z-index:2;
+}
+
+/* SIDEBAR */
+
+.side{
+  position:fixed;
+  inset:0 auto 0 0;
+  width:235px;
+  padding:18px;
+  background:rgba(6,8,18,.78);
+  backdrop-filter:blur(24px);
+  border-right:1px solid var(--line);
+  z-index:40;
+}
+
+.logo{
+  font-size:21px;
+  font-weight:900;
+  padding:8px 5px 25px;
+}
+
+.logo i{
+  display:inline-grid;
+  place-items:center;
+  width:40px;
+  height:40px;
+  margin-right:8px;
+  border-radius:14px;
+  background:linear-gradient(135deg,var(--a),var(--b));
+  font-style:normal;
+  box-shadow:0 10px 35px #7b5cff55;
+}
+
+.nav{
+  display:grid;
+  gap:7px;
+}
+
+.nav button,
+.mobile button{
+  background:transparent;
+  border:1px solid transparent;
+  color:var(--muted);
+  padding:12px;
+  border-radius:14px;
+  text-align:left;
+}
+
+.nav button:hover,
+.nav button.active,
+.mobile button.active{
+  color:#fff;
+  background:#7b5cff1c;
+  border-color:var(--line);
+}
+
+/* MAIN */
+
+.main{
+  margin-left:235px;
+  width:calc(100% - 235px);
+  max-width:1500px;
+  padding:18px;
+}
+
+.top{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin-bottom:18px;
+}
+
+.search{
+  display:flex;
+  gap:8px;
+  flex:1;
+}
+
+.input{
+  width:100%;
+  padding:13px 15px;
+  border-radius:15px;
+  border:1px solid var(--line);
+  outline:none;
+  color:#fff;
+  background:#ffffff09;
+  backdrop-filter:blur(15px);
+}
+
+.input:focus{
+  border-color:#7b5cff88;
+  box-shadow:0 0 0 3px #7b5cff15;
+}
+
+.btn{
+  padding:11px 14px;
+  border-radius:14px;
+  border:1px solid var(--line);
+  color:#fff;
+  background:#ffffff09;
+}
+
+.btn:hover{
+  background:#ffffff14;
+}
+
+.primary{
+  border:0;
+  background:linear-gradient(135deg,var(--a),#5c8cff);
+  box-shadow:0 8px 30px #7b5cff33;
+}
+
+.clock{
+  min-width:145px;
+  text-align:right;
+}
+
+.clock small{
+  display:block;
+  color:var(--muted);
+}
+
+/* CARDS */
+
+.page{
+  display:none;
+}
+
+.page.active{
+  display:block;
+}
+
+.hero,
+.card{
+  background:linear-gradient(145deg,#151a30dd,#0e1224dd);
+  border:1px solid var(--line);
+  border-radius:var(--r);
+  box-shadow:0 25px 70px #0008;
+  backdrop-filter:blur(22px);
+}
+
+.hero{
+  padding:30px;
+  overflow:hidden;
+  position:relative;
+}
+
+.hero:before{
+  content:"";
+  position:absolute;
+  width:300px;
+  height:300px;
+  right:-100px;
+  top:-120px;
+  background:radial-gradient(circle,#7b5cff55,transparent 70%);
+}
+
+.hero h1{
+  position:relative;
+  font-size:clamp(34px,6vw,68px);
+  line-height:.98;
+  margin:10px 0;
+}
+
+.hero p{
+  position:relative;
+  color:#bac2d6;
+  max-width:780px;
+  line-height:1.7;
+}
+
+.chips{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin-top:14px;
+}
+
+.chip{
+  border:1px solid var(--line);
+  background:#ffffff09;
+  color:#ddd;
+  border-radius:99px;
+  padding:8px 12px;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:12px;
+  margin:16px 0;
+}
+
+.card{
+  padding:16px;
+}
+
+.stat b{
+  display:block;
+  font-size:28px;
+}
+
+.stat span,
+.sub{
+  color:var(--muted);
+  font-size:12px;
+}
+
+.head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  margin:22px 0 10px;
+}
+
+.demos{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:12px;
+}
+
+.demo{
+  padding:0;
+  overflow:hidden;
+  cursor:pointer;
+}
+
+.cover{
+  width:100%;
+  aspect-ratio:1;
+  object-fit:cover;
+  background:linear-gradient(135deg,var(--a),var(--b));
+}
+
+.demo div{
+  padding:10px;
+}
+
+/* RESULTS */
+
+.result{
+  display:flex;
+  align-items:center;
+  gap:11px;
+  padding:10px;
+  margin:8px 0;
+  border:1px solid var(--line);
+  border-radius:16px;
+  background:#ffffff07;
+  transition:.2s;
+}
+
+.result:hover{
+  transform:translateY(-1px);
+  background:#ffffff0c;
+}
+
+.result img{
+  width:58px;
+  height:58px;
+  border-radius:12px;
+  object-fit:cover;
+}
+
+.info{
+  flex:1;
+  min-width:0;
+}
+
+.title{
+  font-weight:800;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+.actions{
+  display:flex;
+  gap:5px;
+}
+
+.icon{
+  width:40px;
+  height:40px;
+  padding:0;
+}
+
+.empty{
+  text-align:center;
+  color:var(--muted);
+  padding:35px;
+  border:1px dashed var(--line);
+  border-radius:16px;
+}
+
+/* PLAYER */
+
+.player{
+  position:fixed;
+  left:235px;
+  right:0;
+  bottom:0;
+  height:92px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:9px 14px;
+  background:#080a14ee;
+  backdrop-filter:blur(25px);
+  border-top:1px solid var(--line);
+  z-index:80;
+}
+
+.now{
+  width:270px;
+  min-width:160px;
+  display:flex;
+  align-items:center;
+  gap:9px;
+}
+
+.now img{
+  width:56px;
+  height:56px;
+  border-radius:13px;
+  object-fit:cover;
+}
+
+.now div{
+  min-width:0;
+}
+
+.now b,
+.now span{
+  display:block;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+
+.now span{
+  color:var(--muted);
+  font-size:11px;
+}
+
+.controls{
+  display:flex;
+  gap:5px;
+}
+
+.play{
+  width:45px;
+  height:45px;
+  border-radius:50%;
+  border:0;
+  color:#fff;
+  background:linear-gradient(135deg,var(--a),var(--b));
+}
+
+.progress{
+  flex:1;
+}
+
+.range{
+  width:100%;
+  accent-color:var(--a);
+}
+
+.times{
+  display:flex;
+  justify-content:space-between;
+  color:var(--muted);
+  font-size:10px;
+}
+
+/* MOBILE NAV */
+
+.mobile{
+  display:none;
+}
+
+/* SCENE LABEL */
+
+.scene{
+  position:fixed;
+  top:92px;
+  right:15px;
+  padding:12px 15px;
+  border:1px solid var(--line);
+  border-radius:18px;
+  background:#090c18aa;
+  backdrop-filter:blur(16px);
+  z-index:20;
+}
+
+.scene small{
+  display:block;
+  color:var(--muted);
+}
+
+/* EFFECTS */
+
+.effects{
+  position:fixed;
+  right:16px;
+  bottom:105px;
+  width:min(370px,calc(100% - 32px));
+  padding:16px;
+  background:#101426f7;
+  border:1px solid var(--line);
+  border-radius:20px;
+  z-index:100;
+  display:none;
+  box-shadow:0 25px 80px #000b;
+}
+
+.effects.show{
+  display:block;
+}
+
+.eq{
+  display:grid;
+  grid-template-columns:70px 1fr 35px;
+  gap:8px;
+  align-items:center;
+  margin:10px 0;
+  font-size:12px;
+}
+
+/* MODAL */
+
+.modal{
+  position:fixed;
+  inset:0;
+  z-index:150;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:16px;
+  background:#000b;
+  backdrop-filter:blur(9px);
+}
+
+.modal.show{
+  display:flex;
+}
+
+.modalbox{
+  width:min(680px,100%);
+  max-height:90vh;
+  overflow:auto;
+  padding:18px;
+  background:#111526;
+  border:1px solid var(--line);
+  border-radius:22px;
+  box-shadow:0 30px 100px #000;
+}
+
+.langs,
+.effectsgrid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:9px;
+}
+
+.option{
+  padding:12px;
+  border-radius:13px;
+  border:1px solid var(--line);
+  background:#ffffff08;
+  color:#fff;
+}
+
+.option.selected{
+  border-color:var(--a);
+  background:#7b5cff22;
+}
+
+/* YOUTUBE */
+
+.youtubeModal .modalbox{
+  width:min(900px,100%);
+}
+
+#youtubePlayer{
+  width:100%;
+  aspect-ratio:16/9;
+  background:#000;
+  border-radius:16px;
+  overflow:hidden;
+}
+
+.youtubeInfo{
+  margin-top:12px;
+}
+
+/* TOAST */
+
+.toast{
+  position:fixed;
+  left:50%;
+  bottom:108px;
+  transform:translateX(-50%) translateY(15px);
+  opacity:0;
+  z-index:300;
+  padding:11px 15px;
+  border-radius:14px;
+  border:1px solid var(--line);
+  background:#151a2c;
+  transition:.25s;
+}
+
+.toast.show{
+  opacity:1;
+  transform:translateX(-50%);
+}
+
+/* RTL */
+
+[dir=rtl] .side{
+  left:auto;
+  right:0;
+  border-right:0;
+  border-left:1px solid var(--line);
+}
+
+[dir=rtl] .main{
+  margin-left:0;
+  margin-right:235px;
+}
+
+[dir=rtl] .player{
+  left:0;
+  right:235px;
+}
+
+[dir=rtl] .nav button{
+  text-align:right;
+}
+
+/* RESPONSIVE */
+
+@media(max-width:900px){
+  .grid,
+  .demos{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .side{
+    width:200px;
+  }
+
+  .main{
+    margin-left:200px;
+    width:calc(100% - 200px);
+  }
+
+  .player{
+    left:200px;
+  }
+
+  [dir=rtl] .main{
+    margin-right:200px;
+  }
+
+  [dir=rtl] .player{
+    right:200px;
+  }
+
+  .now{
+    width:190px;
+  }
+}
+
+@media(max-width:700px){
+  body{
+    padding-bottom:112px;
+  }
+
+  .side{
+    display:none;
+  }
+
+  .main{
+    width:100%;
+    margin:0;
+    padding:12px 12px 110px;
+  }
+
+  [dir=rtl] .main{
+    margin:0;
+  }
+
+  .top{
+    flex-wrap:wrap;
+  }
+
+  .search{
+    order:2;
+    flex-basis:100%;
+  }
+
+  .clock{
+    margin-left:auto;
+  }
+
+  .hero{
+    padding:21px;
+  }
+
+  .grid,
+  .demos{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .player{
+    left:0;
+    right:0;
+    height:96px;
+    padding:8px;
+  }
+
+  [dir=rtl] .player{
+    right:0;
+    left:0;
+  }
+
+  .now{
+    width:130px;
+    min-width:110px;
+  }
+
+  .now img{
+    width:45px;
+    height:45px;
+  }
+
+  .optional{
+    display:none;
+  }
+
+  .progress{
+    position:absolute;
+    left:10px;
+    right:10px;
+    bottom:3px;
+    width:auto;
+  }
+
+  .mobile{
+    position:fixed;
+    display:flex;
+    left:8px;
+    right:8px;
+    bottom:99px;
+    height:52px;
+    background:#0c1020f5;
+    border:1px solid var(--line);
+    border-radius:18px;
+    z-index:85;
+    justify-content:space-around;
+  }
+
+  .mobile button{
+    font-size:10px;
+    text-align:center;
+  }
+
+  .scene{
+    display:none;
+  }
+
+  .moon{
+    width:100px;
+    height:100px;
+    right:4%;
+    top:13%;
+  }
+
+  .moon:after{
+    width:100px;
+    height:100px;
+  }
+
+  .result{
+    padding:8px;
+  }
+
+  .result img{
+    width:50px;
+    height:50px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div id="ambient">
+  <canvas id="stars"></canvas>
+  <div class="moon"></div>
+  <div class="cloud one"></div>
+  <div class="cloud two"></div>
+  <div class="horizon"></div>
+</div>
+
+<div class="appLayer">
+
+<aside class="side">
+  <div class="logo"><i>♫</i>Harmoniq AI</div>
+
+  <nav class="nav">
+    <button data-page="home">⌂ <span data-i18n="home">Home</span></button>
+    <button data-page="search">⌕ <span data-i18n="search">Search</span></button>
+    <button data-page="library">▦ <span data-i18n="library">Library</span></button>
+    <button data-page="favorites">♡ <span data-i18n="favorites">Favorites</span></button>
+    <button data-page="playlists">☷ <span data-i18n="playlists">Playlists</span></button>
+    <button data-page="recent">◷ <span data-i18n="recent">Recently Played</span></button>
+    <button id="settingsBtn">⚙ <span data-i18n="settings">Settings</span></button>
+    <button id="effectsBtn">◒ <span data-i18n="effects">Audio Effects</span></button>
+  </nav>
+</aside>
+
+<main class="main">
+
+<header class="top">
+
+  <div class="search">
+    <input id="topSearch" class="input"
+      placeholder="Search music, artists, moods…">
+    <button id="topSearchBtn" class="btn primary">Search</button>
+  </div>
+
+  <div class="clock">
+    <b id="clock">--:--:--</b>
+    <small id="date">----</small>
+  </div>
+
+  <button id="langTop" class="btn">🌐 EN</button>
+
+</header>
+
+<section id="page-home" class="page active">
+
+  <div class="hero">
+
+    <small style="color:var(--b);font-weight:800;letter-spacing:2px">
+      AI MUSIC DISCOVERY
+    </small>
+
+    <h1 data-i18n="hero">
+      Music that matches your moment.
+    </h1>
+
+    <p data-i18n="intro">
+      Search music, play your own files, build playlists and let Harmoniq AI shape the atmosphere around your listening.
+    </p>
+
+    <div class="search">
+      <input id="aiInput" class="input"
+        placeholder="Ask Harmoniq AI for a mood or song…">
+      <button id="aiBtn" class="btn primary">Ask AI</button>
+    </div>
+
+    <div class="chips">
+      <button class="chip">relaxing music</button>
+      <button class="chip">music for sleep</button>
+      <button class="chip">chill ambient music</button>
+      <button class="chip">meditation music</button>
+      <button class="chip">instrumental music</button>
+      <button class="chip">arabic and andalusian music</button>
+    </div>
+
+  </div>
+
+  <div class="grid">
+
+    <div class="card stat">
+      <b id="favCount">0</b>
+      <span data-i18n="favorites">Favorites</span>
+    </div>
+
+    <div class="card stat">
+      <b id="recentCount">0</b>
+      <span data-i18n="recent">Recently Played</span>
+    </div>
+
+    <div class="card stat">
+      <b id="playlistCount">0</b>
+      <span data-i18n="playlists">Playlists</span>
+    </div>
+
+    <div class="card stat">
+      <b id="deviceCount">0</b>
+      <span data-i18n="device">Device Music</span>
+    </div>
+
+  </div>
+
+  <div class="head">
+    <h2 data-i18n="deviceMusic">My Device Music</h2>
+
+    <label class="btn">
+      ＋ <span data-i18n="add">Add Music</span>
+      <input id="files" type="file"
+        accept="audio/*,video/*" multiple hidden>
+    </label>
+  </div>
+
+  <div id="deviceList"></div>
+
+  <div class="head">
+    <h2>Starter Sounds</h2>
+  </div>
+
+  <div class="demos" id="demos"></div>
+
+</section>
+
+<section id="page-search" class="page">
+
+  <div class="card">
+
+    <div class="head">
+      <h2 data-i18n="searchMusic">Search Music</h2>
+      <button id="retry" class="btn">↻</button>
+    </div>
+
+    <div class="search">
+      <input id="searchInput" class="input"
+        placeholder="Search music, artists, moods…">
+      <button id="searchBtn" class="btn primary">Search</button>
+    </div>
+
+    <p id="status" class="sub"></p>
+
+    <div id="results"></div>
+
+  </div>
+
+</section>
+
+<section id="page-library" class="page">
+  <div class="card">
+    <div class="head">
+      <h2>Library</h2>
+    </div>
+    <div id="library"></div>
+  </div>
+</section>
+
+<section id="page-favorites" class="page">
+  <div class="card">
+    <div class="head">
+      <h2>Favorites</h2>
+    </div>
+    <div id="favList"></div>
+  </div>
+</section>
+
+<section id="page-playlists" class="page">
+  <div class="card">
+    <div class="head">
+      <h2>Playlists</h2>
+      <button id="newPlaylist" class="btn primary">＋ New</button>
+    </div>
+    <div id="playlists"></div>
+  </div>
+</section>
+
+<section id="page-recent" class="page">
+  <div class="card">
+    <div class="head">
+      <h2>Recently Played</h2>
+    </div>
+    <div id="recentList"></div>
+  </div>
+</section>
+
+</main>
+
+<nav class="mobile">
+  <button data-page="home">⌂<br>Home</button>
+  <button data-page="search">⌕<br>Search</button>
+  <button data-page="library">▦<br>Library</button>
+  <button data-page="favorites">♡<br>Fav</button>
+  <button id="mobileSettings">⚙<br>Settings</button>
+</nav>
+
+<div class="player">
+
+  <div class="now">
+    <img id="cover">
+    <div>
+      <b id="nowTitle">Harmoniq AI</b>
+      <span id="nowArtist">Ready to play</span>
+    </div>
+  </div>
+
+  <div class="controls">
+    <button id="prev" class="btn optional">⏮</button>
+    <button id="shuffle" class="btn optional">🔀</button>
+    <button id="play" class="play">▶</button>
+    <button id="next" class="btn optional">⏭</button>
+    <button id="repeat" class="btn optional">🔁</button>
+  </div>
+
+  <div class="progress">
+    <input id="seek" class="range" type="range"
+      min="0" max="100" value="0">
+
+    <div class="times">
+      <span id="cur">0:00</span>
+      <span id="dur">0:00</span>
+    </div>
+  </div>
+
+  <button id="mute" class="btn optional">🔊</button>
+
+  <input id="volume" class="range optional"
+    type="range" min="0" max="1" step=".01"
+    value=".85" style="width:80px">
+
+  <button id="effectsPlayer" class="btn">◒</button>
+
+</div>
+
+<div class="scene">
+  <b>Harmoniq 3D</b>
+  <div id="mood">🌙 Night / Relax</div>
+  <small id="sceneDate"></small>
+</div>
+
+<!-- EFFECTS -->
+
+<div id="effects" class="effects">
+
+  <div class="head">
+    <b>3D Audio Effects</b>
+    <button id="closeFx" class="btn">×</button>
+  </div>
+
+  <div style="display:flex;gap:5px;flex-wrap:wrap">
+    <button class="btn preset" data-p="flat">Flat</button>
+    <button class="btn preset" data-p="bass">Bass</button>
+    <button class="btn preset" data-p="soft">Soft</button>
+    <button class="btn preset" data-p="rock">Rock</button>
+    <button class="btn preset" data-p="disco">Disco</button>
+    <button class="btn preset" data-p="loud">Loud</button>
+    <button class="btn preset" data-p="hall">Hall</button>
+  </div>
+
+  <div class="eq">
+    <label>Bass</label>
+    <input id="bass" class="range"
+      type="range" min="-12" max="12" value="0">
+    <output id="bassV">0</output>
+  </div>
+
+  <div class="eq">
+    <label>Treble</label>
+    <input id="treble" class="range"
+      type="range" min="-12" max="12" value="0">
+    <output id="trebleV">0</output>
+  </div>
+
+  <div class="eq">
+    <label>Echo</label>
+    <input id="echo" class="range"
+      type="range" min="0" max=".8"
+      step=".01" value="0">
+    <output id="echoV">0</output>
+  </div>
+
+  <div class="eq">
+    <label>Room</label>
+    <input id="room" class="range"
+      type="range" min="0" max=".8"
+      step=".01" value="0">
+    <output id="roomV">0</output>
+  </div>
+
+</div>
+
+<!-- SETTINGS -->
+
+<div id="settings" class="modal">
+
+  <div class="modalbox">
+
+    <div class="head">
+      <h2>Settings</h2>
+      <button id="closeSettings" class="btn">×</button>
+    </div>
+
+    <h3>Language / اللغة / Dil</h3>
+
+    <div class="langs" id="langs">
+
+      <button class="option" data-lang="en">
+        🇬🇧 English
+      </button>
+
+      <button class="option" data-lang="ar">
+        🇸🇦 العربية
+      </button>
+
+      <button class="option" data-lang="tr">
+        🇹🇷 Türkçe
+      </button>
+
+      <button class="option" data-lang="fr">
+        🇫🇷 Français
+      </button>
+
+      <button class="option" data-lang="es">
+        🇪🇸 Español
+      </button>
+
+      <button class="option" data-lang="de">
+        🇩🇪 Deutsch
+      </button>
+
+    </div>
+
+    <h3>Accent</h3>
+
+    <div class="langs">
+
+      <button class="option accent" data-a="#7b5cff">
+        Violet
+      </button>
+
+      <button class="option accent" data-a="#00d9ff">
+        Cyan
+      </button>
+
+      <button class="option accent" data-a="#ff5fd7">
+        Pink
+      </button>
+
+      <button class="option accent" data-a="#42e695">
+        Green
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+<!-- YOUTUBE PLAYER -->
+
+<div id="youtubeModal" class="modal youtubeModal">
+
+  <div class="modalbox">
+
+    <div class="head">
+      <h2 id="youtubeTitle">YouTube</h2>
+      <button id="closeYoutube" class="btn">×</button>
+    </div>
+
+    <div id="youtubePlayer"></div>
+
+    <div class="youtubeInfo">
+      <b id="youtubeArtist"></b>
+      <div class="sub">
+        YouTube playback
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<div id="toast" class="toast"></div>
+
+<audio id="audio" preload="metadata" crossorigin="anonymous"></audio>
+
+</div>
+
+<!-- Official YouTube IFrame API -->
+<script src="https://www.youtube.com/iframe_api"></script>
+
 <script>
-const W="https://harmoniq-ai-proxy.hamidsaati1980.workers.dev",$=id=>document.getElementById(id),A=$("audio");
-let fav=JSON.parse(localStorage.getItem("harmoniq_favorites")||"[]"),recent=JSON.parse(localStorage.getItem("harmoniq_recent")||"[]"),pls=JSON.parse(localStorage.getItem("harmoniq_playlists")||"[]"),settings=JSON.parse(localStorage.getItem("harmoniq_settings")||"{}"),results=[],devices=[],idx=-1,shuffle=false,repeat=false,lastQ="",lang=settings.lang||"en";
-const texts={en:{home:"Home",search:"Search",library:"Library",favorites:"Favorites",playlists:"Playlists",recent:"Recently Played",settings:"Settings",effects:"Audio Effects",hero:"Music that matches your moment.",intro:"Search music, play your own files, build playlists and let Harmoniq AI shape the atmosphere around your listening.",device:"Device Music",deviceMusic:"My Device Music",add:"Add Music",searchMusic:"Search Music"},ar:{home:"الرئيسية",search:"بحث",library:"المكتبة",favorites:"المفضلة",playlists:"قوائم التشغيل",recent:"المشغلة مؤخراً",settings:"الإعدادات",effects:"مؤثرات الصوت",hero:"موسيقى تناسب لحظتك.",intro:"ابحث عن الموسيقى وشغّل ملفاتك وأنشئ قوائم التشغيل ودع Harmoniq AI يغيّر أجواء الاستماع.",device:"موسيقى الجهاز",deviceMusic:"موسيقى جهازي",add:"إضافة موسيقى",searchMusic:"بحث عن الموسيقى"},tr:{home:"Ana Sayfa",search:"Ara",library:"Kitaplık",favorites:"Favoriler",playlists:"Listeler",recent:"Son Çalınanlar",settings:"Ayarlar",effects:"Ses Efektleri",hero:"Anına uyan müzik.",intro:"Müzik ara, kendi dosyalarını çal ve atmosferi Harmoniq AI ile değiştir.",device:"Cihaz Müziği",deviceMusic:"Cihaz Müziğim",add:"Müzik Ekle",searchMusic:"Müzik Ara"},fr:{home:"Accueil",search:"Recherche",library:"Bibliothèque",favorites:"Favoris",playlists:"Playlists",recent:"Récents",settings:"Réglages",effects:"Effets audio",hero:"La musique qui correspond à votre moment.",intro:"Recherchez, écoutez vos fichiers et créez vos playlists avec Harmoniq AI.",device:"Musique appareil",deviceMusic:"Ma musique",add:"Ajouter",searchMusic:"Rechercher de la musique"},es:{home:"Inicio",search:"Buscar",library:"Biblioteca",favorites:"Favoritos",playlists:"Listas",recent:"Recientes",settings:"Ajustes",effects:"Efectos de audio",hero:"Música para tu momento.",intro:"Busca música, reproduce tus archivos y crea listas con Harmoniq AI.",device:"Música del dispositivo",deviceMusic:"Mi música",add:"Añadir música",searchMusic:"Buscar música"},de:{home:"Start",search:"Suche",library:"Bibliothek",favorites:"Favoriten",playlists:"Playlists",recent:"Zuletzt gespielt",settings:"Einstellungen",effects:"Audioeffekte",hero:"Musik für deinen Moment.",intro:"Musik suchen, eigene Dateien abspielen und Playlists mit Harmoniq AI erstellen.",device:"Gerätetitel",deviceMusic:"Meine Musik",add:"Musik hinzufügen",searchMusic:"Musik suchen"}};
-function toast(s){let e=$("toast");e.textContent=s;e.classList.add("show");clearTimeout(toast.t);toast.t=setTimeout(()=>e.classList.remove("show"),2600)}
-function esc(s){return String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
-function art(t){return t.artwork||"data:image/svg+xml;charset=UTF-8,"+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="500" height="500"><defs><linearGradient id="g"><stop stop-color="#7b5cff"/><stop offset="1" stop-color="#00d9ff"/></linearGradient></defs><rect width="100%" height="100%" fill="url(#g)"/><text x="50%" y="58%" text-anchor="middle" fill="white" font-size="140">♫</text></svg>')}
-function normalize(t){if(!t)return null;let src=String(t.source||t.provider||"audius").toLowerCase(),yt=src==="youtube"||src==="yt",id=t.id||t.audiusId||t.track_id||t.videoId||t.youtubeId||t.url||t.streamUrl;if(!id)return null;let a=t.artwork??t.artwork_url??t.cover_art??t.thumbnail??t.thumbnailUrl??null;if(a&&typeof a==="object")a=a["480x480"]||a["1000x1000"]||a["150x150"]||a["100x100"]||a["50x50"]||a.url||null;return{id:(yt?"youtube_":"audius_")+id,audiusId:!yt?String(t.audiusId||t.track_id||t.id||id):null,title:t.title||t.name||"Unknown",artist:t.artist||t.user?.name||t.user?.handle||t.user?.username||t.channelTitle||"Unknown Artist",artwork:a,source:t.source||(yt?"YouTube":"Audius"),streamUrl:t.streamUrl||t.stream_url||null,url:t.url||t.permalink||null,videoUrl:t.videoUrl||t.video_url||null,downloadUrl:t.downloadUrl||t.download_url||null}}
-function playable(t){if(t.streamUrl)return/^https?:\/\//i.test(t.streamUrl)?t.streamUrl:W+t.streamUrl;if(t.audiusId)return W+"/stream?id="+encodeURIComponent(t.audiusId);if(t.url&&!/youtube\.com|youtu\.be/i.test(t.url))return t.url;return null}
-function page(p){document.querySelectorAll(".page").forEach(x=>x.classList.toggle("active",x.id==="page-"+p));document.querySelectorAll("[data-page]").forEach(x=>x.classList.toggle("active",x.dataset.page===p));if(p==="favorites")list(fav,"favList");if(p==="recent")list(recent,"recentList");if(p==="playlists")renderPlaylists();if(p==="library")list([...fav,...recent,...devices],"library")}
-async function search(q){q=(q||$("searchInput").value||"").trim();if(!q)return toast("Type something to search");lastQ=q;page("search");$("status").textContent="Searching Harmoniq AI…";$("results").innerHTML='<div class="empty">Loading…</div>';try{let r=await fetch(W+"/search?q="+encodeURIComponent(q)+"&limit=50&_t="+Date.now(),{cache:"no-store",headers:{Accept:"application/json"}}),txt=await r.text();if(!r.ok)throw Error("Worker HTTP "+r.status+": "+txt.slice(0,160));let d=JSON.parse(txt),arr=Array.isArray(d)?d:(Array.isArray(d.results)?d.results:Array.isArray(d.data)?d.data:[]);results=arr.map(normalize).filter(Boolean);$("status").textContent=results.length+" result(s) found for “"+q+"”";renderResults(results);if(!results.length)toast("No music found")}catch(e){console.error(e);$("status").textContent="Search failed";$("results").innerHTML='<div class="empty">Search service error: '+esc(e.message)+'</div>'}}
-function renderResults(a){let b=$("results");b.innerHTML="";if(!a.length){b.innerHTML='<div class="empty">No music found.</div>';return}a.forEach(t=>{let r=document.createElement("div");r.className="result";let u=playable(t);r.innerHTML=`<img src="${art(t)}"><div class="info"><div class="title">${esc(t.title)}</div><div class="sub">${esc(t.artist)} · ${esc(t.source||"Music")}</div></div><div class="actions"><button class="btn icon">${u?"▶":"↗"}</button><button class="btn icon">♡</button><button class="btn icon">⇩</button>${t.videoUrl?'<button class="btn icon">▣</button>':''}</div>`;r.children[2].children[0].onclick=()=>u?play(t):open(t);r.children[2].children[1].onclick=()=>favorite(t);r.children[2].children[2].onclick=()=>download(t,"audio");if(t.videoUrl)r.children[2].children[3].onclick=()=>download(t,"video");b.appendChild(r)})}
-function open(t){if(t.url||t.videoUrl)window.open(t.url||t.videoUrl,"_blank","noopener,noreferrer");else toast("No public source link")}
-function download(t,k){let u=k==="video"?t.videoUrl:t.downloadUrl;if(!u){toast("This source does not provide a direct download");return}let a=document.createElement("a");a.href=u;a.target="_blank";a.download=(t.title||"Harmoniq")+(k==="video"?".mp4":".mp3");a.click()}
-function play(t){let u=playable(t);if(!u)return open(t);results=[t,...results.filter(x=>x.id!==t.id)];idx=0;$("nowTitle").textContent=t.title;$("nowArtist").textContent=(t.artist||"Unknown")+" · "+(t.source||"Music");$("cover").src=art(t);A.src=u;A.load();A.play().then(()=>{recent=[t,...recent.filter(x=>x.id!==t.id)].slice(0,50);localStorage.setItem("harmoniq_recent",JSON.stringify(recent));stats();mood(t)}).catch(()=>toast("This audio stream could not be played in this browser"))}
-function next(){if(!results.length)return;let n=shuffle?Math.floor(Math.random()*results.length):idx+1;if(n>=results.length)n=0;idx=n;play(results[idx])}function prev(){if(A.currentTime>4){A.currentTime=0;return}let n=idx-1;if(n<0)n=results.length-1;if(results[n])play(results[n])}
-function favorite(t){let i=fav.findIndex(x=>x.id===t.id);if(i>=0)fav.splice(i,1);else fav.unshift(t);localStorage.setItem("harmoniq_favorites",JSON.stringify(fav));stats();toast(i>=0?"Removed from favorites":"Added to favorites")}
-function list(a,id){let b=$(id);b.innerHTML="";if(!a.length){b.innerHTML='<div class="empty">Nothing here yet.</div>';return}a.forEach(t=>{let r=document.createElement("div");r.className="result";r.innerHTML=`<img src="${art(t)}"><div class="info"><div class="title">${esc(t.title)}</div><div class="sub">${esc(t.artist||"Unknown")}</div></div><button class="btn">▶</button><button class="btn">♡</button>`;r.children[2].onclick=()=>play(t);r.children[3].onclick=()=>favorite(t);b.appendChild(r)})}
-function renderPlaylists(){let b=$("playlists");b.innerHTML="";if(!pls.length){b.innerHTML='<div class="empty">No playlists yet.</div>';return}pls.forEach((p,i)=>{let r=document.createElement("div");r.className="result";r.innerHTML=`<div class="info"><div class="title">${esc(p.name)}</div><div class="sub">${p.tracks?.length||0} tracks</div></div><button class="btn">Open</button><button class="btn">×</button>`;r.children[1].onclick=()=>list(p.tracks||[],"playlists");r.children[2].onclick=()=>{pls.splice(i,1);localStorage.setItem("harmoniq_playlists",JSON.stringify(pls));renderPlaylists();stats()};b.appendChild(r)})}
-function stats(){$("favCount").textContent=fav.length;$('recentCount').textContent=recent.length;$('playlistCount').textContent=pls.length;$('deviceCount').textContent=devices.length}
-function files(fs){[...fs].forEach(f=>devices.push({id:"device_"+Date.now()+Math.random(),title:f.name.replace(/\.[^.]+$/,""),artist:"My Device",source:"Device",url:URL.createObjectURL(f),local:true}));list(devices,"deviceList");stats();toast(fs.length+" file(s) added")}
-function demos(){let d=[["Afterglow","Luna Vale","Chill"],["Velvet Sky","Noah Kade","Relax"],["Open Water","Kairo Field","Ambient"],["Lucid Dream","Harmoniq","Meditation"]],b=$("demos");d.forEach((x,i)=>{let r=document.createElement("div");r.className="card demo";r.innerHTML=`<img class="cover" src="${art({})}"><div><b>${x[0]}</b><span class="sub">${x[1]} · ${x[2]}</span></div>`;r.onclick=()=>{let c=new AudioContext(),o=c.createOscillator(),g=c.createGain();o.frequency.value=[220,261,330,392][i];g.gain.value=.08;o.connect(g).connect(c.destination);o.start();setTimeout(()=>{o.stop();c.close()},2500);$("nowTitle").textContent=x[0];$("nowArtist").textContent=x[1]+" · Demo"};b.appendChild(r)})}
-function language(l){lang=l;settings.lang=l;localStorage.setItem("harmoniq_settings",JSON.stringify(settings));document.documentElement.lang=l;document.documentElement.dir=l==="ar"?"rtl":"ltr";let t=texts[l]||texts.en;document.querySelectorAll("[data-i18n]").forEach(e=>{if(t[e.dataset.i18n])e.textContent=t[e.dataset.i18n]});$("langTop").textContent="🌐 "+l.toUpperCase();document.querySelectorAll("#langs .option").forEach(e=>e.classList.toggle("selected",e.dataset.lang===l));}
-function clock(){let n=new Date();$("clock").textContent=n.toLocaleTimeString([],{hour:"2-digit",minute:"2-digit",second:"2-digit"});$("date").textContent=n.toLocaleDateString(lang,{weekday:"short",year:"numeric",month:"short",day:"numeric"});$("sceneDate").textContent=n.toLocaleDateString(lang,{weekday:"long",month:"long",day:"numeric"})}
-function mood(t){let s=((t.title||"")+" "+(t.artist||"")).toLowerCase();let m=s.match(/rock|disco|party|energy|صاخب|روك|ديسكو/)?"⚡ Energy / Party":s.match(/rain|مطر|yağmur/)?"🌧 Rain":s.match(/sleep|night|نوم|ليل|uyku/)?"🌙 Night / Sleep":s.match(/nature|forest|ocean|طبيعة|doğa/)?"🌿 Nature":"🌌 3D Relax";$("mood").textContent=m}
-let fx=null;function effects(){if(!fx){try{let c=new (AudioContext||webkitAudioContext)(),s=c.createMediaElementSource(A),b=c.createBiquadFilter(),tr=c.createBiquadFilter(),d=c.createDelay(1),wet=c.createGain(),out=c.createGain();b.type="lowshelf";b.frequency.value=180;tr.type="highshelf";tr.frequency.value=3000;s.connect(b).connect(tr).connect(out);tr.connect(d).connect(wet).connect(out);out.connect(c.destination);fx={c,b,tr,d,wet}}catch(e){toast("Audio effects unavailable")}}return fx}
-function fxPreset(p){let v={flat:[0,0,0,0],bass:[8,2,.05,.1],soft:[-3,-2,.03,.15],rock:[6,5,.04,.12],disco:[5,8,.18,.3],loud:[10,6,.02,.08],hall:[2,1,.25,.7]}[p];if(!v)return;["bass","treble","echo","room"].forEach((id,i)=>{$(id).value=v[i];$(id).dispatchEvent(new Event("input"))})}
-$("topSearchBtn").onclick=()=>search($("topSearch").value);$("topSearch").onkeydown=e=>e.key==="Enter"&&search($("topSearch").value);$("searchBtn").onclick=()=>search();$("searchInput").onkeydown=e=>e.key==="Enter"&&search();$("retry").onclick=()=>lastQ&&search(lastQ);$("aiBtn").onclick=()=>search($("aiInput").value);$("aiInput").onkeydown=e=>e.key==="Enter"&&search($("aiInput").value);document.querySelectorAll(".chip").forEach(b=>b.onclick=()=>search(b.textContent));document.querySelectorAll("[data-page]").forEach(b=>b.onclick=()=>page(b.dataset.page));$("files").onchange=e=>files(e.target.files);$("play").onclick=()=>A.src?(A.paused?A.play():A.pause()):results[0]&&play(results[0]);$("next").onclick=next;$("prev").onclick=prev;$("shuffle").onclick=()=>shuffle=!shuffle;$("repeat").onclick=()=>repeat=!repeat;A.onplay=()=>$("play").textContent="❚❚";A.onpause=()=>$("play").textContent="▶";A.ontimeupdate=()=>{if(A.duration){$("seek").value=A.currentTime/A.duration*100;$("cur").textContent=fmt(A.currentTime)}};A.onloadedmetadata=()=>$("dur").textContent=fmt(A.duration);A.onended=()=>repeat?play(results[idx]):next();$("seek").oninput=()=>A.duration&&(A.currentTime=A.duration*$("seek").value/100);$("volume").oninput=()=>A.volume=$("volume").value;$("mute").onclick=()=>{A.muted=!A.muted;$("mute").textContent=A.muted?"🔇":"🔊"};$("settingsBtn").onclick=$("mobileSettings").onclick=$("langTop").onclick=()=>$("settings").classList.add("show");$("closeSettings").onclick=()=>$("settings").classList.remove("show");document.querySelectorAll("#langs .option").forEach(b=>b.onclick=()=>language(b.dataset.lang));document.querySelectorAll(".accent").forEach(b=>b.onclick=()=>{document.documentElement.style.setProperty("--a",b.dataset.a);settings.accent=b.dataset.a;localStorage.setItem("harmoniq_settings",JSON.stringify(settings))});$("effectsBtn").onclick=$("effectsPlayer").onclick=()=>$("effects").classList.toggle("show");$("closeFx").onclick=()=>$("effects").classList.remove("show");document.querySelectorAll(".preset").forEach(b=>b.onclick=()=>fxPreset(b.dataset.p));["bass","treble","echo","room"].forEach(id=>$(id).oninput=()=>{let f=effects();if(!f)return;let v=+$(id).value;if(id==="bass")f.b.gain.value=v;if(id==="treble")f.tr.gain.value=v;if(id==="echo")f.wet.gain.value=v;if(id==="room")f.d.delayTime.value=v;$(id+"V").value=v});$("newPlaylist").onclick=()=>{let n=prompt("Playlist name");if(n){pls.push({name:n,tracks:[]});localStorage.setItem("harmoniq_playlists",JSON.stringify(pls));renderPlaylists();stats()}};
-function fmt(s){if(!isFinite(s))return"0:00";return Math.floor(s/60)+":"+String(Math.floor(s%60)).padStart(2,"0")}
-language(lang);if(settings.accent)document.documentElement.style.setProperty("--a",settings.accent);demos();stats();clock();setInterval(clock,1000);renderPlaylists();
-(function(){let c=$("stars"),x=c.getContext("2d"),a=[];function r(){c.width=innerWidth;c.height=innerHeight;a=Array.from({length:90},()=>({x:Math.random()*c.width,y:Math.random()*c.height,s:Math.random()*2+.3,v:Math.random()*.3+.05}))}function d(){x.clearRect(0,0,c.width,c.height);x.fillStyle="#fff";a.forEach(o=>{o.y-=o.v;if(o.y<0)o.y=c.height;x.globalAlpha=.25;x.fillRect(o.x,o.y,o.s,o.s)});requestAnimationFrame(d)}addEventListener("resize",r);r();d()})();
-</script></body></html>
+"use strict";
+
+/* =========================================================
+   HARMONIQ AI
+   MAIN WORKER
+========================================================= */
+
+const W="https://harmoniq-ai-proxy.hamidsaati1980.workers.dev";
+
+const $=id=>document.getElementById(id);
+const A=$("audio");
+
+let fav=JSON.parse(localStorage.getItem("harmoniq_favorites")||"[]");
+let recent=JSON.parse(localStorage.getItem("harmoniq_recent")||"[]");
+let pls=JSON.parse(localStorage.getItem("harmoniq_playlists")||"[]");
+let settings=JSON.parse(localStorage.getItem("harmoniq_settings")||"{}");
+
+let results=[];
+let devices=[];
+let idx=-1;
+let shuffle=false;
+let repeat=false;
+let lastQ="";
+let lang=settings.lang||"en";
+
+let youtubePlayer=null;
+let currentYouTubeTrack=null;
+
+/* =========================================================
+   TRANSLATIONS
+========================================================= */
+
+const texts={
+en:{
+home:"Home",search:"Search",library:"Library",favorites:"Favorites",
+playlists:"Playlists",recent:"Recently Played",settings:"Settings",
+effects:"Audio Effects",hero:"Music that matches your moment.",
+intro:"Search music, play your own files, build playlists and let Harmoniq AI shape the atmosphere around your listening.",
+device:"Device Music",deviceMusic:"My Device Music",add:"Add Music",
+searchMusic:"Search Music"
+},
+ar:{
+home:"الرئيسية",search:"بحث",library:"المكتبة",favorites:"المفضلة",
+playlists:"قوائم التشغيل",recent:"المشغلة مؤخراً",settings:"الإعدادات",
+effects:"مؤثرات الصوت",hero:"موسيقى تناسب لحظتك.",
+intro:"ابحث عن الموسيقى وشغّل ملفاتك وأنشئ قوائم التشغيل ودع Harmoniq AI يغيّر أجواء الاستماع.",
+device:"موسيقى الجهاز",deviceMusic:"موسيقى جهازي",add:"إضافة موسيقى",
+searchMusic:"بحث عن الموسيقى"
+},
+tr:{
+home:"Ana Sayfa",search:"Ara",library:"Kitaplık",favorites:"Favoriler",
+playlists:"Listeler",recent:"Son Çalınanlar",settings:"Ayarlar",
+effects:"Ses Efektleri",hero:"Anına uyan müzik.",
+intro:"Müzik ara, kendi dosyalarını çal ve atmosferi Harmoniq AI ile değiştir.",
+device:"Cihaz Müziği",deviceMusic:"Cihaz Müziğim",add:"Müzik Ekle",
+searchMusic:"Müzik Ara"
+},
+fr:{
+home:"Accueil",search:"Recherche",library:"Bibliothèque",favorites:"Favoris",
+playlists:"Playlists",recent:"Récents",settings:"Réglages",
+effects:"Effets audio",hero:"La musique qui correspond à votre moment.",
+intro:"Recherchez, écoutez vos fichiers et créez vos playlists avec Harmoniq AI.",
+device:"Musique appareil",deviceMusic:"Ma musique",add:"Ajouter",
+searchMusic:"Rechercher de la musique"
+},
+es:{
+home:"Inicio",search:"Buscar",library:"Biblioteca",favorites:"Favoritos",
+playlists:"Listas",recent:"Recientes",settings:"Ajustes",
+effects:"Efectos de audio",hero:"Música para tu momento.",
+intro:"Busca música, reproduce tus archivos y crea listas con Harmoniq AI.",
+device:"Música del dispositivo",deviceMusic:"Mi música",add:"Añadir música",
+searchMusic:"Buscar música"
+},
+de:{
+home:"Start",search:"Suche",library:"Bibliothek",favorites:"Favoriten",
+playlists:"Playlists",recent:"Zuletzt gespielt",settings:"Einstellungen",
+effects:"Audioeffekte",hero:"Musik für deinen Moment.",
+intro:"Musik suchen, eigene Dateien abspielen und Playlists mit Harmoniq AI erstellen.",
+device:"Gerätetitel",deviceMusic:"Meine Musik",add:"Musik hinzufügen",
+searchMusic:"Musik suchen"
+}
+};
+
+/* =========================================================
+   HELPERS
+========================================================= */
+
+function toast(s){
+  const e=$("toast");
+  e.textContent=s;
+  e.classList.add("show");
+  clearTimeout(toast.t);
+  toast.t=setTimeout(()=>e.classList.remove("show"),2800);
+}
+
+function esc(s){
+  return String(s??"").replace(/[&<>"']/g,m=>({
+    "&":"&amp;",
+    "<":"&lt;",
+    ">":"&gt;",
+    '"':"&quot;",
+    "'":"&#039;"
+  }[m]));
+}
+
+function artwork(t){
+  if(t&&t.artwork)return t.artwork;
+
+  return "data:image/svg+xml;charset=UTF-8,"+
+  encodeURIComponent(`
+  <svg xmlns="http://www.w3.org/2000/svg" width="500" height="500">
+    <defs>
+      <linearGradient id="g">
+        <stop stop-color="#7b5cff"/>
+        <stop offset="1" stop-color="#00d9ff"/>
+      </linearGradient>
+    </defs>
+    <rect width="100%" height="100%" fill="url(#g)"/>
+    <text x="50%" y="58%" text-anchor="middle"
+      fill="white" font-size="140">♫</text>
+  </svg>`);
+}
+
+/* =========================================================
+   NORMALIZE SEARCH RESULT
+========================================================= */
+
+function normalize(t){
+
+  if(!t)return null;
+
+  const source=String(
+    t.source ||
+    t.provider ||
+    ""
+  ).toLowerCase();
+
+  const possibleYoutubeId=
+    t.youtubeId ||
+    t.videoId ||
+    t.video_id ||
+    null;
+
+  const yt=
+    source==="youtube" ||
+    source==="yt" ||
+    !!possibleYoutubeId ||
+    /youtube\.com|youtu\.be/i.test(String(t.url||t.permalink||""));
+
+  const rawId=
+    possibleYoutubeId ||
+    t.id ||
+    t.audiusId ||
+    t.track_id ||
+    t.url ||
+    t.streamUrl;
+
+  if(!rawId)return null;
+
+  let a=
+    t.artwork ??
+    t.artwork_url ??
+    t.cover_art ??
+    t.thumbnail ??
+    t.thumbnailUrl ??
+    t.thumbnail_url ??
+    null;
+
+  if(a&&typeof a==="object"){
+    a=
+      a["480x480"] ||
+      a["1000x1000"] ||
+      a["150x150"] ||
+      a["100x100"] ||
+      a["50x50"] ||
+      a.url ||
+      null;
+  }
+
+  return {
+
+    id:(yt?"youtube_":"audius_")+String(rawId),
+
+    youtubeId:yt?
+      String(possibleYoutubeId||t.videoId||t.id||""):
+      null,
+
+    audiusId:!yt?
+      String(t.audiusId||t.track_id||t.id||rawId):
+      null,
+
+    title:t.title||t.name||"Unknown",
+
+    artist:
+      t.artist ||
+      t.user?.name ||
+      t.user?.handle ||
+      t.user?.username ||
+      t.channelTitle ||
+      t.channel_title ||
+      "Unknown Artist",
+
+    artwork:a||null,
+
+    source:yt?"YouTube":(t.source||"Audius"),
+
+    streamUrl:
+      t.streamUrl ||
+      t.stream_url ||
+      null,
+
+    url:
+      t.url ||
+      t.permalink ||
+      t.link ||
+      null,
+
+    videoUrl:
+      t.videoUrl ||
+      t.video_url ||
+      null,
+
+    embedUrl:
+      t.embedUrl ||
+      t.embed_url ||
+      null,
+
+    downloadUrl:
+      t.downloadUrl ||
+      t.download_url ||
+      null,
+
+    downloadable:
+      t.downloadable===true ||
+      t.is_downloadable===true ||
+      !!t.downloadUrl ||
+      !!t.download_url,
+
+    playbackMode:yt?"youtube":"audio"
+  };
+}
+
+/* =========================================================
+   AUDIO URL
+========================================================= */
+
+function playable(t){
+
+  if(!t)return null;
+
+  if(t.local&&t.url)
+    return t.url;
+
+  if(t.streamUrl){
+
+    return /^https?:\/\//i.test(t.streamUrl)
+      ?t.streamUrl
+      :W+t.streamUrl;
+  }
+
+  if(t.audiusId)
+    return W+"/stream?id="+encodeURIComponent(t.audiusId);
+
+  if(t.url&&!/youtube\.com|youtu\.be/i.test(t.url))
+    return t.url;
+
+  return null;
+}
+
+/* =========================================================
+   PAGE NAVIGATION
+========================================================= */
+
+function page(p){
+
+  document.querySelectorAll(".page")
+    .forEach(x=>{
+      x.classList.toggle(
+        "active",
+        x.id==="page-"+p
+      );
+    });
+
+  document.querySelectorAll("[data-page]")
+    .forEach(x=>{
+      x.classList.toggle(
+        "active",
+        x.dataset.page===p
+      );
+    });
+
+  if(p==="favorites")
+    list(fav,"favList");
+
+  if(p==="recent")
+    list(recent,"recentList");
+
+  if(p==="library")
+    list(
+      [...fav,...recent,...devices],
+      "library"
+    );
+
+  if(p==="playlists")
+    renderPlaylists();
+}
+
+/* =========================================================
+   SEARCH
+========================================================= */
+
+async function search(q){
+
+  q=(q||$("searchInput").value||"").trim();
+
+  if(!q){
+    toast("Type something to search");
+    return;
+  }
+
+  lastQ=q;
+
+  page("search");
+
+  $("status").textContent=
+    "Searching Harmoniq AI…";
+
+  $("results").innerHTML=
+    '<div class="empty">Loading music…</div>';
+
+  try{
+
+    const response=
+      await fetch(
+        W+
+        "/search?q="+
+        encodeURIComponent(q)+
+        "&limit=50&_t="+
+        Date.now(),
+        {
+          method:"GET",
+          cache:"no-store",
+          headers:{
+            "Accept":"application/json"
+          }
+        }
+      );
+
+    const text=
+      await response.text();
+
+    if(!response.ok)
+      throw new Error(
+        "Worker HTTP "+
+        response.status+
+        ": "+
+        text.slice(0,180)
+      );
+
+    let data;
+
+    try{
+      data=JSON.parse(text);
+    }catch{
+      throw new Error(
+        "Worker returned invalid JSON"
+      );
+    }
+
+    const arr=
+      Array.isArray(data)
+        ?data
+        :Array.isArray(data.results)
+          ?data.results
+          :Array.isArray(data.data)
+            ?data.data
+            :[];
+
+    results=
+      arr
+      .map(normalize)
+      .filter(Boolean);
+
+    $("status").textContent=
+      results.length+
+      " result(s) found for “"+
+      q+
+      "”";
+
+    renderResults(results);
+
+    if(!results.length)
+      toast("No music found");
+
+  }catch(e){
+
+    console.error(
+      "Harmoniq search failed:",
+      e
+    );
+
+    $("status").textContent=
+      "Search failed";
+
+    $("results").innerHTML=
+      '<div class="empty">'+
+      'Search service error: '+
+      esc(e.message)+
+      '</div>';
+  }
+}
+
+/* =========================================================
+   RESULTS
+========================================================= */
+
+function renderResults(arr){
+
+  const box=$("results");
+
+  box.innerHTML="";
+
+  if(!arr.length){
+
+    box.innerHTML=
+      '<div class="empty">No music found.</div>';
+
+    return;
+  }
+
+  arr.forEach(t=>{
+
+    const row=
+      document.createElement("div");
+
+    row.className="result";
+
+    const isYT=
+      t.playbackMode==="youtube"||
+      !!t.youtubeId;
+
+    const u=
+      isYT
+        ?true
+        :!!playable(t);
+
+    let downloadButton="";
+
+    if(t.downloadable&&t.downloadUrl){
+
+      downloadButton=
+        '<button class="btn icon" title="Download">⇩</button>';
+    }else{
+
+      downloadButton=
+        '<button class="btn icon" title="Download">⇩</button>';
+    }
+
+    row.innerHTML=`
+
+      <img src="${artwork(t)}">
+
+      <div class="info">
+
+        <div class="title">
+          ${esc(t.title)}
+        </div>
+
+        <div class="sub">
+          ${esc(t.artist)}
+          ·
+          ${esc(t.source||"Music")}
+        </div>
+
+      </div>
+
+      <div class="actions">
+
+        <button class="btn icon"
+          title="${isYT?"Play YouTube":"Play"}">
+          ${u?"▶":"↗"}
+        </button>
+
+        <button class="btn icon"
+          title="Favorite">
+          ♡
+        </button>
+
+        ${downloadButton}
+
+      </div>
+    `;
+
+    const actions=
+      row.children[row.children.length-1];
+
+    actions.children[0].onclick=
+      ()=>{
+        if(isYT)
+          playYouTube(t);
+        else if(playable(t))
+          play(t);
+        else
+          openSource(t);
+      };
+
+    actions.children[1].onclick=
+      ()=>favorite(t);
+
+    actions.children[2].onclick=
+      ()=>download(t);
+
+    box.appendChild(row);
+  });
+}
+
+/* =========================================================
+   OPEN SOURCE
+========================================================= */
+
+function openSource(t){
+
+  const u=
+    t.url||
+    t.videoUrl||
+    null;
+
+  if(u){
+
+    window.open(
+      u,
+      "_blank",
+      "noopener,noreferrer"
+    );
+
+    return;
+  }
+
+  toast("No public source link");
+}
+
+/* =========================================================
+   DOWNLOAD
+   ONLY DIRECT SOURCE PROVIDED
+========================================================= */
+
+function download(t){
+
+  if(!t.downloadUrl){
+
+    toast(
+      "This source does not provide a direct download"
+    );
+
+    return;
+  }
+
+  const a=
+    document.createElement("a");
+
+  a.href=t.downloadUrl;
+
+  a.target="_blank";
+
+  a.rel="noopener noreferrer";
+
+  a.download=
+    (t.title||"Harmoniq")
+    .replace(/[\\/:*?"<>|]/g,"_")+
+    ".mp3";
+
+  document.body.appendChild(a);
+
+  a.click();
+
+  a.remove();
+}
+
+/* =========================================================
+   AUDIO PLAYBACK
+========================================================= */
+
+async function play(t){
+
+  if(!t)return;
+
+  if(t.playbackMode==="youtube"||t.youtubeId){
+
+    playYouTube(t);
+
+    return;
+  }
+
+  const u=playable(t);
+
+  if(!u){
+
+    openSource(t);
+
+    return;
+  }
+
+  results=[
+    t,
+    ...results.filter(
+      x=>x.id!==t.id
+    )
+  ];
+
+  idx=0;
+
+  $("nowTitle").textContent=
+    t.title||"Unknown";
+
+  $("nowArtist").textContent=
+    (t.artist||"Unknown Artist")+
+    " · "+
+    (t.source||"Music");
+
+  $("cover").src=artwork(t);
+
+  closeYoutube();
+
+  try{
+
+    A.pause();
+
+    A.removeAttribute("src");
+
+    A.load();
+
+    A.src=u;
+
+    A.load();
+
+    await A.play();
+
+    addRecent(t);
+
+    mood(t);
+
+    setMediaSession(t);
+
+  }catch(e){
+
+    console.error(
+      "Audio playback failed:",
+      e
+    );
+
+    toast(
+      "This audio stream could not be played in this browser"
+    );
+  }
+}
+
+/* =========================================================
+   YOUTUBE PLAYBACK
+========================================================= */
+
+function playYouTube(t){
+
+  if(!t.youtubeId){
+
+    openSource(t);
+
+    return;
+  }
+
+  currentYouTubeTrack=t;
+
+  A.pause();
+
+  $("nowTitle").textContent=
+    t.title||"YouTube";
+
+  $("nowArtist").textContent=
+    (t.artist||"Unknown Artist")+
+    " · YouTube";
+
+  $("cover").src=artwork(t);
+
+  $("youtubeTitle").textContent=
+    t.title||"YouTube";
+
+  $("youtubeArtist").textContent=
+    t.artist||"";
+
+  $("youtubeModal").classList.add("show");
+
+  if(window.YT&&YT.Player){
+
+    createYouTubePlayer(t);
+
+  }else{
+
+    toast(
+      "YouTube player is loading…"
+    );
+  }
+}
+
+function createYouTubePlayer(t){
+
+  if(youtubePlayer){
+
+    try{
+      youtubePlayer.loadVideoById(
+        t.youtubeId
+      );
+      return;
+    }catch(e){}
+  }
+
+  $("youtubePlayer").innerHTML="";
+
+  youtubePlayer=
+    new YT.Player(
+      "youtubePlayer",
+      {
+        width:"100%",
+        height:"100%",
+        videoId:t.youtubeId,
+
+        playerVars:{
+          autoplay:1,
+          playsinline:1,
+          rel:0,
+          modestbranding:1
+        },
+
+        events:{
+
+          onReady:function(event){
+
+            try{
+              event.target.playVideo();
+            }catch(e){}
+
+            addRecent(t);
+            mood(t);
+          },
+
+          onStateChange:function(event){
+
+            if(
+              window.YT &&
+              event.data===YT.PlayerState.ENDED
+            ){
+
+              if(repeat){
+
+                try{
+                  event.target.seekTo(0,true);
+                  event.target.playVideo();
+                }catch(e){}
+
+              }
+            }
+          },
+
+          onError:function(){
+
+            toast(
+              "YouTube could not play this video"
+            );
+          }
+        }
+      }
+    );
+}
+
+window.onYouTubeIframeAPIReady=
+  function(){
+
+    if(
+      currentYouTubeTrack&&
+      $("youtubeModal").classList.contains("show")
+    ){
+
+      createYouTubePlayer(
+        currentYouTubeTrack
+      );
+    }
+  };
+
+function closeYoutube(){
+
+  $("youtubeModal").classList.remove("show");
+
+  if(youtubePlayer){
+
+    try{
+      youtubePlayer.stopVideo();
+    }catch(e){}
+  }
+
+  currentYouTubeTrack=null;
+}
+
+/* =========================================================
+   QUEUE
+========================================================= */
+
+function next(){
+
+  if(!results.length)return;
+
+  let n;
+
+  if(shuffle){
+
+    n=
+      Math.floor(
+        Math.random()*
+        results.length
+      );
+
+  }else{
+
+    n=idx+1;
+  }
+
+  if(n>=results.length)
+    n=0;
+
+  idx=n;
+
+  play(results[idx]);
+}
+
+function prev(){
+
+  if(
+    A.currentTime>
+    4
+  ){
+
+    A.currentTime=0;
+
+    return;
+  }
+
+  let n=idx-1;
+
+  if(n<0)
+    n=results.length-1;
+
+  if(results[n])
+    play(results[n]);
+}
+
+/* =========================================================
+   FAVORITES
+========================================================= */
+
+function favorite(t){
+
+  const i=
+    fav.findIndex(
+      x=>x.id===t.id
+    );
+
+  if(i>=0){
+
+    fav.splice(i,1);
+
+    toast(
+      "Removed from favorites"
+    );
+
+  }else{
+
+    fav.unshift(t);
+
+    toast(
+      "Added to favorites"
+    );
+  }
+
+  localStorage.setItem(
+    "harmoniq_favorites",
+    JSON.stringify(fav)
+  );
+
+  stats();
+
+  if($("page-favorites").classList.contains("active"))
+    list(fav,"favList");
+}
+
+/* =========================================================
+   LIST
+========================================================= */
+
+function list(arr,id){
+
+  const box=$(id);
+
+  if(!box)return;
+
+  box.innerHTML="";
+
+  if(!arr.length){
+
+    box.innerHTML=
+      '<div class="empty">Nothing here yet.</div>';
+
+    return;
+  }
+
+  arr.forEach(t=>{
+
+    const row=
+      document.createElement("div");
+
+    row.className="result";
+
+    row.innerHTML=`
+
+      <img src="${artwork(t)}">
+
+      <div class="info">
+
+        <div class="title">
+          ${esc(t.title)}
+        </div>
+
+        <div class="sub">
+          ${esc(t.artist||"Unknown")}
+        </div>
+
+      </div>
+
+      <button class="btn">▶</button>
+
+      <button class="btn">♡</button>
+    `;
+
+    row.children[2].onclick=
+      ()=>play(t);
+
+    row.children[3].onclick=
+      ()=>favorite(t);
+
+    box.appendChild(row);
+  });
+}
+
+/* =========================================================
+   PLAYLISTS
+========================================================= */
+
+function renderPlaylists(){
+
+  const box=$("playlists");
+
+  box.innerHTML="";
+
+  if(!pls.length){
+
+    box.innerHTML=
+      '<div class="empty">No playlists yet.</div>';
+
+    return;
+  }
+
+  pls.forEach((p,i)=>{
+
+    const row=
+      document.createElement("div");
+
+    row.className="result";
+
+    row.innerHTML=`
+
+      <div class="info">
+
+        <div class="title">
+          ${esc(p.name)}
+        </div>
+
+        <div class="sub">
+          ${(p.tracks||[]).length} tracks
+        </div>
+
+      </div>
+
+      <button class="btn">Open</button>
+
+      <button class="btn">×</button>
+    `;
+
+    row.children[1].onclick=()=>{
+
+      const tracks=p.tracks||[];
+
+      if(!tracks.length){
+
+        toast(
+          "This playlist is empty"
+        );
+
+        return;
+      }
+
+      page("library");
+
+      list(
+        tracks,
+        "library"
+      );
+    };
+
+    row.children[2].onclick=()=>{
+
+      pls.splice(i,1);
+
+      localStorage.setItem(
+        "harmoniq_playlists",
+        JSON.stringify(pls)
+      );
+
+      renderPlaylists();
+
+      stats();
+    };
+
+    box.appendChild(row);
+  });
+}
+
+/* =========================================================
+   DEVICE MUSIC
+========================================================= */
+
+function addFiles(fs){
+
+  [...fs].forEach(f=>{
+
+    devices.push({
+
+      id:
+        "device_"+
+        Date.now()+
+        Math.random(),
+
+      title:
+        f.name.replace(
+          /\.[^.]+$/,
+          ""
+        ),
+
+      artist:"My Device",
+
+      source:"Device",
+
+      url:
+        URL.createObjectURL(f),
+
+      local:true
+    });
+
+  });
+
+  list(
+    devices,
+    "deviceList"
+  );
+
+  stats();
+
+  toast(
+    fs.length+
+    " file(s) added"
+  );
+}
+
+/* =========================================================
+   DEMO SOUNDS
+========================================================= */
+
+function createDemo(){
+
+  const c=
+    new (
+      window.AudioContext||
+      window.webkitAudioContext
+    )();
+
+  const o=
+    c.createOscillator();
+
+  const g=
+    c.createGain();
+
+  o.frequency.value=220;
+
+  g.gain.value=.07;
+
+  o.connect(g);
+
+  g.connect(c.destination);
+
+  o.start();
+
+  setTimeout(()=>{
+
+    o.stop();
+
+    c.close();
+
+  },2500);
+}
+
+function renderDemos(){
+
+  const d=[
+    ["Afterglow","Luna Vale","Chill"],
+    ["Velvet Sky","Noah Kade","Relax"],
+    ["Open Water","Kairo Field","Ambient"],
+    ["Lucid Dream","Harmoniq","Meditation"]
+  ];
+
+  const box=$("demos");
+
+  box.innerHTML="";
+
+  d.forEach((x,i)=>{
+
+    const row=
+      document.createElement("div");
+
+    row.className="card demo";
+
+    row.innerHTML=`
+
+      <img class="cover"
+        src="${artwork({})}">
+
+      <div>
+
+        <b>${x[0]}</b>
+
+        <span class="sub">
+          ${x[1]} · ${x[2]}
+        </span>
+
+      </div>
+    `;
+
+    row.onclick=()=>{
+
+      createDemo();
+
+      $("nowTitle").textContent=x[0];
+
+      $("nowArtist").textContent=
+        x[1]+" · Demo";
+
+      toast(
+        "Playing starter sound"
+      );
+    };
+
+    box.appendChild(row);
+  });
+}
+
+/* =========================================================
+   STATS
+========================================================= */
+
+function stats(){
+
+  $("favCount").textContent=
+    fav.length;
+
+  $("recentCount").textContent=
+    recent.length;
+
+  $("playlistCount").textContent=
+    pls.length;
+
+  $("deviceCount").textContent=
+    devices.length;
+}
+
+/* =========================================================
+   RECENT
+========================================================= */
+
+function addRecent(t){
+
+  recent=[
+    t,
+    ...recent.filter(
+      x=>x.id!==t.id
+    )
+  ].slice(0,50);
+
+  localStorage.setItem(
+    "harmoniq_recent",
+    JSON.stringify(recent)
+  );
+
+  stats();
+}
+
+/* =========================================================
+   LANGUAGE
+========================================================= */
+
+function language(l){
+
+  lang=l;
+
+  settings.lang=l;
+
+  localStorage.setItem(
+    "harmoniq_settings",
+    JSON.stringify(settings)
+  );
+
+  document.documentElement.lang=l;
+
+  document.documentElement.dir=
+    l==="ar"?"rtl":"ltr";
+
+  const t=
+    texts[l]||
+    texts.en;
+
+  document
+    .querySelectorAll("[data-i18n]")
+    .forEach(e=>{
+
+      const key=
+        e.dataset.i18n;
+
+      if(t[key])
+        e.textContent=t[key];
+    });
+
+  $("langTop").textContent=
+    "🌐 "+
+    l.toUpperCase();
+
+  document
+    .querySelectorAll(
+      "#langs .option"
+    )
+    .forEach(e=>{
+
+      e.classList.toggle(
+        "selected",
+        e.dataset.lang===l
+      );
+    });
+
+  clock();
+}
+
+/* =========================================================
+   CLOCK
+========================================================= */
+
+function clock(){
+
+  const n=new Date();
+
+  $("clock").textContent=
+    n.toLocaleTimeString(
+      [],
+      {
+        hour:"2-digit",
+        minute:"2-digit",
+        second:"2-digit"
+      }
+    );
+
+  $("date").textContent=
+    n.toLocaleDateString(
+      lang,
+      {
+        weekday:"short",
+        year:"numeric",
+        month:"short",
+        day:"numeric"
+      }
+    );
+
+  $("sceneDate").textContent=
+    n.toLocaleDateString(
+      lang,
+      {
+        weekday:"long",
+        month:"long",
+        day:"numeric"
+      }
+    );
+}
+
+/* =========================================================
+   MOOD
+========================================================= */
+
+function mood(t){
+
+  const s=
+    (
+      (t.title||"")+
+      " "+
+      (t.artist||"")
+    ).toLowerCase();
+
+  let m;
+
+  if(
+    /rock|disco|party|energy|صاخب|روك|ديسكو|enerji/i.test(s)
+  ){
+
+    m="⚡ Energy / Party";
+
+  }else if(
+    /rain|مطر|yağmur|pluie|regen/i.test(s)
+  ){
+
+    m="🌧 Rain";
+
+  }else if(
+    /sleep|night|نوم|ليل|uyku|nuit|schlaf/i.test(s)
+  ){
+
+    m="🌙 Night / Sleep";
+
+  }else if(
+    /nature|forest|ocean|طبيعة|doğa|forêt|natur/i.test(s)
+  ){
+
+    m="🌿 Nature";
+
+  }else{
+
+    m="🌌 3D Relax";
+  }
+
+  $("mood").textContent=m;
+}
+
+/* =========================================================
+   AUDIO EFFECTS
+========================================================= */
+
+let fx=null;
+
+function getEffects(){
+
+  if(fx)return fx;
+
+  try{
+
+    const AC=
+      window.AudioContext||
+      window.webkitAudioContext;
+
+    if(!AC)
+      throw new Error("No AudioContext");
+
+    const c=new AC();
+
+    const source=
+      c.createMediaElementSource(A);
+
+    const bass=
+      c.createBiquadFilter();
+
+    bass.type="lowshelf";
+    bass.frequency.value=180;
+
+    const treble=
+      c.createBiquadFilter();
+
+    treble.type="highshelf";
+    treble.frequency.value=3000;
+
+    const delay=
+      c.createDelay(1);
+
+    const wet=
+      c.createGain();
+
+    const out=
+      c.createGain();
+
+    source
+      .connect(bass)
+      .connect(treble)
+      .connect(out);
+
+    treble
+      .connect(delay)
+      .connect(wet)
+      .connect(out);
+
+    out.connect(c.destination);
+
+    fx={
+      c,
+      source,
+      bass,
+      treble,
+      delay,
+      wet,
+      out
+    };
+
+    return fx;
+
+  }catch(e){
+
+    console.error(e);
+
+    toast(
+      "Audio effects unavailable"
+    );
+
+    return null;
+  }
+}
+
+async function resumeEffects(){
+
+  const f=getEffects();
+
+  if(
+    f&&
+    f.c.state==="suspended"
+  ){
+
+    try{
+      await f.c.resume();
+    }catch(e){}
+  }
+
+  return f;
+}
+
+function fxPreset(p){
+
+  const v={
+
+    flat:[0,0,0,0],
+
+    bass:[8,2,.05,.10],
+
+    soft:[-3,-2,.03,.15],
+
+    rock:[6,5,.04,.12],
+
+    disco:[5,8,.18,.30],
+
+    loud:[10,6,.02,.08],
+
+    hall:[2,1,.25,.70]
+
+  }[p];
+
+  if(!v)return;
+
+  [
+    "bass",
+    "treble",
+    "echo",
+    "room"
+  ].forEach((id,i)=>{
+
+    $(id).value=v[i];
+
+    $(id).dispatchEvent(
+      new Event("input")
+    );
+  });
+}
+
+/* =========================================================
+   MEDIA SESSION
+========================================================= */
+
+function setMediaSession(t){
+
+  if(!("mediaSession" in navigator))
+    return;
+
+  try{
+
+    navigator.mediaSession.metadata=
+      new MediaMetadata({
+
+        title:t.title||"Harmoniq AI",
+
+        artist:
+          t.artist||
+          "Unknown Artist",
+
+        album:
+          t.source||
+          "Harmoniq AI",
+
+        artwork:[
+          {
+            src:artwork(t),
+            sizes:"512x512",
+            type:"image/png"
+          }
+        ]
+      });
+
+  }catch(e){}
+}
+
+/* =========================================================
+   AUDIO FORMAT
+========================================================= */
+
+function fmt(s){
+
+  if(!isFinite(s))
+    return "0:00";
+
+  return Math.floor(s/60)+":"+
+    String(
+      Math.floor(s%60)
+    ).padStart(2,"0");
+}
+
+/* =========================================================
+   EVENTS
+========================================================= */
+
+$("topSearchBtn").onclick=
+  ()=>search($("topSearch").value);
+
+$("topSearch").onkeydown=
+  e=>{
+    if(e.key==="Enter")
+      search($("topSearch").value);
+  };
+
+$("searchBtn").onclick=
+  ()=>search();
+
+$("searchInput").onkeydown=
+  e=>{
+    if(e.key==="Enter")
+      search();
+  };
+
+$("retry").onclick=
+  ()=>{
+    if(lastQ)
+      search(lastQ);
+  };
+
+$("aiBtn").onclick=
+  ()=>search($("aiInput").value);
+
+$("aiInput").onkeydown=
+  e=>{
+    if(e.key==="Enter")
+      search($("aiInput").value);
+  };
+
+document
+.querySelectorAll(".chip")
+.forEach(b=>{
+  b.onclick=
+    ()=>search(b.textContent);
+});
+
+document
+.querySelectorAll("[data-page]")
+.forEach(b=>{
+  b.onclick=
+    ()=>page(b.dataset.page);
+});
+
+$("files").onchange=
+  e=>{
+    if(e.target.files.length)
+      addFiles(e.target.files);
+  };
+
+/* PLAY BUTTON */
+
+$("play").onclick=
+  async ()=>{
+
+    if(
+      currentYouTubeTrack&&
+      youtubePlayer
+    ){
+
+      try{
+
+        if(
+          youtubePlayer.getPlayerState()===
+          YT.PlayerState.PLAYING
+        ){
+
+          youtubePlayer.pauseVideo();
+
+        }else{
+
+          youtubePlayer.playVideo();
+        }
+
+      }catch(e){}
+
+      return;
+    }
+
+    if(A.src){
+
+      if(A.paused){
+
+        await resumeEffects();
+
+        A.play();
+
+      }else{
+
+        A.pause();
+      }
+
+      return;
+    }
+
+    if(results.length)
+      play(results[0]);
+  };
+
+$("next").onclick=next;
+
+$("prev").onclick=prev;
+
+$("shuffle").onclick=
+  ()=>{
+    shuffle=!shuffle;
+
+    $("shuffle").style.color=
+      shuffle?"var(--b)":"#fff";
+  };
+
+$("repeat").onclick=
+  ()=>{
+    repeat=!repeat;
+
+    $("repeat").style.color=
+      repeat?"var(--b)":"#fff";
+  };
+
+/* AUDIO EVENTS */
+
+A.onplay=
+  ()=>{
+    $("play").textContent="❚❚";
+  };
+
+A.onpause=
+  ()=>{
+    $("play").textContent="▶";
+  };
+
+A.ontimeupdate=
+  ()=>{
+
+    if(A.duration){
+
+      $("seek").value=
+        A.currentTime/
+        A.duration*
+        100;
+
+      $("cur").textContent=
+        fmt(A.currentTime);
+    }
+  };
+
+A.onloadedmetadata=
+  ()=>{
+    $("dur").textContent=
+      fmt(A.duration);
+  };
+
+A.onended=
+  ()=>{
+
+    if(repeat){
+
+      A.currentTime=0;
+
+      A.play();
+
+    }else{
+
+      next();
+    }
+  };
+
+$("seek").oninput=
+  ()=>{
+
+    if(A.duration){
+
+      A.currentTime=
+        A.duration*
+        $("seek").value/
+        100;
+    }
+  };
+
+$("volume").oninput=
+  ()=>{
+
+    A.volume=
+      Number($("volume").value);
+  };
+
+$("mute").onclick=
+  ()=>{
+
+    A.muted=!A.muted;
+
+    $("mute").textContent=
+      A.muted?"🔇":"🔊";
+  };
+
+/* SETTINGS */
+
+$("settingsBtn").onclick=
+$("mobileSettings").onclick=
+$("langTop").onclick=
+  ()=>{
+    $("settings").classList.add("show");
+  };
+
+$("closeSettings").onclick=
+  ()=>{
+    $("settings").classList.remove("show");
+  };
+
+document
+.querySelectorAll("#langs .option")
+.forEach(b=>{
+  b.onclick=
+    ()=>{
+      language(
+        b.dataset.lang
+      );
+    };
+});
+
+/* ACCENT */
+
+document
+.querySelectorAll(".accent")
+.forEach(b=>{
+
+  b.onclick=()=>{
+
+    document.documentElement
+      .style
+      .setProperty(
+        "--a",
+        b.dataset.a
+      );
+
+    settings.accent=
+      b.dataset.a;
+
+    localStorage.setItem(
+      "harmoniq_settings",
+      JSON.stringify(settings)
+    );
+  };
+});
+
+/* EFFECT PANEL */
+
+$("effectsBtn").onclick=
+$("effectsPlayer").onclick=
+  async ()=>{
+
+    $("effects")
+      .classList
+      .toggle("show");
+
+    if(
+      $("effects")
+      .classList
+      .contains("show")
+    ){
+
+      await resumeEffects();
+    }
+  };
+
+$("closeFx").onclick=
+  ()=>{
+    $("effects")
+      .classList
+      .remove("show");
+  };
+
+document
+.querySelectorAll(".preset")
+.forEach(b=>{
+  b.onclick=
+    ()=>{
+      fxPreset(
+        b.dataset.p
+      );
+    };
+});
+
+/* EQ */
+
+[
+  "bass",
+  "treble",
+  "echo",
+  "room"
+]
+.forEach(id=>{
+
+  $(id).oninput=
+    async ()=>{
+
+      const f=
+        await resumeEffects();
+
+      if(!f)return;
+
+      const v=
+        Number($(id).value);
+
+      if(id==="bass")
+        f.bass.gain.value=v;
+
+      if(id==="treble")
+        f.treble.gain.value=v;
+
+      if(id==="echo")
+        f.wet.gain.value=v;
+
+      if(id==="room")
+        f.delay.delayTime.value=v;
+
+      $(id+"V").value=
+        v;
+    };
+});
+
+/* NEW PLAYLIST */
+
+$("newPlaylist").onclick=
+  ()=>{
+
+    const n=
+      prompt(
+        "Playlist name"
+      );
+
+    if(!n)return;
+
+    pls.push({
+      name:n,
+      tracks:[]
+    });
+
+    localStorage.setItem(
+      "harmoniq_playlists",
+      JSON.stringify(pls)
+    );
+
+    renderPlaylists();
+
+    stats();
+  };
+
+/* CLOSE YOUTUBE */
+
+$("closeYoutube").onclick=
+  closeYoutube;
+
+/* CLICK OUTSIDE MODALS */
+
+$("youtubeModal").onclick=
+  e=>{
+    if(e.target===$("youtubeModal"))
+      closeYoutube();
+  };
+
+$("settings").onclick=
+  e=>{
+    if(e.target===$("settings"))
+      $("settings").classList.remove("show");
+  };
+
+/* =========================================================
+   STARS
+========================================================= */
+
+(function(){
+
+  const canvas=$("stars");
+
+  const ctx=
+    canvas.getContext("2d");
+
+  let stars=[];
+
+  function resize(){
+
+    canvas.width=
+      window.innerWidth;
+
+    canvas.height=
+      window.innerHeight;
+
+    stars=
+      Array.from(
+        {length:110},
+        ()=>({
+
+          x:
+            Math.random()*
+            canvas.width,
+
+          y:
+            Math.random()*
+            canvas.height,
+
+          s:
+            Math.random()*1.8+.3,
+
+          v:
+            Math.random()*.25+.03,
+
+          a:
+            Math.random()*.7+.2
+        })
+      );
+  }
+
+  function draw(){
+
+    ctx.clearRect(
+      0,
+      0,
+      canvas.width,
+      canvas.height
+    );
+
+    stars.forEach(o=>{
+
+      o.y-=o.v;
+
+      if(o.y<0)
+        o.y=canvas.height;
+
+      ctx.globalAlpha=o.a;
+
+      ctx.fillStyle="#fff";
+
+      ctx.beginPath();
+
+      ctx.arc(
+        o.x,
+        o.y,
+        o.s,
+        0,
+        Math.PI*2
+      );
+
+      ctx.fill();
+    });
+
+    ctx.globalAlpha=1;
+
+    requestAnimationFrame(draw);
+  }
+
+  window.addEventListener(
+    "resize",
+    resize
+  );
+
+  resize();
+  draw();
+
+})();
+
+/* =========================================================
+   STARTUP
+========================================================= */
+
+language(lang);
+
+if(settings.accent){
+
+  document.documentElement
+    .style
+    .setProperty(
+      "--a",
+      settings.accent
+    );
+}
+
+A.volume=.85;
+
+renderDemos();
+
+stats();
+
+clock();
+
+renderPlaylists();
+
+setInterval(
+  clock,
+  1000
+);
+
+/* Global search API */
+
+window.HarmoniqSearch=
+  search;
+
+</script>
+
+</body>
+  </html>
