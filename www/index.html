@@ -3774,6 +3774,766 @@ function updateStats(){
 
 })();
 </script>
+<!-- ================= HARMONIQ FINAL VISUAL + YOUTUBE FIX ================= -->
 
+<style>
+
+/* ===== FIX GLOBAL LAYOUT ===== */
+
+html,
+body{
+  width:100%;
+  max-width:100%;
+  overflow-x:hidden !important;
+}
+
+*{
+  max-width:100%;
+}
+
+.app,
+.main{
+  min-width:0 !important;
+  max-width:100% !important;
+}
+
+.main{
+  overflow:visible !important;
+}
+
+.player{
+  max-width:none !important;
+}
+
+.result,
+.topbar,
+.searchbox,
+.hero,
+.card,
+.results{
+  min-width:0 !important;
+}
+
+/* ===== DESKTOP LAYOUT ===== */
+
+@media(min-width:901px){
+
+  .main{
+    width:calc(100% - 235px) !important;
+    margin-left:235px !important;
+    margin-right:0 !important;
+    padding-left:18px !important;
+    padding-right:18px !important;
+  }
+
+  .player{
+    left:235px !important;
+    right:0 !important;
+  }
+
+  [dir="rtl"] .main{
+    margin-left:0 !important;
+    margin-right:235px !important;
+  }
+
+  [dir="rtl"] .player{
+    left:0 !important;
+    right:235px !important;
+  }
+
+}
+
+
+/* ===== MOBILE FULL WIDTH FIX ===== */
+
+@media(max-width:700px){
+
+  .main{
+    width:100% !important;
+    margin:0 !important;
+    padding-left:10px !important;
+    padding-right:10px !important;
+    padding-bottom:125px !important;
+  }
+
+  [dir="rtl"] .main{
+    width:100% !important;
+    margin:0 !important;
+  }
+
+  .topbar{
+    width:100% !important;
+  }
+
+  .searchbox{
+    width:100% !important;
+  }
+
+  .hero{
+    width:100% !important;
+  }
+
+  .player{
+    left:0 !important;
+    right:0 !important;
+    width:100% !important;
+  }
+
+  .sky-box{
+    left:9px !important;
+    right:9px !important;
+    transform:none !important;
+    width:auto !important;
+  }
+
+  .result{
+    width:100% !important;
+  }
+
+}
+
+
+/* ===== CLEAN CRESCENT MOON ===== */
+
+/* Remove old moon effects */
+
+#ambient .moon{
+  width:145px !important;
+  height:145px !important;
+  border-radius:50% !important;
+
+  background:
+    radial-gradient(
+      circle at 38% 34%,
+      #ffffff 0%,
+      #f1f6ff 42%,
+      #c9d5e5 75%,
+      #aab8ca 100%
+    ) !important;
+
+  box-shadow:
+    0 0 18px rgba(255,255,255,.95),
+    0 0 45px rgba(190,215,255,.60),
+    0 0 90px rgba(123,92,255,.25) !important;
+
+  overflow:hidden !important;
+}
+
+/* Hide old moon craters */
+
+#ambient .moon:before{
+  display:none !important;
+  content:none !important;
+}
+
+/* Create clean dark crescent */
+
+#ambient .moon:after{
+  display:block !important;
+  content:"" !important;
+
+  position:absolute !important;
+
+  width:145px !important;
+  height:145px !important;
+
+  left:38px !important;
+  top:-10px !important;
+
+  border-radius:50% !important;
+
+  background:
+    #10162d !important;
+
+  box-shadow:
+    inset -8px 0 20px rgba(0,0,0,.35) !important;
+}
+
+/* Mobile moon */
+
+@media(max-width:700px){
+
+  #ambient .moon{
+    width:105px !important;
+    height:105px !important;
+  }
+
+  #ambient .moon:after{
+    width:105px !important;
+    height:105px !important;
+
+    left:29px !important;
+    top:-7px !important;
+  }
+
+}
+
+
+/* ===== KEEP CLOUDS BEAUTIFUL ===== */
+
+#ambient .cloud{
+  z-index:5 !important;
+  opacity:.58 !important;
+}
+
+#ambient .sky-box{
+  overflow:hidden !important;
+}
+
+#ambient #stars{
+  z-index:1 !important;
+}
+
+
+/* ===== SKY CONTENT ALWAYS VISIBLE ===== */
+
+#ambient{
+  z-index:1 !important;
+  pointer-events:none !important;
+}
+
+.sky-box{
+  z-index:2 !important;
+}
+
+.app{
+  position:relative !important;
+  z-index:10 !important;
+}
+
+
+/* ===== YOUTUBE MODAL ===== */
+
+#youtubeModal{
+  z-index:999 !important;
+  padding:12px !important;
+}
+
+#youtubeModal .modal-box{
+  width:min(900px,100%) !important;
+  max-width:900px !important;
+  max-height:92vh !important;
+  overflow:auto !important;
+}
+
+#youtubePlayer{
+  width:100% !important;
+  aspect-ratio:16/9 !important;
+  height:auto !important;
+  min-height:220px !important;
+  background:#000 !important;
+  border-radius:16px !important;
+  overflow:hidden !important;
+}
+
+#youtubePlayer iframe{
+  width:100% !important;
+  height:100% !important;
+  border:0 !important;
+}
+
+
+/* ===== PLAYER NEVER CUT OFF ===== */
+
+.player{
+  overflow:visible !important;
+}
+
+.now{
+  min-width:0 !important;
+}
+
+.now-info{
+  min-width:0 !important;
+  overflow:hidden !important;
+}
+
+.now img{
+  flex-shrink:0 !important;
+}
+
+.controls{
+  flex-shrink:0 !important;
+}
+
+.progress{
+  min-width:60px !important;
+}
+
+
+/* ===== MOBILE PLAYER ===== */
+
+@media(max-width:700px){
+
+  .player{
+    display:grid !important;
+    grid-template-columns:auto 1fr auto !important;
+    grid-template-rows:60px 18px !important;
+    gap:2px 7px !important;
+    padding:6px 8px 3px !important;
+    min-height:88px !important;
+  }
+
+  .now{
+    grid-column:1 / 2 !important;
+    grid-row:1 !important;
+    width:auto !important;
+    min-width:0 !important;
+  }
+
+  .now img{
+    width:48px !important;
+    height:48px !important;
+  }
+
+  .controls{
+    grid-column:2 / 3 !important;
+    grid-row:1 !important;
+    justify-content:center !important;
+  }
+
+  .controls .optional{
+    display:none !important;
+  }
+
+  .play{
+    width:50px !important;
+    height:50px !important;
+    min-width:50px !important;
+  }
+
+  .player > .optional{
+    display:block !important;
+    grid-column:3 / 4 !important;
+    grid-row:1 !important;
+  }
+
+  .progress{
+    grid-column:1 / 4 !important;
+    grid-row:2 !important;
+    position:static !important;
+    width:100% !important;
+    min-width:0 !important;
+  }
+
+}
+
+
+/* ===== BUTTONS ALWAYS CLICKABLE ===== */
+
+button,
+input,
+label{
+  position:relative;
+  z-index:20;
+}
+
+
+/* ===== SEARCH RESULTS CLEAN ON SMALL SCREENS ===== */
+
+@media(max-width:500px){
+
+  .result{
+    gap:7px !important;
+    padding:8px !important;
+  }
+
+  .result img{
+    width:48px !important;
+    height:48px !important;
+    flex-shrink:0 !important;
+  }
+
+  .result-info{
+    min-width:0 !important;
+  }
+
+  .result-title{
+    max-width:100% !important;
+  }
+
+  .actions{
+    flex-shrink:0 !important;
+  }
+
+  .actions .btn{
+    padding:8px !important;
+  }
+
+}
+
+</style>
+
+
+<script>
+
+/* ============================================================
+   FINAL YOUTUBE REPAIR
+   ============================================================ */
+
+(function(){
+
+  /* Extract YouTube ID from ANY common YouTube URL */
+
+  window.extractYouTubeId = function(value){
+
+    if(!value)
+      return null;
+
+    value = String(value).trim();
+
+    /* Already an ID */
+
+    if(
+      /^[a-zA-Z0-9_-]{11}$/.test(value)
+    ){
+      return value;
+    }
+
+    let match;
+
+    /* youtube.com/watch?v= */
+
+    match =
+      value.match(
+        /[?&]v=([a-zA-Z0-9_-]{11})/
+      );
+
+    if(match)
+      return match[1];
+
+    /* youtu.be/ */
+
+    match =
+      value.match(
+        /youtu\.be\/([a-zA-Z0-9_-]{11})/
+      );
+
+    if(match)
+      return match[1];
+
+    /* youtube.com/shorts/ */
+
+    match =
+      value.match(
+        /youtube\.com\/shorts\/([a-zA-Z0-9_-]{11})/
+      );
+
+    if(match)
+      return match[1];
+
+    /* youtube.com/embed/ */
+
+    match =
+      value.match(
+        /youtube\.com\/embed\/([a-zA-Z0-9_-]{11})/
+      );
+
+    if(match)
+      return match[1];
+
+    return null;
+
+  };
+
+
+  /*
+     Repair normalizeTrack so YouTube results
+     still work when Worker sends URL instead
+     of youtubeId.
+  */
+
+  const oldNormalize =
+    window.normalizeTrack;
+
+
+  window.normalizeTrack =
+    function(track){
+
+      const copy =
+        Object.assign({},track || {});
+
+      const possibleUrl =
+        copy.url ||
+        copy.permalink ||
+        copy.link ||
+        copy.youtube_url ||
+        copy.videoUrl ||
+        "";
+
+      const id =
+        copy.youtubeId ||
+        copy.videoId ||
+        copy.video_id ||
+        extractYouTubeId(
+          possibleUrl
+        );
+
+      if(id){
+
+        copy.youtubeId =
+          id;
+
+        copy.youtube =
+          true;
+
+        copy.source =
+          "YouTube";
+
+        copy.artwork =
+          copy.artwork ||
+          copy.thumbnail ||
+          copy.thumbnailUrl ||
+          (
+            "https://i.ytimg.com/vi/" +
+            id +
+            "/hqdefault.jpg"
+          );
+
+      }
+
+      if(oldNormalize){
+
+        const normalized =
+          oldNormalize(copy);
+
+        if(normalized){
+
+          normalized.youtubeId =
+            normalized.youtubeId ||
+            id;
+
+          normalized.youtube =
+            !!(
+              normalized.youtube ||
+              id
+            );
+
+          if(normalized.youtubeId){
+
+            normalized.artwork =
+              normalized.artwork ||
+              (
+                "https://i.ytimg.com/vi/" +
+                normalized.youtubeId +
+                "/hqdefault.jpg"
+              );
+
+          }
+
+        }
+
+        return normalized;
+
+      }
+
+      return copy;
+
+    };
+
+
+  /*
+     Strong YouTube player opener.
+  */
+
+  window.openYouTubeTrack =
+    function(track){
+
+      if(!track)
+        return;
+
+      let id =
+        track.youtubeId ||
+        track.videoId ||
+        extractYouTubeId(
+          track.url ||
+          track.permalink ||
+          track.link ||
+          ""
+        );
+
+      if(!id){
+
+        showToast(
+          "YouTube video ID not found"
+        );
+
+        return;
+
+      }
+
+      track.youtubeId =
+        id;
+
+      track.youtube =
+        true;
+
+      track.source =
+        "YouTube";
+
+      currentYouTube =
+        track;
+
+      audio.pause();
+
+      $("nowTitle").textContent =
+        track.title ||
+        "YouTube Music";
+
+      $("nowArtist").textContent =
+        (
+          track.artist ||
+          "YouTube"
+        ) +
+        " · YouTube";
+
+      $("cover").src =
+        "https://i.ytimg.com/vi/" +
+        id +
+        "/hqdefault.jpg";
+
+      $("youtubeTitle").textContent =
+        track.title ||
+        "YouTube Music";
+
+      $("youtubeArtist").textContent =
+        track.artist ||
+        "YouTube";
+
+      $("youtubeModal")
+        .classList
+        .add("show");
+
+      $("youtubePlayer").innerHTML = `
+        <iframe
+          src="https://www.youtube.com/embed/${encodeURIComponent(id)}?autoplay=1&playsinline=1&rel=0&modestbranding=1"
+          title="${escapeHTML(track.title || "YouTube Music")}"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          allowfullscreen>
+        </iframe>
+      `;
+
+    };
+
+
+  /*
+     Replace the existing playYouTube function.
+  */
+
+  window.playYouTube =
+    window.openYouTubeTrack;
+
+
+  /*
+     Make every YouTube result use the repaired player.
+  */
+
+  const oldRenderResults =
+    window.renderResults;
+
+
+  window.renderResults =
+    function(list){
+
+      if(oldRenderResults)
+        oldRenderResults(list);
+
+      /*
+         Existing result buttons may already be
+         attached by the original function.
+         We additionally intercept YouTube clicks.
+      */
+
+      document
+        .querySelectorAll("#results .result")
+        .forEach((row,index) => {
+
+          const track =
+            list[index];
+
+          if(!track)
+            return;
+
+          if(
+            track.youtube ||
+            track.youtubeId ||
+            extractYouTubeId(
+              track.url ||
+              track.permalink ||
+              track.link ||
+              ""
+            )
+          ){
+
+            const button =
+              row.querySelector(
+                ".playTrack"
+              );
+
+            if(button){
+
+              button.onclick =
+                function(event){
+
+                  event.preventDefault();
+                  event.stopPropagation();
+
+                  openYouTubeTrack(
+                    track
+                  );
+
+                };
+
+            }
+
+          }
+
+        });
+
+    };
+
+
+  /*
+     If an iframe was already created by the old
+     player, make it responsive.
+  */
+
+  document.addEventListener(
+    "click",
+    function(event){
+
+      const youtubeButton =
+        event.target.closest(
+          "[data-youtube-id]"
+        );
+
+      if(youtubeButton){
+
+        event.preventDefault();
+
+        openYouTubeTrack({
+
+          youtubeId:
+            youtubeButton.dataset.youtubeId,
+
+          title:
+            youtubeButton.dataset.title ||
+            "YouTube Music",
+
+          artist:
+            youtubeButton.dataset.artist ||
+            "YouTube"
+
+        });
+
+      }
+
+    }
+  );
+
+
+})();
+
+</script>
 </body>
       </html>
