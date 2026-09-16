@@ -1,7 +1,7 @@
 {
-  "name": "Harmoniq AI - Music Streaming",
+  "name": "Harmoniq AI",
   "short_name": "Harmoniq AI",
-  "description": "Harmoniq AI is a modern music streaming and discovery experience.",
+  "description": "Harmoniq AI is a modern AI-powered music streaming and discovery app.",
   "id": "/Harmoniq-AI/",
   "start_url": "/Harmoniq-AI/",
   "scope": "/Harmoniq-AI/",
@@ -14,5 +14,13 @@
   "categories": [
     "music",
     "entertainment"
+  ],
+  "icons": [
+    {
+      "src": "/Harmoniq-AI/icon-512.png%20(1).png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
   ]
 }
