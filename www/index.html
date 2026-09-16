@@ -4683,5 +4683,87 @@ body > *:not(#ambient) {
   }
 }
   </style>
+  <style>
+/* ===== Harmoniq AI — Soft Night Clouds ===== */
+
+#ambient .cloud {
+  position: absolute !important;
+  width: 240px !important;
+  height: 55px !important;
+  border-radius: 50% !important;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(205, 216, 235, 0.16),
+      rgba(130, 145, 170, 0.06)
+    ) !important;
+
+  filter: blur(5px) !important;
+  opacity: 0.55 !important;
+
+  border: 0 !important;
+  box-shadow:
+    0 8px 22px rgba(0,0,0,0.12) !important;
+}
+
+/* جسم الغيمة الرئيسي */
+#ambient .cloud::before {
+  content: "" !important;
+  position: absolute !important;
+
+  left: 35px !important;
+  top: -12px !important;
+
+  width: 130px !important;
+  height: 42px !important;
+
+  border-radius: 50% !important;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(215, 224, 240, 0.14),
+      rgba(135, 150, 175, 0.05)
+    ) !important;
+
+  box-shadow:
+    45px 8px 0 rgba(190, 202, 224, 0.07),
+    -28px 12px 0 rgba(175, 190, 214, 0.06) !important;
+}
+
+/* إزالة الدوائر القديمة */
+#ambient .cloud::after {
+  display: none !important;
+}
+
+/* الغيمة الثانية */
+#ambient .cloud:nth-of-type(2) {
+  width: 280px !important;
+  height: 58px !important;
+  opacity: 0.42 !important;
+}
+
+/* حركة بطيئة وناعمة */
+#ambient .cloud {
+  animation:
+    nightCloudMove 38s ease-in-out infinite alternate !important;
+}
+
+#ambient .cloud:nth-of-type(2) {
+  animation-duration: 52s !important;
+  animation-delay: -18s !important;
+}
+
+@keyframes nightCloudMove {
+  from {
+    transform: translateX(-35px);
+  }
+
+  to {
+    transform: translateX(45px);
+  }
+}
+  </style>
 </body>
       </html>
