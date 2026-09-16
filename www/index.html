@@ -1031,6 +1031,52 @@ button:active{
     0 10px 40px rgba(0,0,0,.55),
     0 0 35px rgba(123,92,255,.22) !important;
 }
+  /* FINAL NIGHT UI */
+#ambient{
+  z-index:35 !important;
+  pointer-events:none !important;
+}
+
+#ambient .moon,
+#ambient .cloud{
+  z-index:2 !important;
+}
+
+#ambient .horizon{
+  z-index:1 !important;
+  pointer-events:none !important;
+}
+
+#stars{
+  z-index:0 !important;
+}
+
+.side{
+  z-index:40 !important;
+}
+
+.player{
+  z-index:80 !important;
+}
+
+.mobile{
+  z-index:85 !important;
+}
+
+.effects{
+  z-index:100 !important;
+}
+
+.modal{
+  z-index:150 !important;
+}
+
+@media(max-width:700px){
+  .scene{
+    display:block !important;
+    z-index:90 !important;
+  }
+}
 </style>
 </head>
 
