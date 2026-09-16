@@ -1124,7 +1124,7 @@ async function doSearch(query=null){
   $('searchStatus').textContent='Searching Harmoniq AI…';
   $('searchResults').innerHTML='';
   try{
-    const url=WORKER+'/music?q='+encodeURIComponent(q)+'&_t='+Date.now();
+    const url=WORKER+'/search?q='+encodeURIComponent(q)+'&limit=50&_t='+Date.now();
     const r=await fetch(url,{method:'GET',cache:'no-store',headers:{'Accept':'application/json'}});
     const text=await r.text();
     if(!r.ok)throw new Error('Worker HTTP '+r.status+': '+text.slice(0,180));
