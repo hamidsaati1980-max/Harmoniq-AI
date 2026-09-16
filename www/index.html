@@ -980,6 +980,57 @@ button:active{
     min-width:50px !important;
   }
   }
+  /* ===== FINAL VISIBLE NIGHT UI ===== */
+
+.scene{
+  position:fixed !important;
+  z-index:999 !important;
+  pointer-events:none !important;
+  display:block !important;
+  top:82px !important;
+  right:18px !important;
+}
+
+/* Put the night atmosphere above the app background */
+#stars{
+  position:fixed !important;
+  inset:0 !important;
+  z-index:1 !important;
+  pointer-events:none !important;
+}
+
+/* Keep all interactive content above the stars */
+.main,
+.side,
+.mobile,
+.player,
+.modal,
+.effects,
+.top,
+.hero,
+.card,
+.result{
+  position:relative;
+  z-index:5;
+}
+
+/* Moon stays visible above the normal background */
+.scene,
+.scene *{
+  visibility:visible !important;
+}
+
+/* Give the night indicator a premium glass look */
+.scene{
+  background:
+    radial-gradient(circle at 80% 20%,rgba(255,255,255,.12),transparent 30%),
+    rgba(8,11,28,.78) !important;
+  backdrop-filter:blur(16px);
+  border:1px solid rgba(255,255,255,.18) !important;
+  box-shadow:
+    0 10px 40px rgba(0,0,0,.55),
+    0 0 35px rgba(123,92,255,.22) !important;
+}
 </style>
 </head>
 
