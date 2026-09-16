@@ -1212,4 +1212,124 @@ function toggleSleepPanel(){$('sleepPanel').classList.toggle('show')}function se
 window.addEventListener('beforeunload',()=>{deviceTracks.forEach(t=>t.url&&URL.revokeObjectURL(t.url))});
 renderDemos();renderFavorites();renderRecent();renderPlaylists();updateStats();applyAccent();
 </script>
+ <!-- HARMONIQ AI — MULTI SOURCE SEARCH UI -->
+<script>
+(function () {
+
+  const WORKER =
+    "https://harmoniq-ai-proxy.hamidsaati1980.workers.dev";
+
+  async function multiSourceSearch(query) {
+
+    query = String(query || "").trim();
+
+    if (!query) return;
+
+    try {
+
+      const response = await fetch(
+        WORKER +
+        "/search?q=" +
+        encodeURIComponent(query) +
+        "&limit=50"
+      );
+
+      if (!response.ok) {
+        throw new Error(
+          "Worker HTTP " + response.status
+        );
+      }
+
+      const data = await response.json();
+
+      console.log(
+        "Harmoniq Multi-Source Results:",
+        data
+      );
+
+      /*
+       * Keep the existing Harmoniq search untouched.
+       * The new results are exposed globally so the
+       * existing interface can use them safely.
+       */
+
+      window.HarmoniqSearchResults =
+        Array.isArray(data.results)
+          ? data.results
+          : [];
+
+      window.HarmoniqSearchSources =
+        data.sources || {};
+
+      return data;
+
+    } catch (error) {
+
+      console.error(
+        "Harmoniq Multi-Source Search Error:",
+        error
+      );
+
+      return {
+        ok: false,
+        results: [],
+        error: error.message
+      };
+    }
+  }
+
+
+  /*
+   * Public function.
+   * Other Harmoniq UI code can call:
+   *
+   * HarmoniqSearch("Arabic music")
+   */
+
+  window.HarmoniqSearch =
+    multiSourceSearch;
+
+
+  /*
+   * Detect the existing search form/input
+   * without replacing it.
+   */
+
+  document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+
+      const searchInput =
+        document.querySelector(
+          "#searchInput"
+        );
+
+      if (!searchInput) return;
+
+      const searchForm =
+        searchInput.closest("form");
+
+      if (searchForm) {
+
+        searchForm.addEventListener(
+          "submit",
+          function () {
+
+            const query =
+              searchInput.value.trim();
+
+            if (query) {
+              multiSourceSearch(query);
+            }
+
+          }
+        );
+
+      }
+
+    }
+  );
+
+})();
+</script>
 </body></html>
